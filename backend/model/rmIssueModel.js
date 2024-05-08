@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const RMIssueSchema = new Schema({
-  date: String,
+  date: Date,
   station: String,
   model: String,
   lot: String,

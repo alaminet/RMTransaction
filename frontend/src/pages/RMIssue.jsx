@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import moment from "moment";
 import axios from "axios";
 import {
   Alert,
@@ -42,7 +43,7 @@ const RMIssue = () => {
       const data = await axios.post(
         "http://localhost:8000/v1/api/tnx/rmissue",
         {
-          date: values.DatePicker.$d,
+          date: moment(values.DatePicker.$d).format(),
           station: values.station,
           model: values.lot.split("_")[0],
           lot: values.lot,
@@ -50,6 +51,7 @@ const RMIssue = () => {
           issueList: [...issuelist],
         }
       );
+      console.log(data.data);
       setLoadings(false);
       setMsg(`Entry Done, Tnx ID: ${data.data.tnxID}`);
       setMsgType("success");
