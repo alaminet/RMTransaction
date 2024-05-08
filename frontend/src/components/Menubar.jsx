@@ -21,7 +21,7 @@ const Menubar = () => {
     },
     {
       label: "Transaction",
-      key: "SubMenu",
+      key: "SubMenu1",
       icon: <DiffOutlined />,
       children: [
         {
@@ -81,6 +81,27 @@ const Menubar = () => {
             {
               label: "Buffer",
               key: "buffercheck",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Admin",
+      key: "SubMenu2",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "User",
+          label: "User",
+          children: [
+            {
+              label: "Add User",
+              key: "adduser",
+            },
+            {
+              label: "User List",
+              key: "userlist",
             },
           ],
         },
