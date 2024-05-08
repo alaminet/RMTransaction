@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "antd";
 import { HomeOutlined, DiffOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const Menubar = () => {
+  const user = useSelector((user) => user.loginSlice.login);
   const navigate = useNavigate();
-  const [current, setCurrent] = useState("mail");
+  const [current, setCurrent] = useState("");
   const onClick = (e) => {
     console.log("click ", e);
     setCurrent(e.key);
@@ -116,6 +118,7 @@ const Menubar = () => {
       key: "alipay",
     },
   ];
+
   return (
     <>
       <Menu

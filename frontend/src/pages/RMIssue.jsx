@@ -15,8 +15,10 @@ import {
   Space,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const RMIssue = () => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [loadings, setLoadings] = useState(false);
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
@@ -47,7 +49,7 @@ const RMIssue = () => {
           station: values.station,
           model: values.lot.split("_")[0],
           lot: values.lot,
-          tnxby: "M03166",
+          tnxby: user.userID,
           issueList: [...issuelist],
         }
       );

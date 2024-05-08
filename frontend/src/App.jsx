@@ -11,17 +11,22 @@ import RMCheck from "./pages/RMCheck";
 import RMTnxView from "./pages/RMTnxView";
 import AddUser from "./pages/AddUser";
 import ViewUser from "./pages/ViewUser";
+import Login from "./pages/Login";
+import LoginUserRouter from "./PrivateRouter/LoginUserRouter";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route path="*" element={<Home />}></Route>
-        <Route path="/" element={<Home />}>
-          <Route path="rmissue" element={<RMIssue />}></Route>
-          <Route path="rmcheck" element={<RMCheck />}></Route>
-          <Route path="dailyTnx" element={<RMTnxView />}></Route>
-          <Route path="adduser" element={<AddUser />}></Route>
-          <Route path="userlist" element={<ViewUser />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route element={<LoginUserRouter />}>
+          <Route path="/" element={<Home />}>
+            <Route path="rmissue" element={<RMIssue />}></Route>
+            <Route path="rmcheck" element={<RMCheck />}></Route>
+            <Route path="dailyTnx" element={<RMTnxView />}></Route>
+            <Route path="adduser" element={<AddUser />}></Route>
+            <Route path="userlist" element={<ViewUser />}></Route>
+          </Route>
         </Route>
       </Route>
     )
