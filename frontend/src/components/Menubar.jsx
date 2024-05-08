@@ -8,6 +8,7 @@ const Menubar = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const navigate = useNavigate();
   const [current, setCurrent] = useState("");
+
   const onClick = (e) => {
     console.log("click ", e);
     setCurrent(e.key);
@@ -15,7 +16,7 @@ const Menubar = () => {
   };
 
   // Menu List
-  const items = [
+  const Adminitems = [
     {
       label: "Home",
       key: "/",
@@ -119,13 +120,98 @@ const Menubar = () => {
     },
   ];
 
+  const LMitems = [
+    {
+      label: "Home",
+      key: "/",
+      icon: <HomeOutlined />,
+    },
+    {
+      label: "Transaction",
+      key: "SubMenu1",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "Report",
+          label: "Report",
+          children: [
+            {
+              label: "Daily Transaction",
+              key: "dailyTnx",
+            },
+            {
+              label: "Lot Wise Stock",
+              key: "lotstock",
+            },
+            {
+              label: "Model Wise Stock",
+              key: "modelstock",
+            },
+          ],
+        },
+        {
+          type: "Issue",
+          label: "Issue",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmissue",
+            },
+            {
+              label: "Buffer",
+              key: "bufferissue",
+            },
+          ],
+        },
+        {
+          type: "Receive",
+          label: "Receive",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmreceive",
+            },
+            {
+              label: "Buffer",
+              key: "bufferreceive",
+            },
+          ],
+        },
+        {
+          type: "Checklist",
+          label: "Checklist",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmcheck",
+            },
+            {
+              label: "Buffer",
+              key: "buffercheck",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: (
+        <a href="#" target="_blank" rel="noopener noreferrer">
+          Navigation Four - Link
+        </a>
+      ),
+      key: "alipay",
+    },
+  ];
   return (
     <>
       <Menu
         onClick={onClick}
         selectedKeys={[current]}
         mode="horizontal"
-        items={items}
+        items={
+          (user.role === "admin" && Adminitems) ||
+          (user.role === "LM" && LMitems)
+        }
       />
     </>
   );
