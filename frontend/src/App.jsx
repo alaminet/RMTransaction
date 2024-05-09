@@ -13,6 +13,7 @@ import AddUser from "./pages/AddUser";
 import ViewUser from "./pages/ViewUser";
 import Login from "./pages/Login";
 import LoginUserRouter from "./PrivateRouter/LoginUserRouter";
+import AddItem from "./pages/AddItem";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -26,6 +27,7 @@ function App() {
             <Route path="dailyTnx" element={<RMTnxView />}></Route>
             <Route path="adduser" element={<AddUser />}></Route>
             <Route path="userlist" element={<ViewUser />}></Route>
+            <Route path="additem" element={<AddItem />}></Route>
           </Route>
         </Route>
       </Route>

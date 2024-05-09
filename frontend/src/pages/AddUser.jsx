@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Button, Checkbox, Form, Input, Radio } from "antd";
+import { Alert, Button, Form, Input, Radio } from "antd";
 import axios from "axios";
 
 const AddUser = () => {
@@ -8,7 +8,7 @@ const AddUser = () => {
   const [msgType, setMsgType] = useState("");
   const [adduser] = Form.useForm();
   const onFinish = async (values) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     setLoadings(true);
     try {
       const data = await axios.post(
