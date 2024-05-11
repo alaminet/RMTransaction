@@ -15,6 +15,8 @@ import Login from "./pages/Login";
 import LoginUserRouter from "./PrivateRouter/LoginUserRouter";
 import AddItem from "./pages/AddItem";
 import ViewItemList from "./pages/ViewItemList";
+import AddLot from "./pages/AddLot";
+import ViewLot from "./pages/ViewLot";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -30,6 +32,8 @@ function App() {
             <Route path="userlist" element={<ViewUser />}></Route>
             <Route path="additem" element={<AddItem />}></Route>
             <Route path="itemlist" element={<ViewItemList />}></Route>
+            <Route path="addlot" element={<AddLot />}></Route>
+            <Route path="lotdetails" element={<ViewLot />}></Route>
           </Route>
         </Route>
       </Route>

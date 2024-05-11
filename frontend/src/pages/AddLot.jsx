@@ -1,30 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, message } from "antd";
 import { useSelector } from "react-redux";
 const { TextArea } = Input;
 
-const AddItem = () => {
+const AddLot = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const onFinish = async (values) => {
     // console.log("Success:", values);
     const itemlistArr = [];
     const itemArr = [];
-    const itemList = values.itemdetails.split("\n").map((item, i) => {
-      itemlistArr.push(item.split("\t"));
+    const itemList = values.lotdetails?.split("\n").map((item, i) => {
+      itemlistArr.push(item);
     });
-    itemlistArr?.map((list) => {
-      const items = [{ code: list[0], itemname: list[1], uom: list[2] }];
+    itemlistArr?.map((list, j) => {
+      const items = [{ model: list.split("_")[0], lot: list }];
       itemArr.push(...items);
     });
 
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/item/additem",
+        "http://localhost:8000/v1/api/item/addlot",
         {
           itemlist: itemArr,
         }
       );
+      message.success(data.data.message);
     } catch (error) {
       console.log(error.response.message);
     }
@@ -32,7 +33,6 @@ const AddItem = () => {
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
   return (
     <>
       {user.role === "admin" && (
@@ -55,15 +55,15 @@ const AddItem = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off">
             <Form.Item
-              label="Item Details"
-              name="itemdetails"
+              label="Lot Details"
+              name="lotdetails"
               rules={[
                 {
                   required: true,
-                  message: "Please input Code,Name,UOM paste from XL",
+                  message: "Please input Model_Lot paste from XL",
                 },
               ]}>
-              <TextArea rows={4} placeholder="Code,Name,UOM paste from XL" />
+              <TextArea rows={4} placeholder="ex: SU2id_Lot 01~02" />
             </Form.Item>
 
             <Form.Item
@@ -72,7 +72,7 @@ const AddItem = () => {
                 span: 16,
               }}>
               <Button type="primary" htmlType="submit">
-                Add Item
+                Add Lot
               </Button>
             </Form.Item>
           </Form>
@@ -82,4 +82,4 @@ const AddItem = () => {
   );
 };
 
-export default AddItem;
+export default AddLot;
