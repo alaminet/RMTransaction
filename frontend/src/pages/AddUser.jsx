@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Alert, Button, Form, Input, Radio } from "antd";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AddUser = () => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [loadings, setLoadings] = useState(false);
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
@@ -35,7 +37,7 @@ const AddUser = () => {
   };
   return (
     <>
-      <div>
+      {user.role === "admin" && (<div>
         {msg && <Alert message={msg} type={msgType} showIcon closable />}
         <Form
           form={adduser}
@@ -103,7 +105,8 @@ const AddUser = () => {
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </div>)}
+      
     </>
   );
 };

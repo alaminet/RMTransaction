@@ -2,27 +2,26 @@ const Item = require("../model/itemModel");
 
 async function AddItemController(req, res) {
   const { itemlist } = req.body;
-
-  const arrlist = [];
-  itemlist.map((item) => {
-    arrlist.push({ ...item });
-  });
-
-  arrlist.map(async (list) => {
-    try {
-      const codeexit = await Item.find({ code: list[0] });
-      if (codeexit.length < 0) {
-        const newItem = await new Item({
-          code: list[0],
-          itemname: list[1],
-          uom: list[2],
-        });
-        await newItem.save();
-        res.send("itemAdded");
+  // sorting new code
+  try {
+    itemlist?.map(async (item) => {
+      const codeExit = [];
+      const codeNew = [];
+      const existingItem = await Item.find({ code: item.code });
+      if (existingItem.length > 0) {
+        codeExit.push(item);
+      } else {
+        codeNew.push(item);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  });
+      if (codeNew.length == 0) {
+        console.log("No New Item Found");
+      } else {
+        await Item.insertMany(codeNew);
+      }
+    });
+    res.status(200).send({ message: "Only New Item Added" });
+  } catch (error) {
+    console.log(error);
+  }
 }
 module.exports = AddItemController;

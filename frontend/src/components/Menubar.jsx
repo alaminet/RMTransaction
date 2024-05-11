@@ -288,6 +288,107 @@ const Menubar = () => {
       ],
     },
     {
+      label: "Line Manager",
+      key: "SubMenu2",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "item",
+          label: "Item Master",
+          key: "item",
+          children: [
+            {
+              label: "Add Item",
+              key: "additem",
+            },
+            {
+              label: "Item List",
+              key: "itemlist",
+            },
+          ],
+        },
+        {
+          type: "lot",
+          label: "Lot Master",
+          key: "lot",
+          children: [
+            {
+              label: "Add Lot",
+              key: "addlot",
+            },
+            {
+              label: "Lot Details",
+              key: "lotdetails",
+            },
+          ],
+        },
+        {
+          type: "bom",
+          label: "BOM Master",
+          key: "bom",
+          children: [
+            {
+              label: "Add BOM",
+              key: "addbom",
+            },
+            {
+              label: "BOM Details",
+              key: "bomdetails",
+            },
+          ],
+        },
+        {
+          type: "receive",
+          label: "Receive",
+          key: "receive",
+          children: [
+            {
+              label: "New Receive",
+              key: "newreceive",
+            },
+            {
+              label: "Receive Details",
+              key: "receivedetails",
+            },
+          ],
+        },
+        {
+          type: "movement",
+          label: "Movement Master",
+          key: "movement",
+          children: [
+            {
+              label: "Location Transfer",
+              key: "loctransfer",
+            },
+            {
+              label: "Stock Transfer",
+              key: "stocktransfer",
+            },
+          ],
+        },
+        {
+          type: "report",
+          label: "Report",
+          key: "report",
+          children: [
+            {
+              label: "Daily Transaction",
+              key: "dailyTnx",
+            },
+            {
+              label: "Lot Wise Stock",
+              key: "lotstock",
+            },
+            {
+              label: "Model Wise Stock",
+              key: "modelstock",
+            },
+          ],
+        },
+      ],
+    },
+    {
       label: (
         <a href="#" target="_blank" rel="noopener noreferrer">
           Navigation Four - Link

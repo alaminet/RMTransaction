@@ -3,31 +3,33 @@ import axios from "axios";
 import { Button, Input, Table, message, Popconfirm, Modal, Radio } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-const ViewUser = () => {
+const ViewItemList = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
 
-  const tblData = tbllist.filter((item) =>
-    item.userID.toLowerCase().includes(search.toLowerCase())
+  const tblData = tbllist?.filter((item) =>
+    item?.code?.toLowerCase().includes(search?.toLowerCase())
   );
 
   // modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editID, setEditID] = useState("");
-  const [newRole, setNewRole] = useState("");
+  const [editField, setEditField] = useState("");
+  const [editData, setEditData] = useState("");
 
   const handleOk = async () => {
     setIsModalOpen(false);
-    console.log(editID, newRole);
     try {
       const userEdit = await axios.put(
-        "http://localhost:8000/v1/api/auth/edituser",
+        "http://localhost:8000/v1/api/item/edititem",
         {
-          userID: editID,
-          role: newRole,
+          id: editID,
+          filed: editField,
+          data: editData,
         }
       );
+      message.success(userEdit.data.message);
     } catch (error) {
       console.log(error);
     }
@@ -45,18 +47,17 @@ const ViewUser = () => {
   const handleDelete = async (item) => {
     try {
       const userDelete = await axios.put(
-        "http://localhost:8000/v1/api/auth/dltuser",
+        "http://localhost:8000/v1/api/item/dltitem",
         {
-          userID: item,
+          id: item,
         }
       );
-      message.success("Deleted");
+      message.warning("Deleted");
     } catch (error) {
       console.log(error);
     }
   };
   const cancel = (e) => {
-    console.log(e);
     message.error("Click on No");
   };
 
@@ -68,53 +69,59 @@ const ViewUser = () => {
       key: "sl",
     },
     {
-      title: "User ID",
-      dataIndex: "userID",
-      key: "userID",
+      title: "Part Code",
+      dataIndex: "code",
+      key: "code",
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: "Part Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "UOM",
+      dataIndex: "uom",
+      key: "uom",
     },
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (item) => (
-        <>
-          <Button
-            icon={<EditTwoTone />}
-            onClick={() => handleEdit(item)}></Button>
-          <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
-            onConfirm={() => handleDelete(item)}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No">
+      render: (item) =>
+        user.role === "admin" && (
+          <>
             <Button
-              style={{ marginLeft: "10px" }}
-              danger
-              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
-          </Popconfirm>
-        </>
-      ),
+              icon={<EditTwoTone />}
+              onClick={() => handleEdit(item)}></Button>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this Item?"
+              onConfirm={() => handleDelete(item)}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No">
+              <Button
+                style={{ marginLeft: "10px" }}
+                danger
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+            </Popconfirm>
+          </>
+        ),
     },
   ];
 
   useEffect(() => {
     async function getData() {
-      const issueData = await axios.get(
-        "http://localhost:8000/v1/api/auth/viewuser"
+      const data = await axios.get(
+        "http://localhost:8000/v1/api/item/viewitemlist"
       );
       const tableData = [];
-      issueData?.data?.map((item, i) => {
+      data?.data?.map((item, i) => {
         tableData.push({
           sl: ++i,
-          dataIndex: item._id,
-          userID: item.userID,
-          role: item.role,
+          code: item.code,
+          name: item.itemname,
+          uom: item.uom,
           action: item._id,
         });
 
@@ -127,12 +134,12 @@ const ViewUser = () => {
 
   return (
     <>
-      {user.role === "admin" && (
+      {user.role === "admin" || user.role === "LM" ? (
         <div>
           <div>
             <Input
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Find by ID"
+              placeholder="Find by Code"
               variant="filled"
             />
             <Table
@@ -148,19 +155,21 @@ const ViewUser = () => {
               onOk={handleOk}
               onCancel={handleCancel}>
               <div>
-                <Radio.Group onChange={(e) => setNewRole(e.target.value)}>
-                  <Radio value="user">User</Radio>
-                  <Radio value="LM">Line Manager</Radio>
-                  <Radio value="checker">Checker</Radio>
-                  <Radio value="admin">Admin</Radio>
+                <Radio.Group onChange={(e) => setEditField(e.target.value)}>
+                  <Radio value="code">Part Code</Radio>
+                  <Radio value="itemname">Part Name</Radio>
+                  <Radio value="uom">UOM</Radio>
                 </Radio.Group>
+                <Input onChange={(e) => setEditData(e.target.value)} />
               </div>
             </Modal>
           </div>
         </div>
+      ) : (
+        <p>lm</p>
       )}
     </>
   );
 };
 
-export default ViewUser;
+export default ViewItemList;
