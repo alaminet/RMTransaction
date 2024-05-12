@@ -47,13 +47,13 @@ const ViewLot = () => {
 
   const handleDelete = async (item) => {
     try {
-      const userDelete = await axios.put(
-        "http://localhost:8000/v1/api/item/dltitem",
+      const lotDelete = await axios.put(
+        "http://localhost:8000/v1/api/item/dltlot",
         {
           id: item,
         }
       );
-      message.warning("Deleted");
+      message.warning(lotDelete.data.message);
     } catch (error) {
       console.log(error);
     }

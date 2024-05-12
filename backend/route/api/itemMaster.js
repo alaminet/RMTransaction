@@ -5,6 +5,7 @@ const EditItemController = require("../../controllers/EditItemController");
 const AddLotController = require("../../controllers/AddLotController");
 const ViewLotController = require("../../controllers/ViewLotController");
 const EditLotController = require("../../controllers/EditLotController");
+const DeleteLotController = require("../../controllers/DeleteLotController");
 const route = express.Router();
 
 route.post("/additem", AddItemController);
@@ -15,5 +16,6 @@ route.put("/dltitem", EditItemController);
 route.post("/addlot", AddLotController);
 route.get("/viewLot", ViewLotController);
 route.put("/editlot", EditLotController);
+route.put("/dltlot", DeleteLotController);
 
 module.exports = route;
