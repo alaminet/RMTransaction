@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "axios";
 import { Button, Form, Input } from "antd";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ const { TextArea } = Input;
 
 const AddItem = () => {
   const user = useSelector((user) => user.loginSlice.login);
+  const [additemform] = Form.useForm();
   const onFinish = async (values) => {
     // console.log("Success:", values);
     const itemlistArr = [];
@@ -28,6 +29,7 @@ const AddItem = () => {
     } catch (error) {
       console.log(error.response.message);
     }
+    additemform.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -38,7 +40,8 @@ const AddItem = () => {
       {user.role === "admin" && (
         <div>
           <Form
-            name="basic"
+            form={additemform}
+            name="additem"
             labelCol={{
               span: 8,
             }}

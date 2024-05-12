@@ -6,6 +6,7 @@ const { TextArea } = Input;
 
 const AddLot = () => {
   const user = useSelector((user) => user.loginSlice.login);
+  const [addlotform] = Form.useForm();
   const onFinish = async (values) => {
     // console.log("Success:", values);
     const itemlistArr = [];
@@ -29,6 +30,7 @@ const AddLot = () => {
     } catch (error) {
       console.log(error.response.message);
     }
+    addlotform.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -38,7 +40,8 @@ const AddLot = () => {
       {user.role === "admin" && (
         <div>
           <Form
-            name="basic"
+            form={addlotform}
+            name="addlot"
             labelCol={{
               span: 8,
             }}

@@ -17,6 +17,8 @@ import AddItem from "./pages/AddItem";
 import ViewItemList from "./pages/ViewItemList";
 import AddLot from "./pages/AddLot";
 import ViewLot from "./pages/ViewLot";
+import AddBOM from "./pages/AddBOM";
+import ViewBOM from "./pages/ViewBOM";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,6 +36,8 @@ function App() {
             <Route path="itemlist" element={<ViewItemList />}></Route>
             <Route path="addlot" element={<AddLot />}></Route>
             <Route path="lotdetails" element={<ViewLot />}></Route>
+            <Route path="addbom" element={<AddBOM />}></Route>
+            <Route path="bomdetails" element={<ViewBOM />}></Route>
           </Route>
         </Route>
       </Route>
