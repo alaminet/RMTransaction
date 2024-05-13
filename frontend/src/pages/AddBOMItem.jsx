@@ -130,6 +130,7 @@ const AddBOMItem = () => {
                             options={partList}
                           />
                         </Form.Item>
+
                         <Form.Item
                           {...restField}
                           name={[name, "qty"]}

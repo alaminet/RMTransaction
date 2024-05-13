@@ -20,6 +20,7 @@ import ViewLot from "./pages/ViewLot";
 import AddBOM from "./pages/AddBOM";
 import ViewBOM from "./pages/ViewBOM";
 import AddBOMItem from "./pages/AddBOMItem";
+import ReceiveItem from "./pages/ReceiveItem";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,6 +41,7 @@ function App() {
             <Route path="addbom" element={<AddBOM />}></Route>
             <Route path="bomdetails" element={<ViewBOM />}></Route>
             <Route path="addbomitem" element={<AddBOMItem />}></Route>
+            <Route path="newreceive" element={<ReceiveItem />}></Route>
           </Route>
         </Route>
       </Route>
