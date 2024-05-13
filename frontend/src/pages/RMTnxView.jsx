@@ -85,7 +85,7 @@ const RMTnxView = () => {
               edDate: moment(endDate).format(),
             }
           );
-          console.log(rmIssueDone.data);
+
           const tableData = [];
           rmIssueDone?.data.map((order, i) => {
             order?.issueList?.map((item, j) => {

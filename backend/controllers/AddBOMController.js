@@ -1,6 +1,4 @@
-const Item = require("../model/itemModel");
 const BOM = require("../model/bomModel");
-const Lot = require("../model/lotModel");
 
 async function AddBOMController(req, res) {
   const { lot, itemlist, codeID, qty } = req.body;

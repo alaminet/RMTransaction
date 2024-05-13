@@ -126,6 +126,10 @@ const Menubar = () => {
               key: "addbom",
             },
             {
+              label: "Add BOM Item",
+              key: "addbomitem",
+            },
+            {
               label: "BOM Details",
               key: "bomdetails",
             },

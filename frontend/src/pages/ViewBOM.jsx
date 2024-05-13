@@ -32,7 +32,7 @@ const ViewBOM = () => {
   // lot selection
   const onFinish = async (values) => {
     // console.log("Success:", values);
-    setLoadings(true);
+
     setSelectLot(values.lot);
   };
   const onFinishFailed = (errorInfo) => {
@@ -161,30 +161,35 @@ const ViewBOM = () => {
 
   useEffect(() => {
     async function getBOM() {
-      const data = await axios.post(
-        "http://localhost:8000/v1/api/item/viewbom",
-        {
-          lot: selectLot,
-        }
-      );
-      const tableDataArr = [];
-      data?.data[0].itemlist?.map((item, i) => {
-        tableDataArr.push({
-          sl: ++i,
-          lot: data?.data[0].lotID.lot,
-          code: item?.codeID.code,
-          name: item?.codeID.itemname,
-          uom: item?.codeID.uom,
-          qty: item?.qty,
-          action: item.codeID._id,
+      try {
+        const data = await axios.post(
+          "http://localhost:8000/v1/api/item/viewbom",
+          {
+            lot: selectLot,
+          }
+        );
+        const tableDataArr = [];
+        data?.data[0].itemlist?.map((item, i) => {
+          tableDataArr.push({
+            sl: ++i,
+            lot: data?.data[0].lotID.lot,
+            code: item?.codeID.code,
+            name: item?.codeID.itemname,
+            uom: item?.codeID.uom,
+            qty: item?.qty,
+            action: item.codeID._id,
+          });
+          setTbllist(tableDataArr);
         });
-      });
-      console.log(tableDataArr.length);
+      } catch (error) {
+        console.log(error);
+
+        setTbllist(null);
+      }
     }
     getBOM();
     setLoadings(false);
-  }, [handleEdit, handleDelete, selectLot]);
-  console.log(tbllist);
+  }, [onFinish]);
   return (
     <>
       {user.role === "admin" || user.role === "LM" ? (
@@ -269,7 +274,7 @@ const ViewBOM = () => {
           </div>
         </div>
       ) : (
-        <p>lm</p>
+        <p>You are not allowed, please contact with admin</p>
       )}
     </>
   );

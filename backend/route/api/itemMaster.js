@@ -8,12 +8,15 @@ const EditLotController = require("../../controllers/EditLotController");
 const DeleteLotController = require("../../controllers/DeleteLotController");
 const AddBOMController = require("../../controllers/AddBOMController");
 const ViewBOMController = require("../../controllers/ViewBOMController");
+const ViewBOMLotController = require("../../controllers/ViewBOMLotController");
+const AddItemBOMController = require("../../controllers/AddItemBOMController");
 const route = express.Router();
 
 route.post("/additem", AddItemController);
 route.get("/viewitemlist", ViewItemController);
 route.put("/edititem", EditItemController);
 route.put("/dltitem", EditItemController);
+route.get("/name/:codeID", EditItemController);
 
 route.post("/addlot", AddLotController);
 route.get("/viewLot", ViewLotController);
@@ -22,5 +25,7 @@ route.put("/dltlot", DeleteLotController);
 
 route.post("/addbom", AddBOMController);
 route.post("/viewbom", ViewBOMController);
+route.get("/viewbomlot", ViewBOMLotController);
+route.put("/additembom", AddItemBOMController);
 
 module.exports = route;

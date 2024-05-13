@@ -19,6 +19,7 @@ import AddLot from "./pages/AddLot";
 import ViewLot from "./pages/ViewLot";
 import AddBOM from "./pages/AddBOM";
 import ViewBOM from "./pages/ViewBOM";
+import AddBOMItem from "./pages/AddBOMItem";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,6 +39,7 @@ function App() {
             <Route path="lotdetails" element={<ViewLot />}></Route>
             <Route path="addbom" element={<AddBOM />}></Route>
             <Route path="bomdetails" element={<ViewBOM />}></Route>
+            <Route path="addbomitem" element={<AddBOMItem />}></Route>
           </Route>
         </Route>
       </Route>
