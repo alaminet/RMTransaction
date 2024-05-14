@@ -117,6 +117,21 @@ const Menubar = () => {
           ],
         },
         {
+          type: "location",
+          label: "Location Master",
+          key: "location",
+          children: [
+            {
+              label: "Add Location",
+              key: "addlocation",
+            },
+            {
+              label: "Location Details",
+              key: "locdetails",
+            },
+          ],
+        },
+        {
           type: "bom",
           label: "BOM Master",
           key: "bom",

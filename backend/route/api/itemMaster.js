@@ -10,6 +10,8 @@ const AddBOMController = require("../../controllers/AddBOMController");
 const ViewBOMController = require("../../controllers/ViewBOMController");
 const ViewBOMLotController = require("../../controllers/ViewBOMLotController");
 const AddItemBOMController = require("../../controllers/AddItemBOMController");
+const AddLocationController = require("../../controllers/AddLocationModel");
+const ViewLocationController = require("../../controllers/ViewLocationController");
 const route = express.Router();
 
 route.post("/additem", AddItemController);
@@ -27,5 +29,8 @@ route.post("/addbom", AddBOMController);
 route.post("/viewbom", ViewBOMController);
 route.get("/viewbomlot", ViewBOMLotController);
 route.put("/additembom", AddItemBOMController);
+
+route.post("/addlocation", AddLocationController);
+route.get("/viewlocation", ViewLocationController);
 
 module.exports = route;
