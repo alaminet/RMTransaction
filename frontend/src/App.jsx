@@ -22,6 +22,10 @@ import ViewBOM from "./pages/ViewBOM";
 import AddBOMItem from "./pages/AddBOMItem";
 import ReceiveItem from "./pages/ReceiveItem";
 import AddLocation from "./pages/AddLocation";
+import ViewReceiveItem from "./pages/ViewReceiveItem";
+import AddStation from "./pages/AddStation";
+import ViewStation from "./pages/ViewStation";
+import ViewLocation from "./pages/ViewLocation";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -43,7 +47,11 @@ function App() {
             <Route path="bomdetails" element={<ViewBOM />}></Route>
             <Route path="addbomitem" element={<AddBOMItem />}></Route>
             <Route path="addlocation" element={<AddLocation />}></Route>
+            <Route path="locdetails" element={<ViewLocation />}></Route>
             <Route path="newreceive" element={<ReceiveItem />}></Route>
+            <Route path="receivedetails" element={<ViewReceiveItem />}></Route>
+            <Route path="addstation" element={<AddStation />}></Route>
+            <Route path="stationdtls" element={<ViewStation />}></Route>
           </Route>
         </Route>
       </Route>

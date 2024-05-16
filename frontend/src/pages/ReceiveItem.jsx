@@ -31,8 +31,8 @@ const ReceiveItem = () => {
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const onFinish = async (values) => {
-    // console.log("Success:", values);
-    // setLoadings(true);
+    // console.log("Success:", values.lot);
+    setLoadings(true);
     const itemlistArr = [];
     const itemArr = [];
     const wrongLocArr = [];
@@ -79,17 +79,16 @@ const ReceiveItem = () => {
             inv: values.invoice,
             BE: values.BE,
             PO: values.PO,
-            lot: values.lot,
+            lotID: values.lot,
             rmk: values.remarks,
             tnxby: user._id,
             receList: [...itemArr],
           }
         );
-
-        setLoadings(false);
         message.success(`Receive Tnx ID: ${data.data.rmReceive.tnxID}`);
         setTnxID(data.data.rmReceive.tnxID);
         receiveform.resetFields();
+        setLoadings(false);
       } catch (error) {
         setLoadings(false);
         message.warning(error.response.data.message);
@@ -98,6 +97,7 @@ const ReceiveItem = () => {
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    setLoadings(false);
   };
 
   useEffect(() => {

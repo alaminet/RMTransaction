@@ -117,6 +117,21 @@ const Menubar = () => {
           ],
         },
         {
+          type: "station",
+          label: "Station Master",
+          key: "station",
+          children: [
+            {
+              label: "Add Station",
+              key: "addstation",
+            },
+            {
+              label: "Station Details",
+              key: "stationdtls",
+            },
+          ],
+        },
+        {
           type: "location",
           label: "Location Master",
           key: "location",

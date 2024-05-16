@@ -6,7 +6,7 @@ const RMReceiveController = async (req, res) => {
     inv,
     BE,
     PO,
-    lot,
+    lotID,
     rmk,
     tnxby,
     receList,
@@ -27,7 +27,7 @@ const RMReceiveController = async (req, res) => {
         inv: inv,
         BE: BE,
         PO: PO,
-        lot: lot,
+        lotID: lotID,
         rmk: rmk,
         receList: receList,
         codeID: codeID,
@@ -38,7 +38,7 @@ const RMReceiveController = async (req, res) => {
       await rmReceive.save();
       res.status(200).send({ rmReceive, message: "Recevie Done !" });
     } else {
-      const rmReceive = await new RMReceive({
+      const rmFirstReceive = await new RMReceive({
         date: new Date(date),
         LC: LC,
         tnxID: 19000100,
@@ -46,7 +46,7 @@ const RMReceiveController = async (req, res) => {
         inv: inv,
         BE: BE,
         PO: PO,
-        lot: lot,
+        lotID: lotID,
         rmk: rmk,
         receList: receList,
         codeID: codeID,
@@ -54,10 +54,11 @@ const RMReceiveController = async (req, res) => {
         locID: locID,
         order: order,
       });
-      await rmReceive.save();
-      res.status(200).send({ rmReceive, message: "Recevie Done !" });
+      await rmFirstReceive.save();
+      res.status(200).send({ rmFirstReceive, message: "Recevie Done !" });
     }
   } catch (error) {
+    console.log(error);
     res.status(401).send({ message: "Receive Not Complete" });
   }
 };

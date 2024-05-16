@@ -3,14 +3,33 @@ const { Schema } = mongoose;
 
 const RMReceiveSchema = new Schema({
   date: Date,
-  LC: String,
-  inv: String,
-  BE: String,
-  PO: String,
-  rmk: String,
+  LC: {
+    type: String,
+    default: null,
+  },
+  inv: {
+    type: String,
+    default: null,
+  },
+  BE: {
+    type: String,
+    default: null,
+  },
+  PO: {
+    type: String,
+    default: null,
+  },
+  rmk: {
+    type: String,
+    default: null,
+  },
   tnxby: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  lotID: {
+    type: Schema.Types.ObjectId,
+    ref: "Lot",
   },
   tnxID: Number,
   receList: [

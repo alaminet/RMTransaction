@@ -4,68 +4,68 @@ import { Button, Form, Input, message } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 const { TextArea } = Input;
-const AddLocation = () => {
+
+const AddStation = () => {
   const user = useSelector((user) => user.loginSlice.login);
-  const [addlocform] = Form.useForm();
-  const [locList, setLocList] = useState();
-  const [loading, setLoading] = useState(false);
+  const [addStationForm] = Form.useForm();
+  const [stationList, setStationList] = useState();
   const onFinish = async (values) => {
-    // console.log("Success:", values);
-    setLoading(true);
+    console.log("Success:", values);
     const itemlistArr = [];
     const itemArr = [];
-    values.loclist?.split("\n").map((item, i) => {
-      itemlistArr.push(item);
-    });
+    values.stationlist
+      ?.trim()
+      .split("\n")
+      .map((item, i) => {
+        itemlistArr.push(item);
+      });
 
     itemlistArr?.map((list, j) => {
-      if (locList?.find((l) => l.loc === list)) {
+      if (stationList?.find((s) => s.station === list)) {
         console.log(list);
       } else {
-        const items = [{ loc: list }];
+        const items = [{ station: list }];
         itemArr.push(...items);
       }
     });
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/item/addlocation",
+        "http://localhost:8000/v1/api/item/addstation",
         {
           itemlist: [...itemArr],
         }
       );
+      console.log(data);
       message.success(data.data.message);
-      setLoading(false);
     } catch (error) {
       console.log(error.response.message);
-      setLoading(false);
     }
-    addlocform.resetFields();
+    addStationForm.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
-    setLoading(false);
     console.log("Failed:", errorInfo);
   };
 
   // view location list
   useEffect(() => {
-    async function getLoc() {
+    async function getStation() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewlocation"
+        "http://localhost:8000/v1/api/item/viewstation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
-        tableData.push({ locID: item._id, loc: item.loc });
-        setLocList(tableData);
+        tableData.push({ stationID: item._id, station: item.station });
+        setStationList(tableData);
       });
     }
-    getLoc();
+    getStation();
   }, [onFinish]);
   return (
     <>
       {user.role === "admin" && (
         <div>
           <Form
-            form={addlocform}
+            form={addStationForm}
             name="addlot"
             labelCol={{
               span: 8,
@@ -83,15 +83,15 @@ const AddLocation = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off">
             <Form.Item
-              label="Location List"
-              name="loclist"
+              label="Station List"
+              name="stationlist"
               rules={[
                 {
                   required: true,
                   message: "Please input Location paste from XL",
                 },
               ]}>
-              <TextArea rows={4} placeholder="ex: RM1:A01A ; RM3:B30D" />
+              <TextArea rows={4} placeholder="ex: DOOR" />
             </Form.Item>
 
             <Form.Item
@@ -99,12 +99,8 @@ const AddLocation = () => {
                 offset: 8,
                 span: 16,
               }}>
-              <Button
-                loading={loading}
-                disabled={loading}
-                type="primary"
-                htmlType="submit">
-                Add Location
+              <Button type="primary" htmlType="submit">
+                Add Station
               </Button>
             </Form.Item>
           </Form>
@@ -114,4 +110,4 @@ const AddLocation = () => {
   );
 };
 
-export default AddLocation;
+export default AddStation;

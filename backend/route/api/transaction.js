@@ -5,6 +5,7 @@ const RMIssueStatusUpdateController = require("../../controllers/RMIssueStatusUp
 const RMIssueRejectController = require("../../controllers/RMIssueRejectController");
 const RMIssueDoneController = require("../../controllers/RMIssueDoneController");
 const RMReceiveController = require("../../controllers/RMReceiveController");
+const ViewReceiveController = require("../../controllers/ViewReceiveController");
 const route = express.Router();
 
 route.post("/rmissue", RMIssueController);
@@ -15,5 +16,6 @@ route.get("/rmcheck", RMIssueWatingController);
 route.post("/rmtnxview", RMIssueDoneController);
 
 route.post("/rmreceive", RMReceiveController);
+route.post("/receiveview", ViewReceiveController);
 
 module.exports = route;

@@ -12,6 +12,12 @@ const ViewBOMLotController = require("../../controllers/ViewBOMLotController");
 const AddItemBOMController = require("../../controllers/AddItemBOMController");
 const AddLocationController = require("../../controllers/AddLocationModel");
 const ViewLocationController = require("../../controllers/ViewLocationController");
+const addStationController = require("../../controllers/AddStationController");
+const ViewStationController = require("../../controllers/ViewStationController");
+const EditStationController = require("../../controllers/EditStationController");
+const DeleteStationController = require("../../controllers/DeleteStationController");
+const EditLocationController = require("../../controllers/EditLocationController");
+const DeleteLocationController = require("../../controllers/DeleteLocationController");
 const route = express.Router();
 
 route.post("/additem", AddItemController);
@@ -32,5 +38,12 @@ route.put("/additembom", AddItemBOMController);
 
 route.post("/addlocation", AddLocationController);
 route.get("/viewlocation", ViewLocationController);
+route.get("/editlocation", EditLocationController);
+route.get("/deletelocation", DeleteLocationController);
+
+route.post("/addstation", addStationController);
+route.get("/viewstation", ViewStationController);
+route.put("/editstation", EditStationController);
+route.post("/deletestation", DeleteStationController);
 
 module.exports = route;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import {
@@ -19,6 +19,9 @@ import { useSelector } from "react-redux";
 
 const RMIssue = () => {
   const user = useSelector((user) => user.loginSlice.login);
+  const [stationlist, setStationlist] = useState([]);
+  const [lotlist, setLotlist] = useState([]);
+  const [itemList, setItemList] = useState([]);
   const [loadings, setLoadings] = useState(false);
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
@@ -27,6 +30,32 @@ const RMIssue = () => {
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
+  // Item list based on lot change
+  const onChangeLot = async (e) => {
+    if (e) {
+      try {
+        const data = await axios.post(
+          "http://localhost:8000/v1/api/item/viewbom",
+          {
+            lot: e,
+          }
+        );
+        const tableData = [];
+        data?.data?.map((item, i) => {
+          item?.itemlist.map((list, j) => {
+            tableData.push({
+              value: list.codeID._id,
+              label: `${list.codeID.code} - ${list.codeID.itemname}`,
+            });
+            setItemList(tableData);
+          });
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   // Form submit
   const onFinish = async (values) => {
@@ -64,6 +93,38 @@ const RMIssue = () => {
       setMsgType("error");
     }
   };
+
+  useEffect(() => {
+    // get station list
+    async function getStation() {
+      const data = await axios.get(
+        "http://localhost:8000/v1/api/item/viewstation"
+      );
+      const tableData = [];
+      data?.data?.map((item, i) => {
+        tableData.push({
+          label: item.station,
+          value: item._id,
+        });
+        setStationlist(tableData);
+      });
+    }
+    // get lot list
+    async function getLot() {
+      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
+      const tableData = [];
+      data?.data?.map((item, i) => {
+        tableData.push({
+          label: item.lot,
+          value: item._id,
+        });
+        setLotlist(tableData);
+      });
+    }
+
+    getLot();
+    getStation();
+  }, []);
 
   return (
     <>
@@ -112,24 +173,7 @@ const RMIssue = () => {
                   // onChange={onChangeCode}
                   // onSearch={onSearchCode}
                   filterOption={filterOption}
-                  options={[
-                    {
-                      value: "banmper",
-                      label: "Bamper",
-                    },
-                    {
-                      value: "trim1",
-                      label: "Trim1",
-                    },
-                    {
-                      value: "door",
-                      label: "DOOR",
-                    },
-                    {
-                      value: "final1",
-                      label: "Final 1",
-                    },
-                  ]}
+                  options={stationlist}
                 />
               </Form.Item>
             </Col>
@@ -150,23 +194,10 @@ const RMIssue = () => {
                   }}
                   showSearch
                   optionFilterProp="children"
-                  // onChange={onChangeCode}
+                  onChange={onChangeLot}
                   // onSearch={onSearchCode}
                   filterOption={filterOption}
-                  options={[
-                    {
-                      value: "PS7i_Lot 17~18",
-                      label: "PS7i_Lot 17~18",
-                    },
-                    {
-                      value: "PS7i_Lot 13~16",
-                      label: "PS7i_Lot 13~16",
-                    },
-                    {
-                      value: "PS7i_Lot 13~14",
-                      label: "PS7i_Lot 13~14",
-                    },
-                  ]}
+                  options={lotlist}
                 />
               </Form.Item>
             </Col>
@@ -196,7 +227,7 @@ const RMIssue = () => {
                       ]}>
                       <Select
                         style={{
-                          width: 150,
+                          width: 400,
                         }}
                         showSearch
                         placeholder="Part Code"
@@ -204,24 +235,8 @@ const RMIssue = () => {
                         // onChange={onChangeCode}
                         // onSearch={onSearchCode}
                         filterOption={filterOption}
-                        options={[
-                          {
-                            value: "87810-BV700",
-                            label: "87810-BV700",
-                          },
-                          {
-                            value: "87820-BV700",
-                            label: "87820-BV700",
-                          },
-                          {
-                            value: "87820-BV700",
-                            label: "87820-BV700",
-                          },
-                        ]}
+                        options={itemList}
                       />
-                    </Form.Item>
-                    <Form.Item {...restField} name={[name, "name"]}>
-                      <Input disabled placeholder="Part Name" />
                     </Form.Item>
 
                     <Form.Item
@@ -240,7 +255,7 @@ const RMIssue = () => {
                         showSearch
                         placeholder="Location"
                         optionFilterProp="children"
-                        //   onChange={onChangeCode}
+                        onChange={(record) => console.log(record)}
                         //   onSearch={onSearchCode}
                         filterOption={filterOption}
                         options={[
