@@ -270,20 +270,12 @@ const Menubar = () => {
       icon: <DiffOutlined />,
       children: [
         {
-          type: "Report",
-          label: "Report",
+          type: "stock",
+          label: "Stock",
           children: [
             {
-              label: "Daily Transaction",
-              key: "dailyTnx",
-            },
-            {
-              label: "Lot Wise Stock",
-              key: "lotstock",
-            },
-            {
-              label: "Model Wise Stock",
-              key: "modelstock",
+              label: "Part Wise",
+              key: "partstock",
             },
           ],
         },
@@ -298,20 +290,6 @@ const Menubar = () => {
             {
               label: "Buffer",
               key: "bufferissue",
-            },
-          ],
-        },
-        {
-          type: "Receive",
-          label: "Receive",
-          children: [
-            {
-              label: "RAW Material",
-              key: "rmreceive",
-            },
-            {
-              label: "Buffer",
-              key: "bufferreceive",
             },
           ],
         },
@@ -367,6 +345,36 @@ const Menubar = () => {
           ],
         },
         {
+          type: "station",
+          label: "Station Master",
+          key: "station",
+          children: [
+            {
+              label: "Add Station",
+              key: "addstation",
+            },
+            {
+              label: "Station Details",
+              key: "stationdtls",
+            },
+          ],
+        },
+        {
+          type: "location",
+          label: "Location Master",
+          key: "location",
+          children: [
+            {
+              label: "Add Location",
+              key: "addlocation",
+            },
+            {
+              label: "Location Details",
+              key: "locdetails",
+            },
+          ],
+        },
+        {
           type: "bom",
           label: "BOM Master",
           key: "bom",
@@ -374,6 +382,10 @@ const Menubar = () => {
             {
               label: "Add BOM",
               key: "addbom",
+            },
+            {
+              label: "Add BOM Item",
+              key: "addbomitem",
             },
             {
               label: "BOM Details",
@@ -433,12 +445,155 @@ const Menubar = () => {
       ],
     },
     {
-      label: (
-        <a href="#" target="_blank" rel="noopener noreferrer">
-          Navigation Four - Link
-        </a>
-      ),
-      key: "alipay",
+      label: "Admin",
+      key: "SubMenu3",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "User",
+          label: "User",
+          key: "user",
+          children: [
+            {
+              label: "Add User",
+              key: "adduser",
+            },
+            {
+              label: "User List",
+              key: "userlist",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Password Changed",
+      key: "passcng",
+      icon: <RetweetOutlined />,
+    },
+    {
+      label: "Logout",
+      key: "logout",
+      icon: <LogoutOutlined />,
+    },
+    // {
+    //   label: (
+    //     <a href="#" target="_blank" rel="noopener noreferrer">
+    //       Navigation Four - Link
+    //     </a>
+    //   ),
+    //   key: "alipay",
+    // },
+  ];
+  const checker = [
+    {
+      label: "Home",
+      key: "/",
+      icon: <HomeOutlined />,
+    },
+    {
+      label: "Transaction",
+      key: "SubMenu1",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "stock",
+          label: "Stock",
+          children: [
+            {
+              label: "Part Wise",
+              key: "partstock",
+            },
+          ],
+        },
+        {
+          type: "Issue",
+          label: "Issue",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmissue",
+            },
+            {
+              label: "Buffer",
+              key: "bufferissue",
+            },
+          ],
+        },
+        {
+          type: "Checklist",
+          label: "Checklist",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmcheck",
+            },
+            {
+              label: "Buffer",
+              key: "buffercheck",
+            },
+          ],
+        },
+      ],
+    },
+
+    {
+      label: "Password Changed",
+      key: "passcng",
+      icon: <RetweetOutlined />,
+    },
+    {
+      label: "Logout",
+      key: "logout",
+      icon: <LogoutOutlined />,
+    },
+  ];
+  const regular = [
+    {
+      label: "Home",
+      key: "/",
+      icon: <HomeOutlined />,
+    },
+    {
+      label: "Transaction",
+      key: "SubMenu1",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "stock",
+          label: "Stock",
+          children: [
+            {
+              label: "Part Wise",
+              key: "partstock",
+            },
+          ],
+        },
+        {
+          type: "Issue",
+          label: "Issue",
+          children: [
+            {
+              label: "RAW Material",
+              key: "rmissue",
+            },
+            {
+              label: "Buffer",
+              key: "bufferissue",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Password Changed",
+      key: "passcng",
+      icon: <RetweetOutlined />,
+    },
+    {
+      label: "Logout",
+      key: "logout",
+      icon: <LogoutOutlined />,
     },
   ];
   return (
@@ -449,7 +604,9 @@ const Menubar = () => {
         mode="horizontal"
         items={
           (user.role === "admin" && Adminitems) ||
-          (user.role === "LM" && LMitems)
+          (user.role === "LM" && LMitems) ||
+          (user.role === "checker" && checker) ||
+          (user.role === "user" && regular)
         }
       />
     </>
