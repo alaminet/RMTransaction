@@ -7,7 +7,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
   const onFinish = async (values) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     try {
       const userData = await axios.post(
         "http://localhost:8000/v1/api/auth/login",

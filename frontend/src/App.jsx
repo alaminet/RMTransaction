@@ -26,6 +26,7 @@ import ViewReceiveItem from "./pages/ViewReceiveItem";
 import AddStation from "./pages/AddStation";
 import ViewStation from "./pages/ViewStation";
 import ViewLocation from "./pages/ViewLocation";
+import PassChange from "./pages/PassChange";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,6 +35,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route element={<LoginUserRouter />}>
           <Route path="/" element={<Home />}>
+            <Route path="passcng" element={<PassChange />}></Route>
             <Route path="rmissue" element={<RMIssue />}></Route>
             <Route path="rmcheck" element={<RMCheck />}></Route>
             <Route path="dailyTnx" element={<RMTnxView />}></Route>

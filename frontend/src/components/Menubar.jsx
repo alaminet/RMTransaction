@@ -1,18 +1,32 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Menu } from "antd";
-import { HomeOutlined, DiffOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import { Menu, message } from "antd";
+import {
+  HomeOutlined,
+  DiffOutlined,
+  LogoutOutlined,
+  RetweetOutlined,
+} from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { Loginuser } from "../Slice/UserSlice";
 
 const Menubar = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [current, setCurrent] = useState("");
 
   const onClick = (e) => {
-    console.log("click ", e);
-    setCurrent(e.key);
-    navigate(e.key);
+    // console.log("click ", e);
+    if (e.key === "logout") {
+      message.warning("logout");
+      localStorage.removeItem("user");
+      dispatch(Loginuser(null));
+      navigate("/");
+    } else {
+      setCurrent(e.key);
+      navigate(e.key);
+    }
   };
 
   // Menu List
@@ -225,13 +239,23 @@ const Menubar = () => {
       ],
     },
     {
-      label: (
-        <a href="#" target="_blank" rel="noopener noreferrer">
-          Navigation Four - Link
-        </a>
-      ),
-      key: "alipay",
+      label: "Password Changed",
+      key: "passcng",
+      icon: <RetweetOutlined />,
     },
+    {
+      label: "Logout",
+      key: "logout",
+      icon: <LogoutOutlined />,
+    },
+    // {
+    //   label: (
+    //     <a href="#" target="_blank" rel="noopener noreferrer">
+    //       Navigation Four - Link
+    //     </a>
+    //   ),
+    //   key: "alipay",
+    // },
   ];
 
   const LMitems = [
