@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Input, Table, message, Popconfirm, Modal, Radio } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  message,
+  Popconfirm,
+  Modal,
+  Radio,
+  Flex,
+} from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 const ViewUser = () => {
@@ -19,7 +28,7 @@ const ViewUser = () => {
 
   const handleOk = async () => {
     setIsModalOpen(false);
-    console.log(editID, newRole);
+    // console.log(editID, newRole);
     try {
       const userEdit = await axios.put(
         "http://localhost:8000/v1/api/auth/edituser",
@@ -60,6 +69,20 @@ const ViewUser = () => {
     message.error("Click on No");
   };
 
+  const handleReset = async (e) => {
+    try {
+      const passReset = await axios.post(
+        "http://localhost:8000/v1/api/auth/resetpass",
+        {
+          userID: e,
+        }
+      );
+      message.success(`${passReset.data.userID} 's Password Reset`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // table arrangment
   const columns = [
     {
@@ -83,21 +106,26 @@ const ViewUser = () => {
       key: "action",
       render: (item) => (
         <>
-          <Button
-            icon={<EditTwoTone />}
-            onClick={() => handleEdit(item)}></Button>
-          <Popconfirm
-            title="Delete the task"
-            description="Are you sure to delete this task?"
-            onConfirm={() => handleDelete(item)}
-            onCancel={cancel}
-            okText="Yes"
-            cancelText="No">
+          <Flex gap={16}>
+            <Button type="primary" onClick={() => handleReset(item)}>
+              Reset Pass
+            </Button>
             <Button
-              style={{ marginLeft: "10px" }}
-              danger
-              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
-          </Popconfirm>
+              icon={<EditTwoTone />}
+              onClick={() => handleEdit(item)}></Button>
+            <Popconfirm
+              title="Delete the task"
+              description="Are you sure to delete this task?"
+              onConfirm={() => handleDelete(item)}
+              onCancel={cancel}
+              okText="Yes"
+              cancelText="No">
+              <Button
+                style={{ marginLeft: "10px" }}
+                danger
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+            </Popconfirm>
+          </Flex>
         </>
       ),
     },
