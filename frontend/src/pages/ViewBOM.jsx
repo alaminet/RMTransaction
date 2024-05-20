@@ -255,6 +255,7 @@ const ViewBOM = () => {
               style={{ width: "100%" }}
               dataSource={tblData}
               columns={columns}
+              pagination={false}
             />
           </div>
           <div>

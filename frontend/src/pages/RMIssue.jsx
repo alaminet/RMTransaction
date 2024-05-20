@@ -22,6 +22,7 @@ const RMIssue = () => {
   const [stationlist, setStationlist] = useState([]);
   const [lotlist, setLotlist] = useState([]);
   const [itemList, setItemList] = useState([]);
+  const [itemFull, setItemFull] = useState([]);
   const [loadings, setLoadings] = useState(false);
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
@@ -36,19 +37,31 @@ const RMIssue = () => {
     if (e) {
       try {
         const data = await axios.post(
-          "http://localhost:8000/v1/api/item/viewbom",
+          "http://localhost:8000/v1/api/tnx/lotrecview",
           {
             lot: e,
           }
         );
-        const tableData = [];
+        const itemData = [];
+        const itemFullData = [];
         data?.data?.map((item, i) => {
-          item?.itemlist.map((list, j) => {
-            tableData.push({
-              value: list.codeID._id,
-              label: `${list.codeID.code} - ${list.codeID.itemname}`,
-            });
-            setItemList(tableData);
+          item?.receList.map((list, j) => {
+            if (list.issue < list.qty) {
+              itemData.push({
+                value: list._id,
+                label: `
+                ${list.codeID.code} - 
+                ${list.codeID.itemname} - 
+                ${list.locID.loc} - 
+                ${list.qty - list.issue}${list.codeID.uom}`,
+              });
+              itemFullData.push({
+                id: list._id,
+                codeID: list.codeID._id,
+              });
+              setItemList(itemData);
+              setItemFull(itemFullData);
+            }
           });
         });
       } catch (error) {
@@ -59,14 +72,20 @@ const RMIssue = () => {
 
   // Form submit
   const onFinish = async (values) => {
+    // console.log(values);
     const issuelist = [];
     values.issueList.map((item, i) => {
-      issuelist.push({
-        code: item.code,
-        qty: item.issueQty,
-        loc: item.location,
-        rmk: item.remarks,
-      });
+      const matchItem = itemFull.find((f) => f.id === item.code);
+      if (matchItem) {
+        issuelist.push({
+          lineID: matchItem.id,
+          codeID: matchItem.codeID,
+          qty: item.issueQty,
+          rmk: item.remarks,
+        });
+      } else {
+        console.log("not match");
+      }
     });
 
     setLoadings(true);
@@ -75,14 +94,12 @@ const RMIssue = () => {
         "http://localhost:8000/v1/api/tnx/rmissue",
         {
           date: moment(values.DatePicker.$d).format(),
-          station: values.station,
-          model: values.lot.split("_")[0],
-          lot: values.lot,
-          tnxby: user.userID,
+          stationID: values.station,
+          lotID: values.lot,
+          tnxby: user._id,
           issueList: [...issuelist],
         }
       );
-      console.log(data.data);
       setLoadings(false);
       setMsg(`Entry Done, Tnx ID: ${data.data.tnxID}`);
       setMsgType("success");
@@ -227,55 +244,15 @@ const RMIssue = () => {
                       ]}>
                       <Select
                         style={{
-                          width: 400,
+                          width: 500,
                         }}
                         showSearch
-                        placeholder="Part Code"
+                        placeholder="Part Code ; Name ; Location"
                         optionFilterProp="children"
-                        // onChange={onChangeCode}
                         // onSearch={onSearchCode}
                         filterOption={filterOption}
                         options={itemList}
                       />
-                    </Form.Item>
-
-                    <Form.Item
-                      {...restField}
-                      name={[name, "location"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Location Required",
-                        },
-                      ]}>
-                      <Select
-                        style={{
-                          width: 120,
-                        }}
-                        showSearch
-                        placeholder="Location"
-                        optionFilterProp="children"
-                        onChange={(record) => console.log(record)}
-                        //   onSearch={onSearchCode}
-                        filterOption={filterOption}
-                        options={[
-                          {
-                            value: "RM1:A01B",
-                            label: "RM1:A01B",
-                          },
-                          {
-                            value: "RM3:A01B",
-                            label: "RM3:A01B",
-                          },
-                          {
-                            value: "RM1:L01B",
-                            label: "RM1:L01B",
-                          },
-                        ]}
-                      />
-                    </Form.Item>
-                    <Form.Item {...restField} name={[name, "onHandQty"]}>
-                      <InputNumber disabled placeholder="On_hanad Qty" />
                     </Form.Item>
                     <Form.Item
                       {...restField}

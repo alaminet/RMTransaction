@@ -8,7 +8,11 @@ const RMIssueDoneController = async (req, res) => {
       $gte: new Date(stDate),
       $lte: new Date(edDate),
     },
-  });
+  })
+    .populate("issueList.codeID")
+    .populate("stationID")
+    .populate("tnxby")
+    .populate("lotID");
   return res.status(200).send(tnxDonelist);
 };
 

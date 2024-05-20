@@ -52,20 +52,6 @@ const Menubar = () => {
           ],
         },
         {
-          type: "Receive",
-          label: "Receive",
-          children: [
-            {
-              label: "RAW Material",
-              key: "rmreceive",
-            },
-            {
-              label: "Buffer",
-              key: "bufferreceive",
-            },
-          ],
-        },
-        {
           type: "Checklist",
           label: "Checklist",
           children: [
