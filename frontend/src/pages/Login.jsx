@@ -10,7 +10,7 @@ const Login = () => {
     // console.log("Success:", values);
     try {
       const userData = await axios.post(
-        "http://localhost:8000/v1/api/auth/login",
+        "https://wms-ftl.onrender.com/v1/api/auth/login",
         {
           userID: values.userID,
           password: values.password,
@@ -45,7 +45,8 @@ const Login = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off">
+            autoComplete="off"
+          >
             <Form.Item
               label="User ID"
               name="userID"
@@ -54,7 +55,8 @@ const Login = () => {
                   required: true,
                   message: "Please input your user ID!",
                 },
-              ]}>
+              ]}
+            >
               <Input />
             </Form.Item>
 
@@ -66,7 +68,8 @@ const Login = () => {
                   required: true,
                   message: "Please input your password!",
                 },
-              ]}>
+              ]}
+            >
               <Input.Password />
             </Form.Item>
 
@@ -74,7 +77,8 @@ const Login = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}>
+              }}
+            >
               <Button type="primary" htmlType="submit">
                 Login
               </Button>
