@@ -445,28 +445,6 @@ const Menubar = () => {
       ],
     },
     {
-      label: "Admin",
-      key: "SubMenu3",
-      icon: <DiffOutlined />,
-      children: [
-        {
-          type: "User",
-          label: "User",
-          key: "user",
-          children: [
-            {
-              label: "Add User",
-              key: "adduser",
-            },
-            {
-              label: "User List",
-              key: "userlist",
-            },
-          ],
-        },
-      ],
-    },
-    {
       label: "Password Changed",
       key: "passcng",
       icon: <RetweetOutlined />,
