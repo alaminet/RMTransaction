@@ -22,7 +22,7 @@ const ViewStation = () => {
     setIsModalOpen(false);
     try {
       const stationEdit = await axios.put(
-        "http://localhost:8000/v1/api/item/editstation",
+        "http://wms-ftl.onrender.com/v1/api/item/editstation",
         {
           id: editID.action,
           data: editData,
@@ -46,7 +46,7 @@ const ViewStation = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "http://localhost:8000/v1/api/item/deletestation",
+        "http://wms-ftl.onrender.com/v1/api/item/deletestation",
         {
           id: item,
         }
@@ -102,7 +102,7 @@ const ViewStation = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewstation"
+        "http://wms-ftl.onrender.com/v1/api/item/viewstation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

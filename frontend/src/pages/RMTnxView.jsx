@@ -46,7 +46,7 @@ const RMTnxView = () => {
   const handleDelete = async (item) => {
     try {
       const itemDlt = await axios.post(
-        "http://localhost:8000/v1/api/tnx/dltissueline",
+        "http://wms-ftl.onrender.com/v1/api/tnx/dltissueline",
         {
           id: item.action,
         }
@@ -138,7 +138,7 @@ const RMTnxView = () => {
           console.log("Date Required");
         } else {
           const rmIssueDone = await axios.post(
-            "http://localhost:8000/v1/api/tnx/rmtnxview/",
+            "http://wms-ftl.onrender.com/v1/api/tnx/rmtnxview/",
             {
               stDate: moment(strDate).format(),
               edDate: moment(endDate).format(),

@@ -80,7 +80,7 @@ const ViewReceiveItem = () => {
           console.log("Date Required");
         } else {
           const rmReceive = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveview",
+            "http://wms-ftl.onrender.com/v1/api/tnx/receiveview",
             {
               stDate: moment(strDate).format(),
               edDate: moment(endDate).format(),

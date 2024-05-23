@@ -31,7 +31,7 @@ const AddBOM = () => {
 
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/item/addbom",
+        "http://wms-ftl.onrender.com/v1/api/item/addbom",
         {
           lot: values.lot,
           itemlist: [...itemArr],
