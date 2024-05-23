@@ -14,7 +14,7 @@ const AddUser = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/auth/adduser",
+        "https://wms-ftl.onrender.com/v1/api/auth/adduser",
         {
           userID: values.userid,
           password: values.password,

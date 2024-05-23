@@ -17,7 +17,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const recHistory = await axios.get(
-        "http://wms-ftl.onrender.com/v1/api/tnx/itemwiserec",
+        "https://wms-ftl.onrender.com/v1/api/tnx/itemwiserec",
         {
           lineID: item.receID,
         }
@@ -34,7 +34,7 @@ const RMCheck = () => {
       });
       // console.log(receIDArr[0].issueQty);
       const tnxUpdate = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/tnx/issueUpdate",
+        "https://wms-ftl.onrender.com/v1/api/tnx/issueUpdate",
         {
           issueID: item.issueID,
           receID: item.receID,
@@ -57,7 +57,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const tnxUpdate = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/tnx/issueReject",
+        "https://wms-ftl.onrender.com/v1/api/tnx/issueReject",
         {
           lineID: item.issueID,
         }
@@ -125,7 +125,7 @@ const RMCheck = () => {
 
   async function getRMIssueData() {
     const issueData = await axios.get(
-      "http://wms-ftl.onrender.com/v1/api/tnx/rmcheck"
+      "https://wms-ftl.onrender.com/v1/api/tnx/rmcheck"
     );
     const tableData = [];
     issueData?.data?.map((order, i) => {

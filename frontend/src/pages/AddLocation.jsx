@@ -28,7 +28,7 @@ const AddLocation = () => {
     });
     try {
       const data = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/item/addlocation",
+        "https://wms-ftl.onrender.com/v1/api/item/addlocation",
         {
           itemlist: [...itemArr],
         }
@@ -50,7 +50,7 @@ const AddLocation = () => {
   useEffect(() => {
     async function getLoc() {
       const data = await axios.get(
-        "http://wms-ftl.onrender.com/v1/api/item/viewlocation"
+        "https://wms-ftl.onrender.com/v1/api/item/viewlocation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

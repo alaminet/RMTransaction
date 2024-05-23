@@ -31,7 +31,7 @@ const ViewUser = () => {
     // console.log(editID, newRole);
     try {
       const userEdit = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/auth/edituser",
+        "https://wms-ftl.onrender.com/v1/api/auth/edituser",
         {
           userID: editID,
           role: newRole,
@@ -54,7 +54,7 @@ const ViewUser = () => {
   const handleDelete = async (item) => {
     try {
       const userDelete = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/auth/dltuser",
+        "https://wms-ftl.onrender.com/v1/api/auth/dltuser",
         {
           userID: item,
         }
@@ -72,7 +72,7 @@ const ViewUser = () => {
   const handleReset = async (e) => {
     try {
       const passReset = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/auth/resetpass",
+        "https://wms-ftl.onrender.com/v1/api/auth/resetpass",
         {
           userID: e,
         }
@@ -134,7 +134,7 @@ const ViewUser = () => {
   useEffect(() => {
     async function getData() {
       const issueData = await axios.get(
-        "http://wms-ftl.onrender.com/v1/api/auth/viewuser"
+        "https://wms-ftl.onrender.com/v1/api/auth/viewuser"
       );
       const tableData = [];
       issueData?.data?.map((item, i) => {

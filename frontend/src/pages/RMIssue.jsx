@@ -37,7 +37,7 @@ const RMIssue = () => {
     if (e) {
       try {
         const data = await axios.post(
-          "http://wms-ftl.onrender.com/v1/api/tnx/lotrecview",
+          "https://wms-ftl.onrender.com/v1/api/tnx/lotrecview",
           {
             lot: e,
           }
@@ -91,7 +91,7 @@ const RMIssue = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/tnx/rmissue",
+        "https://wms-ftl.onrender.com/v1/api/tnx/rmissue",
         {
           date: moment(values.DatePicker.$d).format(),
           stationID: values.station,
@@ -115,7 +115,7 @@ const RMIssue = () => {
     // get station list
     async function getStation() {
       const data = await axios.get(
-        "http://wms-ftl.onrender.com/v1/api/item/viewstation"
+        "https://wms-ftl.onrender.com/v1/api/item/viewstation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -128,7 +128,7 @@ const RMIssue = () => {
     }
     // get lot list
     async function getLot() {
-      const data = await axios.get("http://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({

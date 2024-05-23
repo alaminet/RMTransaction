@@ -12,7 +12,7 @@ const PassChange = () => {
     console.log("Success:", values);
     try {
       const userData = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/auth/passchange",
+        "https://wms-ftl.onrender.com/v1/api/auth/passchange",
         {
           userID: user._id,
           oldPass: values.oldPass,

@@ -23,7 +23,7 @@ const ViewLot = () => {
     setIsModalOpen(false);
     try {
       const userEdit = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/item/editlot",
+        "https://wms-ftl.onrender.com/v1/api/item/editlot",
         {
           id: editID,
           filed: editField,
@@ -48,7 +48,7 @@ const ViewLot = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "http://wms-ftl.onrender.com/v1/api/item/dltlot",
+        "https://wms-ftl.onrender.com/v1/api/item/dltlot",
         {
           id: item,
         }
@@ -108,7 +108,7 @@ const ViewLot = () => {
 
   useEffect(() => {
     async function getData() {
-      const data = await axios.get("http://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({

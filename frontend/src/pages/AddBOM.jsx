@@ -31,7 +31,7 @@ const AddBOM = () => {
 
     try {
       const data = await axios.post(
-        "http://wms-ftl.onrender.com/v1/api/item/addbom",
+        "https://wms-ftl.onrender.com/v1/api/item/addbom",
         {
           lot: values.lot,
           itemlist: [...itemArr],
@@ -51,7 +51,7 @@ const AddBOM = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
+      const data = await axios.get("https://localhost:8000/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -60,7 +60,7 @@ const AddBOM = () => {
     }
     async function getItem() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewitemlist"
+        "https://localhost:8000/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
