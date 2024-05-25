@@ -7,6 +7,7 @@ const RMCheck = () => {
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [filterData, setFilterData] = useState([]);
 
   const tblData = tbllist?.filter((item) =>
     item?.code.toLowerCase().includes(search.toLowerCase())
@@ -43,9 +44,9 @@ const RMCheck = () => {
       );
       setLoading(false);
       message.success("Check Done!");
-      setTimeout(() => {
-        window.location.reload(true);
-      }, 1000);
+      setFilterData(
+        filterData.filter((a) => a.action.issueID !== item.issueID)
+      );
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -150,7 +151,15 @@ const RMCheck = () => {
 
   useEffect(() => {
     getRMIssueData();
-  }, [tbllist, search]);
+    setFilterData(tblData);
+  }, [search]);
+
+  const handleRefress = () => {
+    getRMIssueData();
+    const nextList = [...tbllist];
+    nextList.reverse();
+    setFilterData(nextList);
+  };
 
   return (
     <>
@@ -162,7 +171,7 @@ const RMCheck = () => {
             variant="filled"
           />
           <Button
-            onClick={() => window.location.reload(false)}
+            onClick={handleRefress}
             type="primary"
             shape="circle"
             icon={<ReloadOutlined />}
@@ -170,7 +179,7 @@ const RMCheck = () => {
         </Flex>
         <Table
           style={{ width: "100%" }}
-          dataSource={tblData}
+          dataSource={filterData}
           columns={columns}
         />
       </div>
