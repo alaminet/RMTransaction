@@ -9,10 +9,6 @@ const RMCheck = () => {
   const [loading, setLoading] = useState(false);
   const [filterData, setFilterData] = useState([]);
 
-  const tblData = tbllist?.filter((item) =>
-    item?.code.toLowerCase().includes(search.toLowerCase())
-  );
-
   const handleDone = async (item) => {
     // console.log(item.dtls.qty);
     setLoading(true);
@@ -44,9 +40,7 @@ const RMCheck = () => {
       );
       setLoading(false);
       message.success("Check Done!");
-      setFilterData(
-        filterData.filter((a) => a.action.issueID !== item.issueID)
-      );
+      setTbllist(tbllist.filter((a) => a.action.issueID !== item.issueID));
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -64,9 +58,12 @@ const RMCheck = () => {
         }
       );
       setLoading(false);
+      message.warning("Item Rejected!");
+      setTbllist(tbllist.filter((a) => a.action.issueID !== item.issueID));
     } catch (error) {
       console.log(error);
       setLoading(false);
+      message.error("Error Found");
     }
   };
 
@@ -151,14 +148,13 @@ const RMCheck = () => {
 
   useEffect(() => {
     getRMIssueData();
-    setFilterData(tblData);
-  }, [search]);
+  }, []);
 
   const handleRefress = () => {
     getRMIssueData();
     const nextList = [...tbllist];
     nextList.reverse();
-    setFilterData(nextList);
+    setTbllist(nextList);
   };
 
   return (
@@ -179,7 +175,9 @@ const RMCheck = () => {
         </Flex>
         <Table
           style={{ width: "100%" }}
-          dataSource={filterData}
+          dataSource={tbllist?.filter((item) =>
+            item?.code.toLowerCase().includes(search.toLowerCase())
+          )}
           columns={columns}
         />
       </div>
