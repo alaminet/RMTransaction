@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
-import { Button, Form, DatePicker, Divider, Input, Table } from "antd";
+import {
+  Button,
+  Form,
+  DatePicker,
+  Divider,
+  Input,
+  Table,
+  Typography,
+} from "antd";
 
 const ViewReceiveItem = () => {
   const [tbllist, setTbllist] = useState([]);
@@ -122,12 +130,16 @@ const ViewReceiveItem = () => {
   return (
     <>
       <div>
+        <Typography.Title level={2} style={{ textAlign: "center" }}>
+          View Receive Details
+        </Typography.Title>
         <Form
           layout="inline"
           name="rmReceiveView"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off">
+          autoComplete="off"
+        >
           <Form.Item
             label="Start"
             name="StartDate"
@@ -136,7 +148,8 @@ const ViewReceiveItem = () => {
                 required: true,
                 message: "Please input!",
               },
-            ]}>
+            ]}
+          >
             <DatePicker />
           </Form.Item>
           <Form.Item
@@ -147,7 +160,8 @@ const ViewReceiveItem = () => {
                 required: true,
                 message: "Please input!",
               },
-            ]}>
+            ]}
+          >
             <DatePicker />
           </Form.Item>
 
@@ -156,7 +170,8 @@ const ViewReceiveItem = () => {
               type="primary"
               htmlType="submit"
               loading={loading}
-              disabled={loading}>
+              disabled={loading}
+            >
               Find
             </Button>
           </Form.Item>

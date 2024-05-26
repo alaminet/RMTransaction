@@ -10,6 +10,7 @@ import {
   Radio,
   Form,
   Select,
+  Typography,
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -195,6 +196,9 @@ const ViewBOM = () => {
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <div>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            View BOM Details
+          </Typography.Title>
             <Form
               // form={addbomform}
               name="addbom"

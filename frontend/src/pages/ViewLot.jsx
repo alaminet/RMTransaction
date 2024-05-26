@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Input, Table, message, Popconfirm, Modal, Radio } from "antd";
+import { Button, Input, Table, message, Popconfirm, Modal, Radio, Typography } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
@@ -88,18 +88,21 @@ const ViewLot = () => {
           <>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item)}></Button>
+              onClick={() => handleEdit(item)}
+            ></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this Item?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No">
+              cancelText="No"
+            >
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+              ></Button>
             </Popconfirm>
           </>
         ),
@@ -108,7 +111,9 @@ const ViewLot = () => {
 
   useEffect(() => {
     async function getData() {
-      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get(
+        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({
@@ -127,6 +132,9 @@ const ViewLot = () => {
     <>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            View Lot Details
+          </Typography.Title>
           <div>
             <Input
               onChange={(e) => setSearch(e.target.value)}
@@ -144,7 +152,8 @@ const ViewLot = () => {
               title="Edit User Role"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}>
+              onCancel={handleCancel}
+            >
               <div>
                 <Radio.Group onChange={(e) => setEditField(e.target.value)}>
                   <Radio value="model">Model</Radio>

@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Input, Table, message, Popconfirm, Modal, Radio } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  message,
+  Popconfirm,
+  Modal,
+  Radio,
+  Typography,
+} from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
@@ -81,18 +90,21 @@ const ViewStation = () => {
           <>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item, record)}></Button>
+              onClick={() => handleEdit(item, record)}
+            ></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this Item?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No">
+              cancelText="No"
+            >
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+              ></Button>
             </Popconfirm>
           </>
         ),
@@ -121,6 +133,9 @@ const ViewStation = () => {
     <>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            View Station Details
+          </Typography.Title>
           <div>
             <Input
               onChange={(e) => setSearch(e.target.value)}
@@ -139,7 +154,8 @@ const ViewStation = () => {
               title="Edit Station Name"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}>
+              onCancel={handleCancel}
+            >
               <div>
                 <Input
                   placeholder={editID?.station}

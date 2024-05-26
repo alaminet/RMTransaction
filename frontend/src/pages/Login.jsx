@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import { Button, Flex, Form, Input, message } from "antd";
+import { Button, Flex, Form, Input, Typography, message } from "antd";
 import { useDispatch } from "react-redux";
 import { Loginuser } from "../Slice/UserSlice";
 const Login = () => {
@@ -31,7 +31,9 @@ const Login = () => {
       {contextHolder}
       <Flex align="center" justify="center">
         <div>
-          <h1 style={{ textAlign: "center" }}>Login Your ID</h1>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            Login your ID
+          </Typography.Title>
           <Form
             name="login"
             labelCol={{

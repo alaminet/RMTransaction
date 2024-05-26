@@ -13,6 +13,8 @@ import {
   Row,
   Select,
   Space,
+  Typography,
+  message,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -72,42 +74,48 @@ const RMIssue = () => {
 
   // Form submit
   const onFinish = async (values) => {
-    // console.log(values);
-    const issuelist = [];
-    values.issueList.map((item, i) => {
-      const matchItem = itemFull.find((f) => f.id === item.code);
-      if (matchItem) {
-        issuelist.push({
-          lineID: matchItem.id,
-          codeID: matchItem.codeID,
-          qty: item.issueQty,
-          rmk: item.remarks,
-        });
-      } else {
-        console.log("not match");
-      }
-    });
-
+    // console.log(values.issueList);
     setLoadings(true);
-    try {
-      const data = await axios.post(
-        "https://wms-ftl.onrender.com/v1/api/tnx/rmissue",
-        {
-          date: moment(values.DatePicker.$d).format(),
-          stationID: values.station,
-          lotID: values.lot,
-          tnxby: user._id,
-          issueList: [...issuelist],
+    const issuelist = [];
+    if (!values.issueList || values.issueList.length < 1) {
+      message.warning("No Item Found");
+      setLoadings(false);
+    } else {
+      values?.issueList?.map((item, i) => {
+        const matchItem = itemFull.find((f) => f.id === item.code);
+        if (matchItem) {
+          issuelist.push({
+            lineID: matchItem.id,
+            codeID: matchItem.codeID,
+            qty: item.issueQty,
+            rmk: item.remarks,
+          });
+        } else {
+          message.warning("Item not match");
+          setLoadings(false);
         }
-      );
-      setLoadings(false);
-      setMsg(`Entry Done, Tnx ID: ${data.data.tnxID}`);
-      setMsgType("success");
-      RMIssueform.resetFields();
-    } catch (error) {
-      setLoadings(false);
-      setMsg(error.response.data.error);
-      setMsgType("error");
+      });
+
+      try {
+        const data = await axios.post(
+          "https://wms-ftl.onrender.com/v1/api/tnx/rmissue",
+          {
+            date: moment(values.DatePicker.$d).format(),
+            stationID: values.station,
+            lotID: values.lot,
+            tnxby: user._id,
+            issueList: [...issuelist],
+          }
+        );
+        setLoadings(false);
+        setMsg(`Entry Done, Tnx ID: ${data.data.tnxID}`);
+        setMsgType("success");
+        RMIssueform.resetFields();
+      } catch (error) {
+        setLoadings(false);
+        setMsg(error.response.data.error);
+        setMsgType("error");
+      }
     }
   };
 
@@ -128,7 +136,9 @@ const RMIssue = () => {
     }
     // get lot list
     async function getLot() {
-      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get(
+        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({
@@ -147,6 +157,9 @@ const RMIssue = () => {
     <>
       <div>
         {msg && <Alert message={msg} type={msgType} showIcon closable />}
+        <Typography.Title level={2} style={{ textAlign: "center" }}>
+          Part Issue Form
+        </Typography.Title>
         <Form
           form={RMIssueform}
           variant="filled"
@@ -156,7 +169,8 @@ const RMIssue = () => {
             {
               // maxWidth: 600,
             }
-          }>
+          }
+        >
           <Row gutter={16}>
             <Col>
               <Form.Item
@@ -166,7 +180,8 @@ const RMIssue = () => {
                     required: true,
                     message: "Issue Date Required!",
                   },
-                ]}>
+                ]}
+              >
                 <DatePicker placeholder="Issue Date" format={"DD-MMM-YY"} />
               </Form.Item>
             </Col>
@@ -179,7 +194,8 @@ const RMIssue = () => {
                     required: true,
                     message: "Station Required!",
                   },
-                ]}>
+                ]}
+              >
                 <Select
                   placeholder="Station"
                   style={{
@@ -203,7 +219,8 @@ const RMIssue = () => {
                     required: true,
                     message: "Lot Required!",
                   },
-                ]}>
+                ]}
+              >
                 <Select
                   placeholder="Lot/Order"
                   style={{
@@ -232,7 +249,8 @@ const RMIssue = () => {
                       display: "flex",
                       marginBottom: 8,
                     }}
-                    align="baseline">
+                    align="baseline"
+                  >
                     <Form.Item
                       {...restField}
                       name={[name, "code"]}
@@ -241,7 +259,8 @@ const RMIssue = () => {
                           required: true,
                           message: "Part Code Required",
                         },
-                      ]}>
+                      ]}
+                    >
                       <Select
                         style={{
                           width: 500,
@@ -262,7 +281,8 @@ const RMIssue = () => {
                           required: true,
                           message: "input Issue Qty!",
                         },
-                      ]}>
+                      ]}
+                    >
                       <InputNumber placeholder="Issue Qty" />
                     </Form.Item>
 
@@ -278,7 +298,8 @@ const RMIssue = () => {
                     type="dashed"
                     onClick={() => add()}
                     block
-                    icon={<PlusOutlined />}>
+                    icon={<PlusOutlined />}
+                  >
                     Add field
                   </Button>
                 </Form.Item>
@@ -291,7 +312,8 @@ const RMIssue = () => {
               type="primary"
               htmlType="submit"
               loading={loadings}
-              disabled={loadings}>
+              disabled={loadings}
+            >
               Submit
             </Button>
           </Form.Item>
