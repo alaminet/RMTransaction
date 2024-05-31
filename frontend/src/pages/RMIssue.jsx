@@ -13,12 +13,9 @@ import {
   Row,
   Select,
   Space,
-  Typography,
-  message,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
-
 const RMIssue = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [stationlist, setStationlist] = useState([]);
@@ -29,11 +26,9 @@ const RMIssue = () => {
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
   const [RMIssueform] = Form.useForm();
-
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
   // Item list based on lot change
   const onChangeLot = async (e) => {
     if (e) {
@@ -71,30 +66,23 @@ const RMIssue = () => {
       }
     }
   };
-
   // Form submit
   const onFinish = async (values) => {
-    // console.log(values.issueList);
-    setLoadings(true);
+    // console.log(values);
     const issuelist = [];
-    if (!values.issueList || values.issueList.length < 1) {
-      message.warning("No Item Found");
-      setLoadings(false);
-    } else {
-      values?.issueList?.map((item, i) => {
-        const matchItem = itemFull.find((f) => f.id === item.code);
-        if (matchItem) {
-          issuelist.push({
-            lineID: matchItem.id,
-            codeID: matchItem.codeID,
-            qty: item.issueQty,
-            rmk: item.remarks,
-          });
-        } else {
-          message.warning("Item not match");
-          setLoadings(false);
-        }
-      });
+    values.issueList.map((item, i) => {
+      const matchItem = itemFull.find((f) => f.id === item.code);
+      if (matchItem) {
+        issuelist.push({
+          lineID: matchItem.id,
+          codeID: matchItem.codeID,
+          qty: item.issueQty,
+          rmk: item.remarks,
+        });
+      } else {
+        console.log("not match");
+      }
+    });
 
     setLoadings(true);
     // console.log(moment(values.DatePicker.$d).format());
@@ -119,7 +107,6 @@ const RMIssue = () => {
       setMsgType("error");
     }
   };
-
   useEffect(() => {
     // get station list
     async function getStation() {
@@ -140,9 +127,6 @@ const RMIssue = () => {
       const data = await axios.get(
         "https://wms-ftl.onrender.com/v1/api/item/viewLot"
       );
-      const data = await axios.get(
-        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
-      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({
@@ -152,18 +136,13 @@ const RMIssue = () => {
         setLotlist(tableData);
       });
     }
-
     getLot();
     getStation();
   }, []);
-
   return (
     <>
       <div>
         {msg && <Alert message={msg} type={msgType} showIcon closable />}
-        <Typography.Title level={2} style={{ textAlign: "center" }}>
-          Part Issue Form
-        </Typography.Title>
         <Form
           form={RMIssueform}
           variant="filled"
@@ -173,8 +152,7 @@ const RMIssue = () => {
             {
               // maxWidth: 600,
             }
-          }
-        >
+          }>
           <Row gutter={16}>
             <Col>
               <Form.Item
@@ -184,12 +162,10 @@ const RMIssue = () => {
                     required: true,
                     message: "Issue Date Required!",
                   },
-                ]}
-              >
+                ]}>
                 <DatePicker placeholder="Issue Date" format={"DD-MMM-YY"} />
               </Form.Item>
             </Col>
-
             <Col>
               <Form.Item
                 name="station"
@@ -198,8 +174,7 @@ const RMIssue = () => {
                     required: true,
                     message: "Station Required!",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   placeholder="Station"
                   style={{
@@ -214,7 +189,6 @@ const RMIssue = () => {
                 />
               </Form.Item>
             </Col>
-
             <Col>
               <Form.Item
                 name="lot"
@@ -223,8 +197,7 @@ const RMIssue = () => {
                     required: true,
                     message: "Lot Required!",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   placeholder="Lot/Order"
                   style={{
@@ -240,9 +213,7 @@ const RMIssue = () => {
               </Form.Item>
             </Col>
           </Row>
-
           <Divider />
-
           <Form.List name="issueList">
             {(fields, { add, remove }) => (
               <>
@@ -253,8 +224,7 @@ const RMIssue = () => {
                       display: "flex",
                       marginBottom: 8,
                     }}
-                    align="baseline"
-                  >
+                    align="baseline">
                     <Form.Item
                       {...restField}
                       name={[name, "code"]}
@@ -263,8 +233,7 @@ const RMIssue = () => {
                           required: true,
                           message: "Part Code Required",
                         },
-                      ]}
-                    >
+                      ]}>
                       <Select
                         style={{
                           width: 500,
@@ -285,15 +254,12 @@ const RMIssue = () => {
                           required: true,
                           message: "input Issue Qty!",
                         },
-                      ]}
-                    >
+                      ]}>
                       <InputNumber placeholder="Issue Qty" />
                     </Form.Item>
-
                     <Form.Item {...restField} name={[name, "remarks"]}>
                       <Input placeholder="Remarks" />
                     </Form.Item>
-
                     <MinusCircleOutlined onClick={() => remove(name)} />
                   </Space>
                 ))}
@@ -302,22 +268,19 @@ const RMIssue = () => {
                     type="dashed"
                     onClick={() => add()}
                     block
-                    icon={<PlusOutlined />}
-                  >
+                    icon={<PlusOutlined />}>
                     Add field
                   </Button>
                 </Form.Item>
               </>
             )}
           </Form.List>
-
           <Form.Item>
             <Button
               type="primary"
               htmlType="submit"
               loading={loadings}
-              disabled={loadings}
-            >
+              disabled={loadings}>
               Submit
             </Button>
           </Form.Item>
@@ -326,5 +289,4 @@ const RMIssue = () => {
     </>
   );
 };
-
 export default RMIssue;
