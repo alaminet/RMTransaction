@@ -14,6 +14,7 @@ import {
   Space,
   InputNumber,
   message,
+  Typography,
 } from "antd";
 import {
   CheckSquareTwoTone,
@@ -254,8 +255,7 @@ const ViewReceiveItem = () => {
           name="rmReceiveView"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
+          autoComplete="off">
           <Form.Item
             label="Start"
             name="StartDate"
@@ -264,8 +264,7 @@ const ViewReceiveItem = () => {
                 required: true,
                 message: "Please input!",
               },
-            ]}
-          >
+            ]}>
             <DatePicker />
           </Form.Item>
           <Form.Item
@@ -276,8 +275,7 @@ const ViewReceiveItem = () => {
                 required: true,
                 message: "Please input!",
               },
-            ]}
-          >
+            ]}>
             <DatePicker />
           </Form.Item>
 
@@ -286,8 +284,7 @@ const ViewReceiveItem = () => {
               type="primary"
               htmlType="submit"
               loading={loading}
-              disabled={loading}
-            >
+              disabled={loading}>
               Find
             </Button>
           </Form.Item>
