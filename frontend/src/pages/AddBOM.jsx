@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Form, Input, Select, message } from "antd";
+import { Button, Form, Input, Select, message, Typography } from "antd";
 import { useSelector } from "react-redux";
 const { TextArea } = Input;
+const { Title } = Typography;
 
 const AddBOM = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -51,7 +52,9 @@ const AddBOM = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("https://localhost:8000/v1/api/item/viewLot");
+      const data = await axios.get(
+        "https://localhost:8000/v1/api/item/viewLot"
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -75,68 +78,78 @@ const AddBOM = () => {
   return (
     <>
       {user.role === "admin" && (
-        <div>
-          <Form
-            form={addbomform}
-            name="addbom"
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            style={{
-              minWidth: 700,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off">
-            <Form.Item
-              label="Lot Info"
-              name="lot"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Select Lot",
-                },
-              ]}>
-              <Select
-                showSearch
-                placeholder="Select A Lot"
-                optionFilterProp="children"
-                // onChange={onChange}
-                // onSearch={onSearch}
-                filterOption={filterOption}
-                options={lotList}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Item Details"
-              name="itemdetails"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input Code,Qty paste from XL",
-                },
-              ]}>
-              <TextArea rows={4} placeholder="Code,Qty paste from XL" />
-            </Form.Item>
-
-            <Form.Item
+        <>
+          <div>
+            <Typography style={{ textAlign: "center" }}>
+              <Title level={2}>Add New BOM</Title>
+            </Typography>
+            <Form
+              form={addbomform}
+              name="addbom"
+              labelCol={{
+                span: 8,
+              }}
               wrapperCol={{
-                offset: 8,
                 span: 16,
-              }}>
-              <Button
-                loading={loadings}
-                disabled={loadings}
-                type="primary"
-                htmlType="submit">
-                Add BOM
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+              }}
+              style={{
+                minWidth: 700,
+              }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off"
+            >
+              <Form.Item
+                label="Lot Info"
+                name="lot"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Lot",
+                  },
+                ]}
+              >
+                <Select
+                  showSearch
+                  placeholder="Select A Lot"
+                  optionFilterProp="children"
+                  // onChange={onChange}
+                  // onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={lotList}
+                />
+              </Form.Item>
+              <Form.Item
+                label="Item Details"
+                name="itemdetails"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input Code,Qty paste from XL",
+                  },
+                ]}
+              >
+                <TextArea rows={4} placeholder="Code,Qty paste from XL" />
+              </Form.Item>
+
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button
+                  loading={loadings}
+                  disabled={loadings}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  Add BOM
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        </>
       )}
     </>
   );

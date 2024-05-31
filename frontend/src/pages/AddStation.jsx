@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Typography, message } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 const { TextArea } = Input;
@@ -64,6 +64,9 @@ const AddStation = () => {
     <>
       {user.role === "admin" && (
         <div>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            Add New Station
+          </Typography.Title>
           <Form
             form={addStationForm}
             name="addlot"
@@ -81,7 +84,8 @@ const AddStation = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off">
+            autoComplete="off"
+          >
             <Form.Item
               label="Station List"
               name="stationlist"
@@ -90,7 +94,8 @@ const AddStation = () => {
                   required: true,
                   message: "Please input Location paste from XL",
                 },
-              ]}>
+              ]}
+            >
               <TextArea rows={4} placeholder="ex: DOOR" />
             </Form.Item>
 
@@ -98,7 +103,8 @@ const AddStation = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}>
+              }}
+            >
               <Button type="primary" htmlType="submit">
                 Add Station
               </Button>

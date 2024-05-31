@@ -9,6 +9,7 @@ import {
   Modal,
   Radio,
   Flex,
+  Typography,
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -112,18 +113,21 @@ const ViewUser = () => {
             </Button>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item)}></Button>
+              onClick={() => handleEdit(item)}
+            ></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No">
+              cancelText="No"
+            >
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
+              ></Button>
             </Popconfirm>
           </Flex>
         </>
@@ -157,6 +161,9 @@ const ViewUser = () => {
     <>
       {user.role === "admin" && (
         <div>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            View User Details
+          </Typography.Title>
           <div>
             <Input
               onChange={(e) => setSearch(e.target.value)}
@@ -174,7 +181,8 @@ const ViewUser = () => {
               title="Edit User Role"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}>
+              onCancel={handleCancel}
+            >
               <div>
                 <Radio.Group onChange={(e) => setNewRole(e.target.value)}>
                   <Radio value="user">User</Radio>

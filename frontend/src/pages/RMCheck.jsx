@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
-import { Button, Flex, Input, Table, message } from "antd";
+import { Button, Flex, Input, Table, Typography, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 
 const RMCheck = () => {
@@ -172,6 +172,9 @@ const RMCheck = () => {
   return (
     <>
       <div>
+      <Typography.Title level={2} style={{ textAlign: "center" }}>
+            Check RM Transaction
+          </Typography.Title>
         <Flex gap={16}>
           <Input
             onChange={(e) => setSearch(e.target.value)}

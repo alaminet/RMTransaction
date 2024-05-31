@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Typography } from "antd";
 import { useSelector } from "react-redux";
 const { TextArea } = Input;
+const { Title } = Typography;
 
 const AddItem = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -39,6 +40,9 @@ const AddItem = () => {
     <>
       {user.role === "admin" && (
         <div>
+          <Typography style={{ textAlign: "center" }}>
+            <Title level={2}>Add New Item</Title>
+          </Typography>
           <Form
             form={additemform}
             name="additem"
