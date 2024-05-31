@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import {
@@ -9,12 +9,10 @@ import {
   Input,
   Table,
   Select,
-  Popconfirm,
-  Modal,
-  Radio,
   message,
+  Popconfirm,
 } from "antd";
-import { DeleteTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 const RMTnxView = () => {
@@ -22,21 +20,53 @@ const RMTnxView = () => {
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [strDate, setStrDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [tnxType, setTnxType] = useState("");
 
-  const tblData = tbllist.filter((item) =>
-    item.code.toLowerCase().includes(search.toLowerCase())
-  );
   // From output
   const onFinish = async (values) => {
     // console.log("Success:", values);
     setLoading(true);
-    setStrDate(values.StartDate.$d);
-    setEndDate(values.EndDate.$d);
-    setTnxType(values.type);
-    setLoading(false);
+    let strDate = values.StartDate.$d;
+    let endDate = new Date(values.EndDate.$d).setHours(23, 59, 59);
+    let tnxType = values.type;
+    try {
+      if (!strDate || !endDate) {
+        message.error("Date Required");
+        setLoading(false);
+      } else {
+        const rmIssueDone = await axios.post(
+          "https://wms-ftl.onrender.com/v1/api/tnx/rmtnxview/",
+          {
+            stDate: moment(strDate).format(),
+            edDate: moment(endDate).format(),
+          }
+        );
+        const tableData = [];
+        rmIssueDone?.data.map((order, i) => {
+          order?.issueList?.map((item, j) => {
+            item.status === tnxType &&
+              tableData.push({
+                dataIndex: order._id,
+                sl: ++i,
+                date: moment(order.date).format("DD-MMM-YY"),
+                station: order.stationID.station,
+                tnxID: order.tnxID,
+                lot: order.lotID.lot,
+                code: item.codeID.code,
+                name: item.codeID.itemname,
+                qty: item.qty,
+                status: item.status,
+                rmk: item.rmk,
+                action: item._id,
+              });
+            setTbllist(tableData);
+            setLoading(false);
+          });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -45,23 +75,26 @@ const RMTnxView = () => {
   // action controller
   const handleDelete = async (item) => {
     try {
-      const itemDlt = await axios.post(
+      const itemDelete = await axios.post(
         "https://wms-ftl.onrender.com/v1/api/tnx/dltissueline",
         {
-          id: item.action,
+          id: item,
         }
       );
-      message.warning(itemDlt.data.message);
+      setTbllist(tbllist.filter((a) => a.action !== item));
+      message.warning(itemDelete.data.message);
     } catch (error) {
       console.log(error);
     }
   };
-  const cancel = (e) => {
-    message.error("Click on No");
-  };
 
   // table arrangment
   const columns = [
+    {
+      title: "SL",
+      dataIndex: "sl",
+      key: "sl",
+    },
     {
       title: "Date",
       dataIndex: "date",
@@ -111,67 +144,21 @@ const RMTnxView = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (_, item) =>
-        item.status !== "done" && (
+      render: (item) =>
+        user.role === "admin" && (
           <>
-            <Popconfirm
-              title="Delete the task"
-              description="Are you sure to delete this Item?"
-              onConfirm={() => handleDelete(item)}
-              onCancel={cancel}
-              okText="Yes"
-              cancelText="No">
-              <Button
-                style={{ marginLeft: "10px" }}
-                danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
-            </Popconfirm>
+            {/* <Button
+              icon={<EditTwoTone />}
+              onClick={() => handleEdit(item)}></Button> */}
+            <Button
+              style={{ marginLeft: "10px" }}
+              onClick={() => handleDelete(item)}
+              danger
+              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
           </>
         ),
     },
   ];
-  // table data collection
-  useEffect(() => {
-    async function getRMIssueData() {
-      try {
-        if (!strDate || !endDate) {
-          console.log("Date Required");
-        } else {
-          const rmIssueDone = await axios.post(
-            "https://wms-ftl.onrender.com/v1/api/tnx/rmtnxview/",
-            {
-              stDate: moment(strDate).format(),
-              edDate: moment(endDate).format(),
-            }
-          );
-
-          const tableData = [];
-          rmIssueDone?.data.map((order, i) => {
-            order?.issueList?.map((item, j) => {
-              item.status === tnxType &&
-                tableData.push({
-                  dataIndex: order._id,
-                  date: moment(order.date).format("DD-MMM-YY"),
-                  station: order.stationID.station,
-                  tnxID: order.tnxID,
-                  lot: order.lotID.lot,
-                  code: item.codeID.code,
-                  name: item.codeID.itemname,
-                  qty: item.qty,
-                  status: item.status,
-                  rmk: item.rmk,
-                  action: item._id,
-                });
-              setTbllist(tableData);
-            });
-          });
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getRMIssueData();
-  }, [strDate, endDate, tnxType, handleDelete]);
 
   return (
     <>
@@ -218,9 +205,6 @@ const RMTnxView = () => {
                 style={{ width: "100px" }}
                 placeholder="Tnx Type"
                 optionFilterProp="children"
-                // onChange={onChange}
-                // onSearch={onSearch}
-                // filterOption={filterOption}
                 options={[
                   { label: "Done", value: "done" },
                   { label: "Reject", value: "reject" },
@@ -248,7 +232,9 @@ const RMTnxView = () => {
             />
             <Table
               style={{ width: "100%" }}
-              dataSource={tbllist}
+              dataSource={tbllist.filter((item) =>
+                item.code.toLowerCase().includes(search.toLowerCase())
+              )}
               columns={columns}
             />
           </div>

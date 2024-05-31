@@ -2,11 +2,11 @@ const RMIssue = require("../model/rmIssueModel");
 
 const RMIssueDoneController = async (req, res) => {
   const { stDate, edDate } = req.body;
-
+  // console.log(edDate);
   const tnxDonelist = await RMIssue.find({
     date: {
-      $gte: new Date(stDate),
-      $lte: new Date(edDate),
+      $gte: stDate,
+      $lte: edDate,
     },
   })
     .populate("issueList.codeID")

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import axios from "axios";
 import { Button, Flex, Input, Table, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
@@ -7,7 +8,6 @@ const RMCheck = () => {
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [filterData, setFilterData] = useState([]);
 
   const handleDone = async (item) => {
     // console.log(item.dtls.qty);
@@ -31,7 +31,7 @@ const RMCheck = () => {
       });
       // console.log(receIDArr[0].issueQty);
       const tnxUpdate = await axios.put(
-        "https://wms-ftl.onrender.com/v1/api/tnx/issueUpdate",
+        "https://wms-ftl.onrender.com/v1/api/tnx/issueUpdate", //http://localhost:8000/ https://wms-ftl.onrender.com/
         {
           issueID: item.issueID,
           receID: item.receID,
@@ -69,6 +69,16 @@ const RMCheck = () => {
 
   // table arrangment
   const columns = [
+    {
+      title: "SL",
+      dataIndex: "sl",
+      key: "sl",
+    },
+    {
+      title: "Date",
+      dataIndex: "dated",
+      key: "dated",
+    },
     {
       title: "Station",
       dataIndex: "station",
@@ -123,7 +133,7 @@ const RMCheck = () => {
 
   async function getRMIssueData() {
     const issueData = await axios.get(
-      "https://wms-ftl.onrender.com/v1/api/tnx/rmcheck"
+      "https://wms-ftl.onrender.com/v1/api/tnx/rmcheck" //http://localhost:8000/ https://wms-ftl.onrender.com/
     );
     const tableData = [];
     issueData?.data?.map((order, i) => {
@@ -132,6 +142,8 @@ const RMCheck = () => {
         item.status !== "done" &&
           tableData.push({
             dataIndex: i,
+            sl: ++i,
+            dated: moment(order.date).format("DD-MMM-YY HH:mm"),
             station: order.stationID.station,
             lot: order.lotID.lot,
             code: item.codeID.code,
@@ -148,7 +160,7 @@ const RMCheck = () => {
 
   useEffect(() => {
     getRMIssueData();
-  }, []);
+  }, [search, tbllist]);
 
   const handleRefress = () => {
     getRMIssueData();

@@ -89,6 +89,7 @@ const RMIssue = () => {
     });
 
     setLoadings(true);
+    // console.log(moment(values.DatePicker.$d).format());
     try {
       const data = await axios.post(
         "https://wms-ftl.onrender.com/v1/api/tnx/rmissue",
@@ -128,7 +129,9 @@ const RMIssue = () => {
     }
     // get lot list
     async function getLot() {
-      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get(
+        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({

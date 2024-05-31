@@ -7,7 +7,7 @@ const RMIssueController = async (req, res) => {
 
   if (lastTnxID.length > 0) {
     const rmissue = await new RMIssue({
-      date: new Date(date),
+      date: date,
       tnxby: tnxby,
       tnxID: lastTnxID[0].tnxID + 1,
       stationID: stationID,
