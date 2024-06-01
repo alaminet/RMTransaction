@@ -28,6 +28,7 @@ import ViewStation from "./pages/ViewStation";
 import ViewLocation from "./pages/ViewLocation";
 import PassChange from "./pages/PassChange";
 import PartStock from "./pages/PartStock";
+import LotStock from "./pages/LotStock";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -56,6 +57,7 @@ function App() {
             <Route path="addstation" element={<AddStation />}></Route>
             <Route path="stationdtls" element={<ViewStation />}></Route>
             <Route path="partstock" element={<PartStock />}></Route>
+            <Route path="lotstock" element={<LotStock />}></Route>
           </Route>
         </Route>
       </Route>

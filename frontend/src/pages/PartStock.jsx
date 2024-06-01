@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Divider, Form, Input, Table, Typography, message } from "antd";
+import { Button, Divider, Form, Input, Table, message } from "antd";
 import { useSelector } from "react-redux";
 
 const PartStock = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [findpartdlts] = Form.useForm();
-  const [search, setSearch] = useState("");
   const [loadings, setLoadings] = useState(false);
   const [tbllist, setTbllist] = useState([]);
 
@@ -16,7 +15,7 @@ const PartStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/tnx/partstock",
+        "https://wms-ftl.onrender.com/v1/api/tnx/partstock",
         {
           code: values.code.toUpperCase().trim(),
         }
@@ -138,14 +137,18 @@ const PartStock = () => {
             </Form.Item>
           </Form>
         </div>
-        <Divider>On-Hand Details Table</Divider>
-        <div>
-          <Table
-            style={{ width: "100%" }}
-            dataSource={tbllist}
-            columns={columns}
-          />
-        </div>
+        {tbllist.length > 0 && (
+          <>
+            <Divider>On-Hand Details Table</Divider>
+            <div>
+              <Table
+                style={{ width: "100%" }}
+                dataSource={tbllist}
+                columns={columns}
+              />
+            </div>
+          </>
+        )}
       </div>
     </>
   );

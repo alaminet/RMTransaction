@@ -71,6 +71,7 @@ const RMIssue = () => {
   // Form submit
   const onFinish = async (values) => {
     // console.log(values);
+    setLoadings(true);
     const issuelist = [];
     values.issueList.map((item, i) => {
       const matchItem = itemFull.find((f) => f.id === item.code);
@@ -86,7 +87,6 @@ const RMIssue = () => {
       }
     });
 
-    setLoadings(true);
     // console.log(moment(values.DatePicker.$d).format());
     try {
       const h = new Date().getHours();
@@ -102,9 +102,9 @@ const RMIssue = () => {
           issueList: [...issuelist],
         }
       );
-      setLoadings(false);
       setMsg(`Entry Done, Tnx ID: ${data.data.tnxID}`);
       setMsgType("success");
+      setLoadings(false);
       RMIssueform.resetFields();
     } catch (error) {
       setLoadings(false);

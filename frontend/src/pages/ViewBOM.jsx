@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 const ViewBOM = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [loadings, setLoadings] = useState(false);
-  const [selectLot, setSelectLot] = useState();
+  // const [selectLot, setSelectLot] = useState();
   const [lotList, setLotList] = useState();
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
@@ -27,16 +27,46 @@ const ViewBOM = () => {
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-  const tblData = tbllist?.filter((item) =>
-    item?.code?.toLowerCase().includes(search?.toLowerCase())
-  );
+
   // lot selection
   const onFinish = async (values) => {
     // console.log("Success:", values);
-
-    setSelectLot(values.lot);
+    setLoadings(true);
+    // setSelectLot(values.lot);
+    try {
+      const bomdata = await axios.post(
+        "https://wms-ftl.onrender.com/v1/api/item/viewbom",
+        {
+          lot: values.lot,
+        }
+      );
+      if (bomdata.data.length < 1) {
+        message.info("BOM Not Uploaded");
+        setLoadings(false);
+      } else {
+        const tableDataArr = [];
+        bomdata?.data[0].itemlist?.map((item, i) => {
+          tableDataArr.push({
+            sl: ++i,
+            lot: bomdata?.data[0].lotID.lot,
+            code: item?.codeID.code,
+            name: item?.codeID.itemname,
+            uom: item?.codeID.uom,
+            qty: item?.qty,
+            action: item.codeID._id,
+          });
+          setTbllist(tableDataArr);
+          setLoadings(false);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      setTbllist(null);
+      setLoadings(false);
+    }
   };
   const onFinishFailed = (errorInfo) => {
+    setLoadings(false);
     console.log("Failed:", errorInfo);
   };
 
@@ -150,7 +180,9 @@ const ViewBOM = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("https://wms-ftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get(
+        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -160,45 +192,14 @@ const ViewBOM = () => {
     getLot();
   }, []);
 
-  useEffect(() => {
-    async function getBOM() {
-      try {
-        const data = await axios.post(
-          "https://wms-ftl.onrender.com/v1/api/item/viewbom",
-          {
-            lot: selectLot,
-          }
-        );
-        const tableDataArr = [];
-        data?.data[0].itemlist?.map((item, i) => {
-          tableDataArr.push({
-            sl: ++i,
-            lot: data?.data[0].lotID.lot,
-            code: item?.codeID.code,
-            name: item?.codeID.itemname,
-            uom: item?.codeID.uom,
-            qty: item?.qty,
-            action: item.codeID._id,
-          });
-          setTbllist(tableDataArr);
-        });
-      } catch (error) {
-        console.log(error);
-
-        setTbllist(null);
-      }
-    }
-    getBOM();
-    setLoadings(false);
-  }, [onFinish]);
   return (
     <>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <div>
-          <Typography.Title level={2} style={{ textAlign: "center" }}>
-            View BOM Details
-          </Typography.Title>
+            <Typography.Title level={2} style={{ textAlign: "center" }}>
+              View BOM Details
+            </Typography.Title>
             <Form
               // form={addbomform}
               name="addbom"
@@ -209,7 +210,7 @@ const ViewBOM = () => {
                 span: 16,
               }}
               style={{
-                minWidth: 700,
+                maxWidth: 700,
               }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
@@ -233,7 +234,6 @@ const ViewBOM = () => {
                   options={lotList}
                 />
               </Form.Item>
-
               <Form.Item
                 wrapperCol={{
                   offset: 8,
@@ -257,9 +257,11 @@ const ViewBOM = () => {
             />
             <Table
               style={{ width: "100%" }}
-              dataSource={tblData}
+              dataSource={tbllist?.filter((item) =>
+                item?.code?.toLowerCase().includes(search?.toLowerCase())
+              )}
               columns={columns}
-              pagination={false}
+              // pagination={false}
             />
           </div>
           <div>

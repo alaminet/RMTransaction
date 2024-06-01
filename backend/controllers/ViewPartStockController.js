@@ -1,6 +1,5 @@
 const Item = require("../model/itemModel");
 const Receive = require("../model/rmReceiveModel");
-const Issue = require("../model/rmIssueModel");
 
 const ViewPartStockController = async (req, res) => {
   const { code } = req.body;

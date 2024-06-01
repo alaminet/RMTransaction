@@ -38,7 +38,8 @@ const AddBOM = () => {
           itemlist: [...itemArr],
         }
       );
-      console.log(data);
+      // console.log(data);
+      message.success(data.data.message);
       setLoadings(false);
     } catch (error) {
       setLoadings(false);
@@ -53,7 +54,7 @@ const AddBOM = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://localhost:8000/v1/api/item/viewLot"
+        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

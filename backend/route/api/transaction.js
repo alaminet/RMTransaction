@@ -12,6 +12,7 @@ const DeleteIssueLineController = require("../../controllers/DeleteIssueLineCont
 const RMReceiveUpdateController = require("../../controllers/RMReceiveUpdateController");
 const RMIssueQtyUpdateController = require("../../controllers/RMIssueQtyUpdateController");
 const ViewPartStockController = require("../../controllers/ViewPartStockController");
+const ViewLotStockController = require("../../controllers/ViewLotStockController");
 const route = express.Router();
 
 route.post("/rmissue", RMIssueController);
@@ -30,5 +31,6 @@ route.get("/itemwiserec", ViewItemWiseRecController);
 route.post("/lotrecview", ViewLotWiseReceController);
 
 route.post("/partstock", ViewPartStockController);
+route.post("/lotstock", ViewLotStockController);
 
 module.exports = route;
