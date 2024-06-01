@@ -172,9 +172,9 @@ const RMCheck = () => {
   return (
     <>
       <div>
-      <Typography.Title level={2} style={{ textAlign: "center" }}>
-            Check RM Transaction
-          </Typography.Title>
+        <Typography.Title level={2} style={{ textAlign: "center" }}>
+          Check RM Transaction
+        </Typography.Title>
         <Flex gap={16}>
           <Input
             onChange={(e) => setSearch(e.target.value)}

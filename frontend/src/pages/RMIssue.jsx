@@ -13,6 +13,7 @@ import {
   Row,
   Select,
   Space,
+  Typography,
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -26,6 +27,7 @@ const RMIssue = () => {
   const [msg, setMsg] = useState("");
   const [msgType, setMsgType] = useState("");
   const [RMIssueform] = Form.useForm();
+
   // Filter `option.label` match the user type `input`
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -87,10 +89,13 @@ const RMIssue = () => {
     setLoadings(true);
     // console.log(moment(values.DatePicker.$d).format());
     try {
+      const h = new Date().getHours();
+      const m = new Date().getMinutes();
+      const s = new Date().getSeconds();
       const data = await axios.post(
         "https://wms-ftl.onrender.com/v1/api/tnx/rmissue",
         {
-          date: moment(values.DatePicker.$d).format(),
+          date: new Date(values.DatePicker.$d).setHours(h, m, s), //moment(values.DatePicker.$d).format()
           stationID: values.station,
           lotID: values.lot,
           tnxby: user._id,
@@ -143,6 +148,9 @@ const RMIssue = () => {
     <>
       <div>
         {msg && <Alert message={msg} type={msgType} showIcon closable />}
+        <Typography.Title level={2} style={{ textAlign: "center" }}>
+          RAW Materials Movement Form
+        </Typography.Title>
         <Form
           form={RMIssueform}
           variant="filled"
