@@ -25,22 +25,27 @@ const RMCheck = () => {
           if (list._id === item.receID) {
             receIDArr.push({
               issueQty: list.issue,
+              receiveQty: list.qty,
             });
           }
         });
       });
       // console.log(receIDArr[0].issueQty);
-      const tnxUpdate = await axios.put(
-        "https://wms-ftl.onrender.com/v1/api/tnx/issueUpdate", //http://localhost:8000/ https://wms-ftl.onrender.com/
-        {
-          issueID: item.issueID,
-          receID: item.receID,
-          qty: receIDArr[0].issueQty + item.dtls.qty,
-        }
-      );
+      if (receIDArr[0].issueQty + item.dtls.qty > receIDArr[0].receiveQty) {
+        message.warning("Excess Issue, Inform your LM");
+      } else {
+        const tnxUpdate = await axios.put(
+          "https://wms-ftl.onrender.com/v1/api/tnx/issueUpdate", //http://localhost:8000/ https://wms-ftl.onrender.com/
+          {
+            issueID: item.issueID,
+            receID: item.receID,
+            qty: receIDArr[0].issueQty + item.dtls.qty,
+          }
+        );
+        message.success("Check Done!");
+        setTbllist(tbllist.filter((a) => a.action.issueID !== item.issueID));
+      }
       setLoading(false);
-      message.success("Check Done!");
-      setTbllist(tbllist.filter((a) => a.action.issueID !== item.issueID));
     } catch (error) {
       setLoading(false);
       console.log(error);
