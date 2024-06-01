@@ -16,12 +16,7 @@ import {
   message,
   Typography,
 } from "antd";
-import {
-  CheckSquareTwoTone,
-  EditTwoTone,
-  DeleteTwoTone,
-  CloseSquareTwoTone,
-} from "@ant-design/icons";
+import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
 const ViewReceiveItem = () => {
   const [editForm] = Form.useForm();

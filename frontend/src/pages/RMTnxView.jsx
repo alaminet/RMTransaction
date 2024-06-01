@@ -11,15 +11,21 @@ import {
   Select,
   message,
   Popconfirm,
+  Modal,
+  Space,
+  InputNumber,
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 const RMTnxView = () => {
   const user = useSelector((user) => user.loginSlice.login);
+  const [editForm] = Form.useForm();
+  const [editItem, setEditItem] = useState();
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // From output
   const onFinish = async (values) => {
@@ -40,6 +46,7 @@ const RMTnxView = () => {
             edDate: moment(endDate).format(),
           }
         );
+        rmIssueDone.data.length == 0 && message.warning("No Data Found");
         const tableData = [];
         rmIssueDone?.data.map((order, i) => {
           order?.issueList?.map((item, j) => {
@@ -59,9 +66,9 @@ const RMTnxView = () => {
                 action: item._id,
               });
             setTbllist(tableData);
-            setLoading(false);
           });
         });
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -70,9 +77,51 @@ const RMTnxView = () => {
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    setLoading(false);
   };
 
   // action controller
+  // edit table data
+  const handleEdit = (values) => {
+    // console.log(values);
+    setIsModalOpen(true);
+    setEditItem(values);
+    editForm.setFieldsValue({
+      id: values.action,
+      issue: values.qty,
+    });
+  };
+  const onFinishEdit = async (values) => {
+    // console.log(editItem);
+    // console.log(values);
+    setIsModalOpen(false);
+    if (editItem.qty !== values.issue) {
+      try {
+        const update = await axios.post(
+          "http://localhost:8000/v1/api/tnx/rmissueqtyupdate",
+          {
+            id: values.id,
+            value: values.issue,
+          },
+          {
+            headers: {
+              Authorization: "CAt7p0qqwYALAIY",
+            },
+          }
+        );
+        message.success(update.data.message);
+      } catch (error) {
+        message.error(error.response.data.message);
+      }
+    } else {
+      message.info("Tnx Qty Not Changed");
+    }
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  // delete tnx line item
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
@@ -144,12 +193,12 @@ const RMTnxView = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (item) =>
+      render: (item, record) =>
         user.role === "admin" && (
           <>
-            {/* <Button
+            <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item)}></Button> */}
+              onClick={() => handleEdit(record)}></Button>
             <Button
               style={{ marginLeft: "10px" }}
               onClick={() => handleDelete(item)}
@@ -163,82 +212,117 @@ const RMTnxView = () => {
   return (
     <>
       {user.role === "admin" || user.role === "LM" ? (
-        <div>
-          <Form
-            layout="inline"
-            name="rmtnxview"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete="off">
-            <Form.Item
-              label="Start"
-              name="StartDate"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input!",
-                },
-              ]}>
-              <DatePicker />
-            </Form.Item>
-            <Form.Item
-              label="End"
-              name="EndDate"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input!",
-                },
-              ]}>
-              <DatePicker />
-            </Form.Item>
-            <Form.Item
-              label="Tnx Type"
-              name="type"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Select Tnx Type!",
-                },
-              ]}>
-              <Select
-                style={{ width: "100px" }}
-                placeholder="Tnx Type"
-                optionFilterProp="children"
-                options={[
-                  { label: "Done", value: "done" },
-                  { label: "Reject", value: "reject" },
-                  { label: "Waiting", value: "waiting" },
-                ]}
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                loading={loading}
-                disabled={loading}>
-                Find
-              </Button>
-            </Form.Item>
-          </Form>
-          <Divider>Transaction Details Table</Divider>
+        <>
           <div>
-            <Input
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Find by Code"
-              variant="filled"
-            />
-            <Table
-              style={{ width: "100%" }}
-              dataSource={tbllist.filter((item) =>
-                item.code.toLowerCase().includes(search.toLowerCase())
-              )}
-              columns={columns}
-            />
+            <Form
+              layout="inline"
+              name="rmtnxview"
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              autoComplete="off">
+              <Form.Item
+                label="Start"
+                name="StartDate"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input!",
+                  },
+                ]}>
+                <DatePicker />
+              </Form.Item>
+              <Form.Item
+                label="End"
+                name="EndDate"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input!",
+                  },
+                ]}>
+                <DatePicker />
+              </Form.Item>
+              <Form.Item
+                label="Tnx Type"
+                name="type"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Select Tnx Type!",
+                  },
+                ]}>
+                <Select
+                  style={{ width: "100px" }}
+                  placeholder="Tnx Type"
+                  optionFilterProp="children"
+                  options={[
+                    { label: "Done", value: "done" },
+                    { label: "Reject", value: "reject" },
+                    { label: "Waiting", value: "waiting" },
+                  ]}
+                />
+              </Form.Item>
+
+              <Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={loading}
+                  disabled={loading}>
+                  Find
+                </Button>
+              </Form.Item>
+            </Form>
+            <Divider>Transaction Details Table</Divider>
+            <div>
+              <Input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Find by Code"
+                variant="filled"
+              />
+              <Table
+                style={{ width: "100%" }}
+                dataSource={tbllist.filter((item) =>
+                  item.code.toLowerCase().includes(search.toLowerCase())
+                )}
+                columns={columns}
+              />
+            </div>
           </div>
-        </div>
+          <div>
+            <Modal
+              title="Edit Tnx Qty"
+              open={isModalOpen}
+              onCancel={handleCancel}
+              footer="">
+              <Form
+                form={editForm}
+                // layout="vertical"
+                onFinish={onFinishEdit}
+                // onFinishFailed={onFinishFailed}
+                autoComplete="off">
+                <Form.Item hidden name="id"></Form.Item>
+                <Form.Item
+                  name="issue"
+                  label="Issue Qty"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}>
+                  <InputNumber placeholder="Issue Qty" />
+                </Form.Item>
+                <Form.Item>
+                  <Space>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </Space>
+                </Form.Item>
+              </Form>
+            </Modal>
+          </div>{" "}
+        </>
       ) : (
         <p>You are not allowed, please contact with admin</p>
       )}
