@@ -139,7 +139,7 @@ const RMCheck = () => {
     issueData?.data?.map((order, i) => {
       order?.issueList?.map((item, j) => {
         // console.log(item);
-        item.status !== "done" &&
+        item.status === "waiting" &&
           tableData.push({
             dataIndex: i,
             sl: ++i,

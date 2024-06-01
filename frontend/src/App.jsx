@@ -27,6 +27,7 @@ import AddStation from "./pages/AddStation";
 import ViewStation from "./pages/ViewStation";
 import ViewLocation from "./pages/ViewLocation";
 import PassChange from "./pages/PassChange";
+import PartStock from "./pages/PartStock";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -54,6 +55,7 @@ function App() {
             <Route path="receivedetails" element={<ViewReceiveItem />}></Route>
             <Route path="addstation" element={<AddStation />}></Route>
             <Route path="stationdtls" element={<ViewStation />}></Route>
+            <Route path="partstock" element={<PartStock />}></Route>
           </Route>
         </Route>
       </Route>

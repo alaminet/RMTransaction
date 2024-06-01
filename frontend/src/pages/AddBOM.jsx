@@ -63,7 +63,7 @@ const AddBOM = () => {
     }
     async function getItem() {
       const data = await axios.get(
-        "https://localhost:8000/v1/api/item/viewitemlist"
+        "https://wms-ftl.onrender.com/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -97,8 +97,7 @@ const AddBOM = () => {
               }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
-              autoComplete="off"
-            >
+              autoComplete="off">
               <Form.Item
                 label="Lot Info"
                 name="lot"
@@ -107,8 +106,7 @@ const AddBOM = () => {
                     required: true,
                     message: "Please Select Lot",
                   },
-                ]}
-              >
+                ]}>
                 <Select
                   showSearch
                   placeholder="Select A Lot"
@@ -127,8 +125,7 @@ const AddBOM = () => {
                     required: true,
                     message: "Please input Code,Qty paste from XL",
                   },
-                ]}
-              >
+                ]}>
                 <TextArea rows={4} placeholder="Code,Qty paste from XL" />
               </Form.Item>
 
@@ -136,14 +133,12 @@ const AddBOM = () => {
                 wrapperCol={{
                   offset: 8,
                   span: 16,
-                }}
-              >
+                }}>
                 <Button
                   loading={loadings}
                   disabled={loadings}
                   type="primary"
-                  htmlType="submit"
-                >
+                  htmlType="submit">
                   Add BOM
                 </Button>
               </Form.Item>
