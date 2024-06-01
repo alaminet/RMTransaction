@@ -7,7 +7,9 @@ const ViewPartStockController = async (req, res) => {
   try {
     const itemMatch = await Item.findOne({ code: code });
     if (itemMatch) {
-      const receive = await Receive.find({ "receList.codeID": itemMatch._id });
+      const receive = await Receive.find({
+        "receList.codeID": itemMatch._id,
+      }).populate("receList.locID").populate("lotID");
       res.status(200).send({ itemMatch, receive });
     } else {
       res.status(401).send({ message: "Item Not Matched" });
