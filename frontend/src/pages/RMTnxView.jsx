@@ -48,15 +48,17 @@ const RMTnxView = () => {
         );
         rmIssueDone.data.length == 0 && message.warning("No Data Found");
         const tableData = [];
+        let y = 1;
         rmIssueDone?.data.map((order, i) => {
           order?.issueList?.map((item, j) => {
             item.status === tnxType &&
               tableData.push({
                 dataIndex: order._id,
-                sl: ++i,
+                sl: y++,
                 date: moment(order.date).format("DD-MMM-YY"),
                 station: order.stationID.station,
                 tnxID: order.tnxID,
+                tnxby: order.tnxby.userID,
                 lot: order.lotID.lot,
                 code: item.codeID.code,
                 name: item.codeID.itemname,
@@ -153,6 +155,11 @@ const RMTnxView = () => {
       title: "Tnx ID",
       dataIndex: "tnxID",
       key: "tnxid",
+    },
+    {
+      title: "Tnx by",
+      dataIndex: "tnxby",
+      key: "tnxby",
     },
     {
       title: "Station",

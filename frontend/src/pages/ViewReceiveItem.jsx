@@ -60,14 +60,14 @@ const ViewReceiveItem = () => {
   const onFinishEdit = async (values) => {
     // console.log(editItem);
     // console.log(values);
-    setIsModalOpen(false);
+    setLoading(true);
     if (editItem.locID.loc !== values.loc && editItem.issue !== values.issue) {
       message.warning("Single Edit can be done");
     } else {
       if (editItem.locID.loc !== values.loc) {
         try {
           const update = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveupdate",
+            "https://wms-ftl.onrender.com/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "locID",
@@ -80,15 +80,18 @@ const ViewReceiveItem = () => {
             }
           );
           message.success(update.data.message);
+          setLoading(false);
+          setIsModalOpen(false);
         } catch (error) {
+          setLoading(false);
           message.error(error.response.data.message);
-          console.log(error.response.data.message);
+          // console.log(error.response.data.message);
         }
       }
       if (editItem.issue !== values.issue) {
         try {
           const update = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveupdate",
+            "https://wms-ftl.onrender.com/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "issue",
@@ -101,14 +104,18 @@ const ViewReceiveItem = () => {
             }
           );
           message.success(update.data.message);
+          setLoading(false);
+          setIsModalOpen(false);
         } catch (error) {
+          setLoading(false);
           message.error(error.response.data.message);
-          console.log(error.response.data.message);
+          // console.log(error.response.data.message);
         }
       }
     }
   };
   const handleCancel = () => {
+    setLoading(false);
     setIsModalOpen(false);
   };
 
@@ -355,7 +362,11 @@ const ViewReceiveItem = () => {
               </Form.Item>
               <Form.Item>
                 <Space>
-                  <Button type="primary" htmlType="submit">
+                  <Button
+                    loading={loading}
+                    disabled={loading}
+                    type="primary"
+                    htmlType="submit">
                     Submit
                   </Button>
                 </Space>
