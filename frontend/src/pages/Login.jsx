@@ -10,7 +10,7 @@ const Login = () => {
     // console.log("Success:", values);
     try {
       const userData = await axios.post(
-        "https://wms-ftl.onrender.com/v1/api/auth/login",
+        "https://alt-wmsftl.onrender.com/v1/api/auth/login",
         {
           userID: values.userID,
           password: values.password,

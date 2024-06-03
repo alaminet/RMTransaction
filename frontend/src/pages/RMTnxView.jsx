@@ -40,7 +40,7 @@ const RMTnxView = () => {
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "https://wms-ftl.onrender.com/v1/api/tnx/rmtnxview/",
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/rmtnxview/",
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
@@ -100,7 +100,7 @@ const RMTnxView = () => {
     if (editItem.qty !== values.issue) {
       try {
         const update = await axios.post(
-          "http://localhost:8000/v1/api/tnx/rmissueqtyupdate",
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/rmissueqtyupdate",
           {
             id: values.id,
             value: values.issue,
@@ -127,7 +127,7 @@ const RMTnxView = () => {
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
-        "https://wms-ftl.onrender.com/v1/api/tnx/dltissueline",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/dltissueline",
         {
           id: item,
         }

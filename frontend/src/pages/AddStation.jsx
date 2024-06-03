@@ -30,7 +30,7 @@ const AddStation = () => {
     });
     try {
       const data = await axios.post(
-        "https://wms-ftl.onrender.com/v1/api/item/addstation",
+        "https://alt-wmsftl.onrender.com/v1/api/item/addstation",
         {
           itemlist: [...itemArr],
         }
@@ -50,7 +50,7 @@ const AddStation = () => {
   useEffect(() => {
     async function getStation() {
       const data = await axios.get(
-        "https://wms-ftl.onrender.com/v1/api/item/viewstation"
+        "https://alt-wmsftl.onrender.com/v1/api/item/viewstation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

@@ -20,7 +20,7 @@ const LotStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "https://wms-ftl.onrender.com/v1/api/tnx/lotstock",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/lotstock",
         {
           lot: values.lot,
         }
@@ -119,7 +119,7 @@ const LotStock = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://wms-ftl.onrender.com/v1/api/item/viewLot"
+        "https://alt-wmsftl.onrender.com/v1/api/item/viewLot"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

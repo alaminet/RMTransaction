@@ -16,8 +16,7 @@ const RMReceiveUpdateController = async (req, res) => {
       } else {
         res.status(401).send({ message: "Location Not Found" });
       }
-    }
-    if (field == "issue") {
+    } else if (field == "issue") {
       await RMReceive.findOneAndUpdate(
         { "receList._id": id },
         { $set: { "receList.$.issue": value } },
