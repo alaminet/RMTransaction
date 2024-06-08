@@ -14,7 +14,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const recHistory = await axios.get(
-        "http://localhost:8000/v1/api/tnx/itemwiserec",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/itemwiserec",
         {
           lineID: item.receID,
         }
@@ -35,7 +35,7 @@ const RMCheck = () => {
         message.warning("Excess Issue, Inform your LM");
       } else {
         const tnxUpdate = await axios.put(
-          "http://localhost:8000/v1/api/tnx/issueUpdate", //http://localhost:8000/ http://localhost:8000/
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/issueUpdate", 
           {
             issueID: item.issueID,
             receID: item.receID,
@@ -57,7 +57,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const tnxUpdate = await axios.put(
-        "http://localhost:8000/v1/api/tnx/issueReject",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/issueReject",
         {
           lineID: item.issueID,
         }
@@ -138,7 +138,7 @@ const RMCheck = () => {
 
   async function getRMIssueData() {
     const issueData = await axios.get(
-      "http://localhost:8000/v1/api/tnx/rmcheck" //http://localhost:8000/ http://localhost:8000/
+      "https://alt-wmsftl.onrender.com/v1/api/tnx/rmcheck" //https://alt-wmsftl.onrender.com/ https://alt-wmsftl.onrender.com/
     );
     const tableData = [];
     issueData?.data?.map((order, i) => {

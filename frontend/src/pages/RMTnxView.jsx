@@ -14,6 +14,7 @@ import {
   Modal,
   Space,
   InputNumber,
+  Typography,
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -216,6 +217,9 @@ const RMTnxView = () => {
       {user.role === "admin" || user.role === "LM" ? (
         <>
           <div>
+            <Typography.Title level={2} style={{ textAlign: "center" }}>
+              Date Wise Issue Details
+            </Typography.Title>
             <Form
               layout="inline"
               name="rmtnxview"

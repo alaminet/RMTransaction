@@ -36,7 +36,7 @@ const RMIssue = () => {
     if (e) {
       try {
         const data = await axios.post(
-          "http://localhost:8000/v1/api/tnx/lotrecview",
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/lotrecview",
           {
             lot: e,
           }
@@ -93,7 +93,7 @@ const RMIssue = () => {
       const m = new Date().getMinutes();
       const s = new Date().getSeconds();
       const data = await axios.post(
-        "http://localhost:8000/v1/api/tnx/rmissue",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/rmissue",
         {
           date: new Date(values.DatePicker.$d).setHours(h, m, s), //moment(values.DatePicker.$d).format()
           stationID: values.station,
@@ -116,7 +116,7 @@ const RMIssue = () => {
     // get station list
     async function getStation() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewstation"
+        "https://alt-wmsftl.onrender.com/v1/api/item/viewstation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -130,7 +130,7 @@ const RMIssue = () => {
     // get lot list
     async function getLot() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewLot"
+        "https://alt-wmsftl.onrender.com/v1/api/item/viewLot"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

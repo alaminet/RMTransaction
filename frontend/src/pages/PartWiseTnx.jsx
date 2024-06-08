@@ -16,6 +16,7 @@ import {
   InputNumber,
   Row,
   Col,
+  Typography,
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
@@ -48,7 +49,7 @@ const PartWiseTnx = () => {
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "http://localhost:8000/v1/api/tnx/itemtnxdlts",
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/itemtnxdlts",
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
@@ -114,7 +115,7 @@ const PartWiseTnx = () => {
     if (editItem.qty !== values.issue) {
       try {
         const update = await axios.post(
-          "http://localhost:8000/v1/api/tnx/rmissueqtyupdate",
+          "https://alt-wmsftl.onrender.com/v1/api/tnx/rmissueqtyupdate",
           {
             id: values.id,
             value: values.issue,
@@ -136,7 +137,7 @@ const PartWiseTnx = () => {
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
-        "http://localhost:8000/v1/api/tnx/dltissueline",
+        "https://alt-wmsftl.onrender.com/v1/api/tnx/dltissueline",
         {
           id: item,
         }
@@ -224,7 +225,7 @@ const PartWiseTnx = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewitemlist"
+        "https://alt-wmsftl.onrender.com/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -243,6 +244,9 @@ const PartWiseTnx = () => {
       {user.role === "admin" || user.role === "LM" ? (
         <>
           <div>
+            <Typography.Title level={2} style={{ textAlign: "center" }}>
+              Part Wise Issue Details
+            </Typography.Title>
             <Form
               layout="inline"
               name="rmtnxview"
