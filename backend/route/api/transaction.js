@@ -13,6 +13,7 @@ const RMReceiveUpdateController = require("../../controllers/RMReceiveUpdateCont
 const RMIssueQtyUpdateController = require("../../controllers/RMIssueQtyUpdateController");
 const ViewPartStockController = require("../../controllers/ViewPartStockController");
 const ViewLotStockController = require("../../controllers/ViewLotStockController");
+const ViewItemWiseIssueController = require("../../controllers/ViewItemWiseIssueController");
 const route = express.Router();
 
 route.post("/rmissue", RMIssueController);
@@ -23,6 +24,7 @@ route.post("/dltissueline", DeleteIssueLineController);
 
 route.get("/rmcheck", RMIssueWatingController);
 route.post("/rmtnxview", RMIssueDoneController);
+route.post("/itemtnxdlts", ViewItemWiseIssueController);
 
 route.post("/rmreceive", RMReceiveController);
 route.post("/receiveview", ViewReceiveController);

@@ -22,7 +22,7 @@ const AddItem = () => {
 
     try {
       const data = await axios.post(
-        "https://alt-wmsftl.onrender.com/v1/api/item/additem",
+        "http://localhost:8000/v1/api/item/additem",
         {
           itemlist: itemArr,
         }

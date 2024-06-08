@@ -1,45 +1,77 @@
-import React, { useEffect, useRef, useState } from "react";
-import moment from "moment";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Button,
-  Form,
-  DatePicker,
   Divider,
+  Form,
   Input,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
   Table,
+  Typography,
+  message,
   Flex,
   Tooltip,
-  Modal,
-  Space,
-  InputNumber,
-  message,
-  Typography,
 } from "antd";
-import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 
-const ViewReceiveItem = () => {
+const PartWiseReceive = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [editForm] = Form.useForm();
-  const [tbllist, setTbllist] = useState([]);
   const [editItem, setEditItem] = useState();
-  const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [strDate, setStrDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [findpartdlts] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [tbllist, setTbllist] = useState([]);
+  const [itemlist, setitemlist] = useState([]);
 
-  // const tblData = tbllist?.filter((item) =>
-  //   item?.code.toLowerCase().includes(search.toLowerCase())
-  // );
+  // Filter `option.label` match the user type `input`
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-  // From output
+  // form controll
   const onFinish = async (values) => {
-    // console.log("Success:", values.StartDate.$d);
+    // console.log("Success:", values);
     setLoading(true);
-    setStrDate(values.StartDate.$d);
-    setEndDate(new Date(values.EndDate.$d).setHours(23, 59, 59));
+    try {
+      const data = await axios.post(
+        "http://localhost:8000/v1/api/tnx/partstock",
+        {
+          code: values.code.toUpperCase().trim(),
+        }
+      );
+      //   console.log(data?.data.receive);
+      const recArr = [];
+      let y = 1;
+      data?.data.receive.map((receive, i) => {
+        receive.receList.map((reclist, j) => {
+          if (reclist.codeID == data.data.itemMatch._id) {
+            recArr.push({
+              sl: y++,
+              code: data.data.itemMatch.code,
+              name: data.data.itemMatch.itemname,
+              loc: reclist.locID.loc,
+              lot: receive.lotID.lot,
+              recqty: reclist.qty,
+              issqty: reclist.issue,
+              onhand: reclist.qty - reclist.issue,
+              action: reclist,
+            });
+          }
+          setTbllist(recArr);
+        });
+      });
+      setLoading(false);
+      //   console.log(tbllist);
+    } catch (error) {
+      setLoading(false);
+      message.error(error.response.data.message);
+    }
+
+    // findpartdlts.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -48,15 +80,14 @@ const ViewReceiveItem = () => {
 
   // edit table data
   const handleEdit = (values) => {
-    // console.log(values.action);
+    // console.log(values);
     setIsModalOpen(true);
-    setEditItem(values.action);
+    setEditItem(values);
     editForm.setFieldsValue({
-      id: values.action._id,
-      code: values.action.codeID.code,
-      loc: values.action.locID.loc,
-      issue: values.action.issue,
-      qty: values.action.qty,
+      id: values._id,
+      loc: values.locID.loc,
+      issue: values.issue,
+      qty: values.qty,
     });
   };
   const onFinishEdit = async (values) => {
@@ -111,32 +142,30 @@ const ViewReceiveItem = () => {
     setIsModalOpen(false);
   };
 
+  // Part Info
+  useEffect(() => {
+    async function getData() {
+      const data = await axios.get(
+        "http://localhost:8000/v1/api/item/viewitemlist"
+      );
+      const tableData = [];
+      data?.data?.map((item, i) => {
+        tableData.push({
+          label: item.code + "_" + item.itemname,
+          value: item.code,
+        });
+        setitemlist(tableData);
+      });
+    }
+    getData();
+  }, []);
+
   // table arrangment
   const columns = [
     {
       title: "SL",
       dataIndex: "sl",
-      rowScope: "sl",
-    },
-    {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-    },
-    // {
-    //   title: "Tnx ID",
-    //   dataIndex: "tnxID",
-    //   key: "tnxid",
-    // },
-    {
-      title: "Lot No",
-      dataIndex: "lot",
-      key: "lot",
-    },
-    {
-      title: "Order No",
-      dataIndex: "order",
-      key: "order",
+      key: "sl",
     },
     {
       title: "Part Code",
@@ -149,31 +178,41 @@ const ViewReceiveItem = () => {
       key: "name",
     },
     {
-      title: "location",
+      title: "Model_Lot",
+      dataIndex: "lot",
+      key: "lot",
+    },
+    {
+      title: "Location",
       dataIndex: "loc",
       key: "loc",
     },
     {
       title: "Receive Qty",
-      dataIndex: "qty",
-      key: "qty",
+      dataIndex: "recqty",
+      key: "recqty",
     },
     {
       title: "Issue Qty",
-      dataIndex: "issue",
-      key: "issue",
+      dataIndex: "issqty",
+      key: "issqty",
+    },
+    {
+      title: "On-Hand Qty",
+      dataIndex: "onhand",
+      key: "onhand",
     },
     {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (_, record) =>
+      render: (item, record) =>
         user.role === "admin" && (
           <>
             <Flex gap={4}>
               <Tooltip title="Edit">
                 <Button
-                  onClick={() => handleEdit(record)}
+                  onClick={() => handleEdit(item)}
                   icon={<EditTwoTone />}
                 />
               </Tooltip>
@@ -188,119 +227,68 @@ const ViewReceiveItem = () => {
         ),
     },
   ];
-  // table data collection
-  useEffect(() => {
-    async function getRMIssueData() {
-      try {
-        if (!strDate || !endDate) {
-          message.warning("Date Required");
-          setLoading(false);
-        } else {
-          const rmReceive = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveview",
-            {
-              stDate: moment(strDate).format(),
-              edDate: moment(endDate).format(),
-            }
-          );
-          // console.log(rmReceive.data);
-          const tableData = [];
-          rmReceive?.data.map((order, i) => {
-            order?.receList?.map((item, j) => {
-              tableData.push({
-                dataIndex: order._id,
-                sl: ++i,
-                date: moment(order.date).format("DD-MMM-YY"),
-                LC: order.LC,
-                inv: order.inv,
-                BE: order.BE,
-                PO: order.PO,
-                lot: order.lotID.lot,
-                rmk: order.rmk,
-                order: order.order,
-                tnxID: order.tnxID,
-                code: item.codeID.code,
-                name: item.codeID.itemname,
-                loc: item.locID.loc,
-                qty: item.qty,
-                issue: item.issue,
-                action: item,
-              });
-              setTbllist(tableData);
-              setLoading(false);
-            });
-          });
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    }
-    getRMIssueData();
-  }, [strDate, endDate]);
-
   return (
     <>
       <div>
         <Typography.Title level={2} style={{ textAlign: "center" }}>
-          View Receive Details
+          Part Wise Receive Details
         </Typography.Title>
-        <Form
-          layout="inline"
-          name="rmReceiveView"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off">
-          <Form.Item
-            label="Start"
-            name="StartDate"
-            rules={[
-              {
-                required: true,
-                message: "Please input!",
-              },
-            ]}>
-            <DatePicker />
-          </Form.Item>
-          <Form.Item
-            label="End"
-            name="EndDate"
-            rules={[
-              {
-                required: true,
-                message: "Please input!",
-              },
-            ]}>
-            <DatePicker />
-          </Form.Item>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Form
+            form={findpartdlts}
+            name="partdlts"
+            layout="inline"
+            style={{
+              minWidth: 400,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off">
+            <Form.Item
+              label="Part Code"
+              name="code"
+              rules={[
+                {
+                  required: true,
+                  message: "Please insert Part Code",
+                },
+              ]}>
+              <Select
+                style={{
+                  width: 500,
+                }}
+                showSearch
+                placeholder="Find Your Item"
+                optionFilterProp="children"
+                // onSearch={onSearchCode}
+                filterOption={filterOption}
+                options={itemlist}
+              />
+            </Form.Item>
 
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              loading={loading}
-              disabled={loading}>
-              Find
-            </Button>
-          </Form.Item>
-        </Form>
-        <Divider>Transaction Details Table</Divider>
-        <div>
-          <Input
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Find by Code"
-            variant="filled"
-          />
-          <Table
-            style={{ width: "100%" }}
-            // rowKey={(record) => console.log(record)}
-            dataSource={tbllist?.filter((item) =>
-              item?.code.toLowerCase().includes(search.toLowerCase())
-            )}
-            columns={columns}
-          />
+            <Form.Item>
+              <Button
+                loading={loading}
+                disabled={loading}
+                type="primary"
+                htmlType="submit">
+                Find
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
+        {tbllist.length > 0 && (
+          <>
+            <Divider>On-Hand Details Table</Divider>
+            <div>
+              <Table
+                style={{ width: "100%" }}
+                dataSource={tbllist}
+                columns={columns}
+              />
+            </div>
+          </>
+        )}
         <div>
           <Modal
             title="Edit Category"
@@ -314,16 +302,6 @@ const ViewReceiveItem = () => {
               // onFinishFailed={onFinishFailed}
               autoComplete="off">
               <Form.Item hidden name="id"></Form.Item>
-              <Form.Item
-                name="code"
-                label="Item Code"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}>
-                <Input disabled placeholder="Item Code" />
-              </Form.Item>
               <Form.Item
                 name="loc"
                 label="Location"
@@ -372,5 +350,4 @@ const ViewReceiveItem = () => {
     </>
   );
 };
-
-export default ViewReceiveItem;
+export default PartWiseReceive;

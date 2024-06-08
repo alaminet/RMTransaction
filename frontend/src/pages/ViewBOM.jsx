@@ -35,7 +35,7 @@ const ViewBOM = () => {
     // setSelectLot(values.lot);
     try {
       const bomdata = await axios.post(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewbom",
+        "http://localhost:8000/v1/api/item/viewbom",
         {
           lot: values.lot,
         }
@@ -80,7 +80,7 @@ const ViewBOM = () => {
     setIsModalOpen(false);
     try {
       const userEdit = await axios.put(
-        "https://alt-wmsftl.onrender.com/v1/api/item/editlot",
+        "http://localhost:8000/v1/api/item/editlot",
         {
           id: editID,
           filed: editField,
@@ -105,7 +105,7 @@ const ViewBOM = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "https://alt-wmsftl.onrender.com/v1/api/item/dltlot",
+        "http://localhost:8000/v1/api/item/dltlot",
         {
           id: item,
         }
@@ -181,7 +181,7 @@ const ViewBOM = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewLot"
+        "http://localhost:8000/v1/api/item/viewLot"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

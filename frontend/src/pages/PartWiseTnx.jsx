@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import axios from "axios";
 import {
@@ -14,44 +14,57 @@ import {
   Modal,
   Space,
   InputNumber,
+  Row,
+  Col,
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
-const RMTnxView = () => {
+const PartWiseTnx = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [editForm] = Form.useForm();
   const [editItem, setEditItem] = useState();
   const [tbllist, setTbllist] = useState([]);
+  const [itemlist, setitemlist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Filter `option.label` match the user type `input`
+  const filterOption = (input, option) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
   // From output
   const onFinish = async (values) => {
-    // console.log("Success:", values);
+    console.log("Success:", values);
     setLoading(true);
     let strDate = values.StartDate.$d;
     let endDate = new Date(values.EndDate.$d).setHours(23, 59, 59);
     let tnxType = values.type;
+    let findItem = values.code;
     try {
       if (!strDate || !endDate) {
         message.error("Date Required");
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "http://localhost:8000/v1/api/tnx/rmtnxview/",
+          "http://localhost:8000/v1/api/tnx/itemtnxdlts",
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
+            codeID: findItem,
           }
         );
-        rmIssueDone.data.length == 0 && message.warning("No Data Found");
+        console.log(rmIssueDone.data);
+        if (rmIssueDone.data.length == 0) {
+          message.warning("No Data Found");
+          setTbllist("");
+        }
         const tableData = [];
         let y = 1;
         rmIssueDone?.data.map((order, i) => {
           order?.issueList?.map((item, j) => {
-            item.status === tnxType &&
+            if (item.status === tnxType && item.codeID._id === findItem) {
               tableData.push({
                 dataIndex: order._id,
                 sl: y++,
@@ -67,7 +80,8 @@ const RMTnxView = () => {
                 rmk: item.rmk,
                 action: item._id,
               });
-            setTbllist(tableData);
+              setTbllist(tableData);
+            }
           });
         });
         setLoading(false);
@@ -104,11 +118,6 @@ const RMTnxView = () => {
           {
             id: values.id,
             value: values.issue,
-          },
-          {
-            headers: {
-              Authorization: "CAt7p0qqwYALAIY",
-            },
           }
         );
         message.success(update.data.message);
@@ -211,6 +220,24 @@ const RMTnxView = () => {
     },
   ];
 
+  // Part Info
+  useEffect(() => {
+    async function getData() {
+      const data = await axios.get(
+        "http://localhost:8000/v1/api/item/viewitemlist"
+      );
+      const tableData = [];
+      data?.data?.map((item, i) => {
+        tableData.push({
+          label: item.code + "_" + item.itemname,
+          value: item._id,
+        });
+        setitemlist(tableData);
+      });
+    }
+    getData();
+  }, []);
+
   return (
     <>
       {user.role === "admin" || user.role === "LM" ? (
@@ -223,7 +250,6 @@ const RMTnxView = () => {
               onFinishFailed={onFinishFailed}
               autoComplete="off">
               <Form.Item
-                label="Start"
                 name="StartDate"
                 rules={[
                   {
@@ -231,10 +257,10 @@ const RMTnxView = () => {
                     message: "Please input!",
                   },
                 ]}>
-                <DatePicker />
+                <DatePicker placeholder="Start Date" />
               </Form.Item>
+
               <Form.Item
-                label="End"
                 name="EndDate"
                 rules={[
                   {
@@ -242,10 +268,29 @@ const RMTnxView = () => {
                     message: "Please input!",
                   },
                 ]}>
-                <DatePicker />
+                <DatePicker placeholder="End Date" />
               </Form.Item>
+
               <Form.Item
-                label="Tnx Type"
+                name="code"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please insert Part Code",
+                  },
+                ]}>
+                <Select
+                  showSearch
+                  style={{ width: "250px" }}
+                  placeholder="Find Your Item"
+                  optionFilterProp="children"
+                  // onSearch={onSearchCode}
+                  filterOption={filterOption}
+                  options={itemlist}
+                />
+              </Form.Item>
+
+              <Form.Item
                 name="type"
                 rules={[
                   {
@@ -264,7 +309,6 @@ const RMTnxView = () => {
                   ]}
                 />
               </Form.Item>
-
               <Form.Item>
                 <Button
                   type="primary"
@@ -284,9 +328,12 @@ const RMTnxView = () => {
               />
               <Table
                 style={{ width: "100%" }}
-                dataSource={tbllist.filter((item) =>
-                  item.code.toLowerCase().includes(search.toLowerCase())
-                )}
+                dataSource={
+                  tbllist !== "" &&
+                  tbllist.filter((item) =>
+                    item.code.toLowerCase().includes(search.toLowerCase())
+                  )
+                }
                 columns={columns}
               />
             </div>
@@ -332,4 +379,4 @@ const RMTnxView = () => {
   );
 };
 
-export default RMTnxView;
+export default PartWiseTnx;

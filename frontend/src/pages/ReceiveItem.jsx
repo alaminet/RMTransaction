@@ -72,7 +72,7 @@ const ReceiveItem = () => {
       setWrongCode(null);
       try {
         const data = await axios.post(
-          "https://alt-wmsftl.onrender.com/v1/api/tnx/rmreceive",
+          "http://localhost:8000/v1/api/tnx/rmreceive",
           {
             date: moment(values.DatePicker.$d).format(),
             LC: values.LC,
@@ -102,7 +102,7 @@ const ReceiveItem = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("https://alt-wmsftl.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -111,7 +111,7 @@ const ReceiveItem = () => {
     }
     async function getItem() {
       const data = await axios.get(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewitemlist"
+        "http://localhost:8000/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -121,7 +121,7 @@ const ReceiveItem = () => {
     }
     async function getLoc() {
       const data = await axios.get(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewlocation"
+        "http://localhost:8000/v1/api/item/viewlocation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

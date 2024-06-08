@@ -178,6 +178,10 @@ const Menubar = () => {
               label: "Receive Details",
               key: "receivedetails",
             },
+            {
+              label: "Item Wise Receive Details",
+              key: "itemrevdtls",
+            },
           ],
         },
         {
@@ -203,6 +207,10 @@ const Menubar = () => {
             {
               label: "Daily Transaction",
               key: "dailyTnx",
+            },
+            {
+              label: "Part Wise Transaction",
+              key: "partTnx",
             },
             {
               label: "Lot Wise Stock",
@@ -406,6 +414,10 @@ const Menubar = () => {
               label: "Receive Details",
               key: "receivedetails",
             },
+            {
+              label: "Item Wise Receive Details",
+              key: "itemrevdtls",
+            },
           ],
         },
         {
@@ -431,6 +443,10 @@ const Menubar = () => {
             {
               label: "Daily Transaction",
               key: "dailyTnx",
+            },
+            {
+              label: "Part Wise Transaction",
+              key: "partTnx",
             },
             {
               label: "Lot Wise Stock",

@@ -29,6 +29,8 @@ import ViewLocation from "./pages/ViewLocation";
 import PassChange from "./pages/PassChange";
 import PartStock from "./pages/PartStock";
 import LotStock from "./pages/LotStock";
+import PartWiseReceive from "./pages/PartWiseReceive";
+import PartWiseTnx from "./pages/PartWiseTnx";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,6 +60,8 @@ function App() {
             <Route path="stationdtls" element={<ViewStation />}></Route>
             <Route path="partstock" element={<PartStock />}></Route>
             <Route path="lotstock" element={<LotStock />}></Route>
+            <Route path="itemrevdtls" element={<PartWiseReceive />}></Route>
+            <Route path="partTnx" element={<PartWiseTnx />}></Route>
           </Route>
         </Route>
       </Route>
