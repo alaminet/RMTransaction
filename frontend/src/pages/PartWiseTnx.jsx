@@ -49,7 +49,7 @@ const PartWiseTnx = () => {
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "https://alt-wmsftl.onrender.com/v1/api/tnx/itemtnxdlts",
+          "https://ftlwms01.onrender.com/v1/api/tnx/itemtnxdlts",
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
@@ -115,7 +115,7 @@ const PartWiseTnx = () => {
     if (editItem.qty !== values.issue) {
       try {
         const update = await axios.post(
-          "https://alt-wmsftl.onrender.com/v1/api/tnx/rmissueqtyupdate",
+          "https://ftlwms01.onrender.com/v1/api/tnx/rmissueqtyupdate",
           {
             id: values.id,
             value: values.issue,
@@ -137,7 +137,7 @@ const PartWiseTnx = () => {
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
-        "https://alt-wmsftl.onrender.com/v1/api/tnx/dltissueline",
+        "https://ftlwms01.onrender.com/v1/api/tnx/dltissueline",
         {
           id: item,
         }
@@ -225,7 +225,7 @@ const PartWiseTnx = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewitemlist"
+        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

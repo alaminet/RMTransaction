@@ -15,7 +15,7 @@ const PartStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "https://alt-wmsftl.onrender.com/v1/api/tnx/partstock",
+        "https://ftlwms01.onrender.com/v1/api/tnx/partstock",
         {
           code: values.code.toUpperCase().trim(),
         }
