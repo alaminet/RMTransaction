@@ -7,6 +7,7 @@ const LotStock = () => {
   const [findpartdlts] = Form.useForm();
   const [lotList, setLotList] = useState();
   const [loadings, setLoadings] = useState(false);
+  const [fullList, setFullList] = useState(true);
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
 
@@ -70,7 +71,7 @@ const LotStock = () => {
       title: "SL",
       dataIndex: "sl",
       key: "sl",
-      defaultSortOrder: "descend",
+      defaultSortOrder: "ascend",
       sorter: (a, b) => a.sl - b.sl,
     },
     {
@@ -97,30 +98,25 @@ const LotStock = () => {
       title: "Receive Qty",
       dataIndex: "recqty",
       key: "recqty",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.recqty - b.recqty,
     },
     {
       title: "Issue Qty",
       dataIndex: "issqty",
       key: "issqty",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.issqty - b.issqty,
     },
     {
       title: "On-Hand Qty",
       dataIndex: "onhand",
       key: "onhand",
-      defaultSortOrder: "descend",
       sorter: (a, b) => a.onhand - b.onhand,
     },
   ];
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewLot"
-      );
+      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -172,6 +168,11 @@ const LotStock = () => {
                   Find
                 </Button>
               </Form.Item>
+              <Form.Item>
+                <Button onClick={() => setFullList(!fullList)} type="primary">
+                  View All
+                </Button>
+              </Form.Item>
             </Form>
           </div>
           {tbllist.length > 0 && (
@@ -187,6 +188,7 @@ const LotStock = () => {
                   />
                 </div>
                 <Table
+                  pagination={fullList}
                   style={{ width: "100%" }}
                   dataSource={tbllist?.filter((item) =>
                     item?.code?.toLowerCase().includes(search?.toLowerCase())

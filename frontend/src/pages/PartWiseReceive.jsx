@@ -38,7 +38,7 @@ const PartWiseReceive = () => {
     setLoading(true);
     try {
       const data = await axios.post(
-        "https://alt-wmsftl.onrender.com/v1/api/tnx/partstock",
+        "http://localhost:8000/v1/api/tnx/partstock",
         {
           code: values.code.toUpperCase().trim(),
         }
@@ -100,7 +100,7 @@ const PartWiseReceive = () => {
       if (editItem.locID.loc !== values.loc) {
         try {
           const update = await axios.post(
-            "https://alt-wmsftl.onrender.com/v1/api/tnx/receiveupdate",
+            "http://localhost:8000/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "locID",
@@ -119,7 +119,7 @@ const PartWiseReceive = () => {
       if (editItem.issue !== values.issue) {
         try {
           const update = await axios.post(
-            "https://alt-wmsftl.onrender.com/v1/api/tnx/receiveupdate",
+            "http://localhost:8000/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "issue",
@@ -146,7 +146,7 @@ const PartWiseReceive = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://alt-wmsftl.onrender.com/v1/api/item/viewitemlist"
+        "http://localhost:8000/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

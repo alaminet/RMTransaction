@@ -26,6 +26,7 @@ const RMTnxView = () => {
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showList, setShowList] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // From output
@@ -278,6 +279,11 @@ const RMTnxView = () => {
                   Find
                 </Button>
               </Form.Item>
+              <Form.Item>
+                <Button type="primary" onClick={() => setShowList(!showList)}>
+                  Show All
+                </Button>
+              </Form.Item>
             </Form>
             <Divider>Transaction Details Table</Divider>
             <div>
@@ -287,6 +293,7 @@ const RMTnxView = () => {
                 variant="filled"
               />
               <Table
+                pagination={showList}
                 style={{ width: "100%" }}
                 dataSource={tbllist.filter((item) =>
                   item.code.toLowerCase().includes(search.toLowerCase())
