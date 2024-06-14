@@ -69,7 +69,7 @@ const ViewReceiveItem = () => {
       if (editItem.locID.loc !== values.loc) {
         try {
           const update = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveupdate",
+            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "locID",
@@ -88,7 +88,7 @@ const ViewReceiveItem = () => {
       if (editItem.issue !== values.issue) {
         try {
           const update = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveupdate",
+            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
             {
               id: values.id,
               field: "issue",
@@ -197,7 +197,7 @@ const ViewReceiveItem = () => {
           setLoading(false);
         } else {
           const rmReceive = await axios.post(
-            "http://localhost:8000/v1/api/tnx/receiveview",
+            "https://ftlwms01.onrender.com/v1/api/tnx/receiveview",
             {
               stDate: moment(strDate).format(),
               edDate: moment(endDate).format(),

@@ -21,7 +21,7 @@ const LotStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/tnx/lotstock",
+        "https://ftlwms01.onrender.com/v1/api/tnx/lotstock",
         {
           lot: values.lot,
         }
@@ -116,7 +116,7 @@ const LotStock = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
+      const data = await axios.get("https://ftlwms01.onrender.com/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });

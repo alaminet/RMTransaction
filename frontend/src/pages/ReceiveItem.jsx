@@ -64,15 +64,17 @@ const ReceiveItem = () => {
     if (wrongCodeArr.length > 0) {
       setWrongLoc(null);
       message.error(`${wrongCodeArr} is not define`);
+      setLoadings(false);
     } else if (wrongLocArr.length > 0) {
       setWrongCode(null);
       message.error(`${wrongLocArr} is not define`);
+      setLoadings(false);
     } else {
       setWrongLoc(null);
       setWrongCode(null);
       try {
         const data = await axios.post(
-          "http://localhost:8000/v1/api/tnx/rmreceive",
+          "https://ftlwms01.onrender.com/v1/api/tnx/rmreceive",
           {
             date: moment(values.DatePicker.$d).format(),
             LC: values.LC,
@@ -102,7 +104,7 @@ const ReceiveItem = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("http://localhost:8000/v1/api/item/viewLot");
+      const data = await axios.get("https://ftlwms01.onrender.com/v1/api/item/viewLot");
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -111,7 +113,7 @@ const ReceiveItem = () => {
     }
     async function getItem() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewitemlist"
+        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -121,7 +123,7 @@ const ReceiveItem = () => {
     }
     async function getLoc() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewlocation"
+        "https://ftlwms01.onrender.com/v1/api/item/viewlocation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {

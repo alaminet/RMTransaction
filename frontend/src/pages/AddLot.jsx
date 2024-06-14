@@ -21,7 +21,7 @@ const AddLot = () => {
 
     try {
       const data = await axios.post(
-        "http://localhost:8000/v1/api/item/addlot",
+        "https://ftlwms01.onrender.com/v1/api/item/addlot",
         {
           itemlist: itemArr,
         }

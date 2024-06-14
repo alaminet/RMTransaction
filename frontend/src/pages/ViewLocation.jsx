@@ -22,7 +22,7 @@ const ViewLocation = () => {
     setIsModalOpen(false);
     try {
       const stationEdit = await axios.put(
-        "http://localhost:8000/v1/api/item/editlocation",
+        "https://ftlwms01.onrender.com/v1/api/item/editlocation",
         {
           id: editID.action,
           data: editData,
@@ -46,7 +46,7 @@ const ViewLocation = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "http://localhost:8000/v1/api/item/deletelocation",
+        "https://ftlwms01.onrender.com/v1/api/item/deletelocation",
         {
           id: item,
         }
@@ -105,7 +105,7 @@ const ViewLocation = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "http://localhost:8000/v1/api/item/viewlocation"
+        "https://ftlwms01.onrender.com/v1/api/item/viewlocation"
       );
       const tableData = [];
       data?.data?.map((item, i) => {
