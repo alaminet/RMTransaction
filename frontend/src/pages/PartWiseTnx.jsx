@@ -20,6 +20,7 @@ import {
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const PartWiseTnx = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -49,7 +50,7 @@ const PartWiseTnx = () => {
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "https://ftlwms01.onrender.com/v1/api/tnx/itemtnxdlts",
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/itemtnxdlts`,
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
@@ -115,7 +116,7 @@ const PartWiseTnx = () => {
     if (editItem.qty !== values.issue) {
       try {
         const update = await axios.post(
-          "https://ftlwms01.onrender.com/v1/api/tnx/rmissueqtyupdate",
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmissueqtyupdate`,
           {
             id: values.id,
             value: values.issue,
@@ -137,7 +138,7 @@ const PartWiseTnx = () => {
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/dltissueline",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/dltissueline`,
         {
           id: item,
         }
@@ -225,7 +226,7 @@ const PartWiseTnx = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewitemlist`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -241,6 +242,9 @@ const PartWiseTnx = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Tnx - Part Wise</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <>
           <div>

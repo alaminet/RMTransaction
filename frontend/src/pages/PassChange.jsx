@@ -3,16 +3,17 @@ import axios from "axios";
 import { Button, Form, Input, Typography, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Loginuser } from "../Slice/UserSlice";
+import { Helmet } from "react-helmet-async";
 
 const PassChange = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const onFinish = async (values) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     try {
       const userData = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/auth/passchange",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/passchange`,
         {
           userID: user._id,
           oldPass: values.oldPass,
@@ -32,6 +33,9 @@ const PassChange = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Change Password</title>
+      </Helmet>
       <Typography.Title level={2} style={{ textAlign: "center" }}>
         Change Your Password
       </Typography.Title>
@@ -52,8 +56,7 @@ const PassChange = () => {
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        autoComplete="off"
-      >
+        autoComplete="off">
         <Form.Item
           name="oldPass"
           label="Current Password"
@@ -62,8 +65,7 @@ const PassChange = () => {
               required: true,
               message: "Please input your Current password!",
             },
-          ]}
-        >
+          ]}>
           <Input.Password />
         </Form.Item>
         <Form.Item
@@ -75,8 +77,7 @@ const PassChange = () => {
               message: "Please input your password!",
             },
           ]}
-          hasFeedback
-        >
+          hasFeedback>
           <Input.Password />
         </Form.Item>
 
@@ -100,8 +101,7 @@ const PassChange = () => {
                 );
               },
             }),
-          ]}
-        >
+          ]}>
           <Input.Password />
         </Form.Item>
 
@@ -109,8 +109,7 @@ const PassChange = () => {
           wrapperCol={{
             offset: 10,
             span: 14,
-          }}
-        >
+          }}>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>

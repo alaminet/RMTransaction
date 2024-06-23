@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Form, Input, Typography, message } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
 const AddLocation = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -28,7 +29,7 @@ const AddLocation = () => {
     });
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/addlocation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/addlocation`,
         {
           itemlist: [...itemArr],
         }
@@ -50,7 +51,7 @@ const AddLocation = () => {
   useEffect(() => {
     async function getLoc() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewlocation"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewlocation`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -62,6 +63,9 @@ const AddLocation = () => {
   }, [onFinish]);
   return (
     <>
+      <Helmet>
+        <title>Add Location</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -84,8 +88,7 @@ const AddLocation = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               label="Location List"
               name="loclist"
@@ -94,8 +97,7 @@ const AddLocation = () => {
                   required: true,
                   message: "Please input Location paste from XL",
                 },
-              ]}
-            >
+              ]}>
               <TextArea rows={4} placeholder="ex: RM1:A01A ; RM3:B30D" />
             </Form.Item>
 
@@ -103,14 +105,12 @@ const AddLocation = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}
-            >
+              }}>
               <Button
                 loading={loading}
                 disabled={loading}
                 type="primary"
-                htmlType="submit"
-              >
+                htmlType="submit">
                 Add Location
               </Button>
             </Form.Item>

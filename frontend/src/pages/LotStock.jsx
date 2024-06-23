@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Divider, Form, Input, Select, Table, message } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const LotStock = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [findpartdlts] = Form.useForm();
@@ -21,7 +22,7 @@ const LotStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/lotstock",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/lotstock`,
         {
           lot: values.lot,
         }
@@ -116,7 +117,9 @@ const LotStock = () => {
 
   useEffect(() => {
     async function getLot() {
-      const data = await axios.get("https://ftlwms01.onrender.com/v1/api/item/viewLot");
+      const data = await axios.get(
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
+      );
       const tableData = [];
       data?.data?.map((item, i) => {
         tableData.push({ value: item._id, label: item.lot });
@@ -127,6 +130,9 @@ const LotStock = () => {
   }, []);
   return (
     <>
+      <Helmet>
+        <title>Lot Wise Stock</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <div style={{ display: "flex", justifyContent: "center" }}>

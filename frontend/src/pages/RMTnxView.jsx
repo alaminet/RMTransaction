@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const RMTnxView = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -42,7 +43,7 @@ const RMTnxView = () => {
         setLoading(false);
       } else {
         const rmIssueDone = await axios.post(
-          "https://ftlwms01.onrender.com/v1/api/tnx/rmtnxview/",
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmtnxview/`,
           {
             stDate: moment(strDate).format(),
             edDate: moment(endDate).format(),
@@ -102,7 +103,7 @@ const RMTnxView = () => {
     if (editItem.qty !== values.issue) {
       try {
         const update = await axios.post(
-          "https://ftlwms01.onrender.com/v1/api/tnx/rmissueqtyupdate",
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmissueqtyupdate`,
           {
             id: values.id,
             value: values.issue,
@@ -129,7 +130,7 @@ const RMTnxView = () => {
   const handleDelete = async (item) => {
     try {
       const itemDelete = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/dltissueline",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/dltissueline`,
         {
           id: item,
         }
@@ -215,6 +216,9 @@ const RMTnxView = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Daily Transaction</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <>
           <div>

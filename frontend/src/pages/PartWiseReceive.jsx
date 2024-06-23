@@ -17,6 +17,7 @@ import {
 } from "antd";
 import { useSelector } from "react-redux";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
+import { Helmet } from "react-helmet-async";
 
 const PartWiseReceive = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -38,7 +39,7 @@ const PartWiseReceive = () => {
     setLoading(true);
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/partstock",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/partstock`,
         {
           code: values.code.toUpperCase().trim(),
         }
@@ -100,7 +101,7 @@ const PartWiseReceive = () => {
       if (editItem.locID.loc !== values.loc) {
         try {
           const update = await axios.post(
-            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
+            `${import.meta.env.VITE_API_URL}/v1/api/tnx/receiveupdate`,
             {
               id: values.id,
               field: "locID",
@@ -119,7 +120,7 @@ const PartWiseReceive = () => {
       if (editItem.issue !== values.issue) {
         try {
           const update = await axios.post(
-            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
+            `${import.meta.env.VITE_API_URL}/v1/api/tnx/receiveupdate`,
             {
               id: values.id,
               field: "issue",
@@ -146,7 +147,7 @@ const PartWiseReceive = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewitemlist`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -229,6 +230,9 @@ const PartWiseReceive = () => {
   ];
   return (
     <>
+      <Helmet>
+        <title>Receive - Part wsie</title>
+      </Helmet>
       <div>
         <Typography.Title level={2} style={{ textAlign: "center" }}>
           Part Wise Receive Details

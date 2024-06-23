@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Form, Input, Typography, message } from "antd";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
 
 const AddStation = () => {
@@ -30,7 +31,7 @@ const AddStation = () => {
     });
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/addstation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/addstation`,
         {
           itemlist: [...itemArr],
         }
@@ -50,7 +51,7 @@ const AddStation = () => {
   useEffect(() => {
     async function getStation() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewstation"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewstation`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -62,6 +63,9 @@ const AddStation = () => {
   }, [onFinish]);
   return (
     <>
+      <Helmet>
+        <title>Add Station</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -84,8 +88,7 @@ const AddStation = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               label="Station List"
               name="stationlist"
@@ -94,8 +97,7 @@ const AddStation = () => {
                   required: true,
                   message: "Please input Location paste from XL",
                 },
-              ]}
-            >
+              ]}>
               <TextArea rows={4} placeholder="ex: DOOR" />
             </Form.Item>
 
@@ -103,8 +105,7 @@ const AddStation = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}
-            >
+              }}>
               <Button type="primary" htmlType="submit">
                 Add Station
               </Button>

@@ -14,6 +14,7 @@ import {
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const ViewBOM = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -35,7 +36,7 @@ const ViewBOM = () => {
     // setSelectLot(values.lot);
     try {
       const bomdata = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/viewbom",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewbom`,
         {
           lot: values.lot,
         }
@@ -80,7 +81,7 @@ const ViewBOM = () => {
     setIsModalOpen(false);
     try {
       const userEdit = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/editlot",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/editlot`,
         {
           id: editID,
           filed: editField,
@@ -105,7 +106,7 @@ const ViewBOM = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/dltlot",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/dltlot`,
         {
           id: item,
         }
@@ -181,7 +182,7 @@ const ViewBOM = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewLot"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -194,6 +195,9 @@ const ViewBOM = () => {
 
   return (
     <>
+      <Helmet>
+        <title>BOM Details</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <div>

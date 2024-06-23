@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button, Flex, Form, Input, Typography, message } from "antd";
 import { useDispatch } from "react-redux";
 import { Loginuser } from "../Slice/UserSlice";
+import { Helmet } from "react-helmet-async";
 const Login = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -10,7 +11,7 @@ const Login = () => {
     // console.log("Success:", values);
     try {
       const userData = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/auth/login",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/login`,
         {
           userID: values.userID,
           password: values.password,
@@ -28,6 +29,9 @@ const Login = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
       {contextHolder}
       <Flex align="center" justify="center">
         <div>
@@ -47,8 +51,7 @@ const Login = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               label="User ID"
               name="userID"
@@ -57,8 +60,7 @@ const Login = () => {
                   required: true,
                   message: "Please input your user ID!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
 
@@ -70,8 +72,7 @@ const Login = () => {
                   required: true,
                   message: "Please input your password!",
                 },
-              ]}
-            >
+              ]}>
               <Input.Password />
             </Form.Item>
 
@@ -79,8 +80,7 @@ const Login = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}
-            >
+              }}>
               <Button type="primary" htmlType="submit">
                 Login
               </Button>

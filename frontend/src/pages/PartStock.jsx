@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Divider, Form, Input, Table, message } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const PartStock = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -15,7 +16,7 @@ const PartStock = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/partstock",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/partstock`,
         {
           code: values.code.toUpperCase().trim(),
         }
@@ -102,6 +103,9 @@ const PartStock = () => {
   ];
   return (
     <>
+      <Helmet>
+        <title>Part Wise Stock</title>
+      </Helmet>
       <div>
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Form

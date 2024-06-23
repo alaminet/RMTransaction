@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Input, Table, message, Popconfirm, Modal, Radio, Typography } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  message,
+  Popconfirm,
+  Modal,
+  Radio,
+  Typography,
+} from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const ViewLocation = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -22,7 +32,7 @@ const ViewLocation = () => {
     setIsModalOpen(false);
     try {
       const stationEdit = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/editlocation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/editlocation`,
         {
           id: editID.action,
           data: editData,
@@ -46,7 +56,7 @@ const ViewLocation = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/deletelocation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/deletelocation`,
         {
           id: item,
         }
@@ -81,21 +91,18 @@ const ViewLocation = () => {
           <>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item, record)}
-            ></Button>
+              onClick={() => handleEdit(item, record)}></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this Item?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No"
-            >
+              cancelText="No">
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
-              ></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
             </Popconfirm>
           </>
         ),
@@ -105,7 +112,7 @@ const ViewLocation = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewlocation"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewlocation`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -122,6 +129,9 @@ const ViewLocation = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Location Details</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -145,8 +155,7 @@ const ViewLocation = () => {
               title="Edit Location Name"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}
-            >
+              onCancel={handleCancel}>
               <div>
                 <Input
                   placeholder={editID?.location}

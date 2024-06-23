@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Alert, Button, Form, Input, Radio, Typography } from "antd";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const AddUser = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -14,7 +15,7 @@ const AddUser = () => {
     setLoadings(true);
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/auth/adduser",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/adduser`,
         {
           userID: values.userid,
           password: values.password,
@@ -37,6 +38,9 @@ const AddUser = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Add User</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           {msg && <Alert message={msg} type={msgType} showIcon closable />}
@@ -54,8 +58,7 @@ const AddUser = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               label="User ID"
               name="userid"
@@ -64,8 +67,7 @@ const AddUser = () => {
                   required: true,
                   message: "Please input User ID!",
                 },
-              ]}
-            >
+              ]}>
               <Input />
             </Form.Item>
 
@@ -77,8 +79,7 @@ const AddUser = () => {
                   required: true,
                   message: "Please input your password!",
                 },
-              ]}
-            >
+              ]}>
               <Input.Password />
             </Form.Item>
             <Form.Item
@@ -89,8 +90,7 @@ const AddUser = () => {
                   required: true,
                   message: "Please select role!",
                 },
-              ]}
-            >
+              ]}>
               <Radio.Group>
                 <Radio value="user">User</Radio>
                 <Radio value="LM">Line Manager</Radio>
@@ -103,14 +103,12 @@ const AddUser = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}
-            >
+              }}>
               <Button
                 loading={loadings}
                 disabled={loadings}
                 type="primary"
-                htmlType="submit"
-              >
+                htmlType="submit">
                 Add User
               </Button>
             </Form.Item>

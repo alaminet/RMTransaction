@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const ViewStation = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -31,7 +32,7 @@ const ViewStation = () => {
     setIsModalOpen(false);
     try {
       const stationEdit = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/editstation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/editstation`,
         {
           id: editID.action,
           data: editData,
@@ -55,7 +56,7 @@ const ViewStation = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/deletestation",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/deletestation`,
         {
           id: item,
         }
@@ -90,21 +91,18 @@ const ViewStation = () => {
           <>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item, record)}
-            ></Button>
+              onClick={() => handleEdit(item, record)}></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this Item?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No"
-            >
+              cancelText="No">
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
-              ></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
             </Popconfirm>
           </>
         ),
@@ -114,7 +112,7 @@ const ViewStation = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewstation"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewstation`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -131,6 +129,9 @@ const ViewStation = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Station Details</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -154,8 +155,7 @@ const ViewStation = () => {
               title="Edit Station Name"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}
-            >
+              onCancel={handleCancel}>
               <div>
                 <Input
                   placeholder={editID?.station}

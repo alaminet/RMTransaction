@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Button, Form, Input, Typography } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
 const { Title } = Typography;
 
@@ -22,7 +23,7 @@ const AddItem = () => {
 
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/additem",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/additem`,
         {
           itemlist: itemArr,
         }
@@ -38,6 +39,9 @@ const AddItem = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Add Item</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           <Typography style={{ textAlign: "center" }}>

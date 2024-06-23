@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, Typography, message } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
 
 const AddLot = () => {
@@ -21,7 +22,7 @@ const AddLot = () => {
 
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/addlot",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/addlot`,
         {
           itemlist: itemArr,
         }
@@ -37,6 +38,9 @@ const AddLot = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Add LOT</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -59,8 +63,7 @@ const AddLot = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               label="Lot Details"
               name="lotdetails"
@@ -69,8 +72,7 @@ const AddLot = () => {
                   required: true,
                   message: "Please input Model_Lot paste from XL",
                 },
-              ]}
-            >
+              ]}>
               <TextArea rows={4} placeholder="ex: SU2id_Lot 01~02" />
             </Form.Item>
 
@@ -78,8 +80,7 @@ const AddLot = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}
-            >
+              }}>
               <Button type="primary" htmlType="submit">
                 Add Lot
               </Button>

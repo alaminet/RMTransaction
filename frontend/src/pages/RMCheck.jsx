@@ -3,6 +3,7 @@ import moment from "moment";
 import axios from "axios";
 import { Button, Flex, Input, Table, Typography, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
+import { Helmet } from "react-helmet-async";
 
 const RMCheck = () => {
   const [tbllist, setTbllist] = useState([]);
@@ -14,7 +15,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const recHistory = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/tnx/itemwiserec",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/itemwiserec`,
         {
           lineID: item.receID,
         }
@@ -35,7 +36,7 @@ const RMCheck = () => {
         message.warning("Excess Issue, Inform your LM");
       } else {
         const tnxUpdate = await axios.put(
-          "https://ftlwms01.onrender.com/v1/api/tnx/issueUpdate", 
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/issueUpdate`,
           {
             issueID: item.issueID,
             receID: item.receID,
@@ -57,7 +58,7 @@ const RMCheck = () => {
     setLoading(true);
     try {
       const tnxUpdate = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/tnx/issueReject",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/issueReject`,
         {
           lineID: item.issueID,
         }
@@ -138,7 +139,7 @@ const RMCheck = () => {
 
   async function getRMIssueData() {
     const issueData = await axios.get(
-      "https://ftlwms01.onrender.com/v1/api/tnx/rmcheck" //https://ftlwms01.onrender.com/ https://ftlwms01.onrender.com/
+      `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmcheck`
     );
     const tableData = [];
     issueData?.data?.map((order, i) => {
@@ -176,6 +177,9 @@ const RMCheck = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Part Checking</title>
+      </Helmet>
       <div>
         <Typography.Title level={2} style={{ textAlign: "center" }}>
           Check RM Transaction

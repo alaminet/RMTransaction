@@ -1,8 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Input, Table, message, Popconfirm, Modal, Radio, Typography } from "antd";
+import {
+  Button,
+  Input,
+  Table,
+  message,
+  Popconfirm,
+  Modal,
+  Radio,
+  Typography,
+} from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const ViewLot = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -23,7 +33,7 @@ const ViewLot = () => {
     setIsModalOpen(false);
     try {
       const userEdit = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/editlot",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/editlot`,
         {
           id: editID,
           filed: editField,
@@ -48,7 +58,7 @@ const ViewLot = () => {
   const handleDelete = async (item) => {
     try {
       const lotDelete = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/dltlot",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/dltlot`,
         {
           id: item,
         }
@@ -88,21 +98,18 @@ const ViewLot = () => {
           <>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item)}
-            ></Button>
+              onClick={() => handleEdit(item)}></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this Item?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No"
-            >
+              cancelText="No">
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
-              ></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
             </Popconfirm>
           </>
         ),
@@ -112,7 +119,7 @@ const ViewLot = () => {
   useEffect(() => {
     async function getData() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewLot"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -130,6 +137,9 @@ const ViewLot = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Lot Details</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -152,8 +162,7 @@ const ViewLot = () => {
               title="Edit User Role"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}
-            >
+              onCancel={handleCancel}>
               <div>
                 <Radio.Group onChange={(e) => setEditField(e.target.value)}>
                   <Radio value="model">Model</Radio>

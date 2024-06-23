@@ -17,6 +17,7 @@ import {
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const RMIssue = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [stationlist, setStationlist] = useState([]);
@@ -36,7 +37,7 @@ const RMIssue = () => {
     if (e) {
       try {
         const data = await axios.post(
-          "https://ftlwms01.onrender.com/v1/api/tnx/lotrecview",
+          `${import.meta.env.VITE_API_URL}/v1/api/tnx/lotrecview`,
           {
             lot: e,
           }
@@ -93,7 +94,7 @@ const RMIssue = () => {
       const m = new Date().getMinutes();
       const s = new Date().getSeconds();
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/tnx/rmissue",
+        `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmissue`,
         {
           date: new Date(values.DatePicker.$d).setHours(h, m, s), //moment(values.DatePicker.$d).format()
           stationID: values.station,
@@ -116,7 +117,7 @@ const RMIssue = () => {
     // get station list
     async function getStation() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewstation"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewstation`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -130,7 +131,7 @@ const RMIssue = () => {
     // get lot list
     async function getLot() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewLot"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -146,6 +147,9 @@ const RMIssue = () => {
   }, []);
   return (
     <>
+      <Helmet>
+        <title>Part Issue</title>
+      </Helmet>
       <div>
         {msg && <Alert message={msg} type={msgType} showIcon closable />}
         <Typography.Title level={2} style={{ textAlign: "center" }}>

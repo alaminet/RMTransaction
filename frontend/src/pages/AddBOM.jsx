@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Button, Form, Input, Select, message, Typography } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
 const { Title } = Typography;
 
@@ -32,7 +33,7 @@ const AddBOM = () => {
 
     try {
       const data = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/item/addbom",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/addbom`,
         {
           lot: values.lot,
           itemlist: [...itemArr],
@@ -54,7 +55,7 @@ const AddBOM = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewLot"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -64,7 +65,7 @@ const AddBOM = () => {
     }
     async function getItem() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewitemlist`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -78,6 +79,9 @@ const AddBOM = () => {
 
   return (
     <>
+      <Helmet>
+        <title>New BOM</title>
+      </Helmet>
       {user.role === "admin" && (
         <>
           <div>

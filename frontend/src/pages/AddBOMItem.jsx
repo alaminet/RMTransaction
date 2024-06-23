@@ -3,6 +3,7 @@ import axios from "axios";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Select, Space, Typography } from "antd";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const { Title } = Typography;
 
 const AddBOMItem = () => {
@@ -20,7 +21,7 @@ const AddBOMItem = () => {
     // console.log("Success:", values);
     try {
       const data = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/item/additembom",
+        `${import.meta.env.VITE_API_URL}/v1/api/item/additembom`,
         {
           lot: values.lot,
           itemlist: [...values.itemlist],
@@ -39,7 +40,7 @@ const AddBOMItem = () => {
   useEffect(() => {
     async function getLot() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewLot"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewLot`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -53,7 +54,7 @@ const AddBOMItem = () => {
   useEffect(() => {
     async function getPart() {
       const data = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/item/viewitemlist"
+        `${import.meta.env.VITE_API_URL}/v1/api/item/viewitemlist`
       );
       const tableData = [];
       data?.data?.map((item, i) => {
@@ -69,6 +70,9 @@ const AddBOMItem = () => {
   }, []);
   return (
     <>
+      <Helmet>
+        <title>Add BOM</title>
+      </Helmet>
       {user.role === "admin" || user.role === "LM" ? (
         <div>
           <Typography style={{ textAlign: "center" }}>
@@ -88,8 +92,7 @@ const AddBOMItem = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off"
-          >
+            autoComplete="off">
             <Form.Item
               name="lot"
               rules={[
@@ -97,8 +100,7 @@ const AddBOMItem = () => {
                   required: true,
                   message: "Please Select exact BOM!",
                 },
-              ]}
-            >
+              ]}>
               <Select
                 showSearch
                 placeholder="Select a BOM"
@@ -118,8 +120,7 @@ const AddBOMItem = () => {
                           display: "flex",
                           marginBottom: 8,
                         }}
-                        align="baseline"
-                      >
+                        align="baseline">
                         <Form.Item
                           {...restField}
                           // style={{ width: "150px" }}
@@ -129,8 +130,7 @@ const AddBOMItem = () => {
                               required: true,
                               message: "Part Code Required",
                             },
-                          ]}
-                        >
+                          ]}>
                           <Select
                             showSearch
                             placeholder="Select Part Code"
@@ -148,8 +148,7 @@ const AddBOMItem = () => {
                               required: true,
                               message: "BOM Qty Required",
                             },
-                          ]}
-                        >
+                          ]}>
                           <Input placeholder="BOM Qty" />
                         </Form.Item>
                         <MinusCircleOutlined onClick={() => remove(name)} />
@@ -160,8 +159,7 @@ const AddBOMItem = () => {
                         type="dashed"
                         onClick={() => add()}
                         block
-                        icon={<PlusOutlined />}
-                      >
+                        icon={<PlusOutlined />}>
                         Add Items
                       </Button>
                     </Form.Item>
@@ -175,8 +173,7 @@ const AddBOMItem = () => {
                 type="primary"
                 htmlType="submit"
                 loading={loadings}
-                disabled={loadings}
-              >
+                disabled={loadings}>
                 Submit
               </Button>
             </Form.Item>

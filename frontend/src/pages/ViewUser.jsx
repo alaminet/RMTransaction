@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 const ViewUser = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [tbllist, setTbllist] = useState([]);
@@ -32,7 +33,7 @@ const ViewUser = () => {
     // console.log(editID, newRole);
     try {
       const userEdit = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/auth/edituser",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/edituser`,
         {
           userID: editID,
           role: newRole,
@@ -55,7 +56,7 @@ const ViewUser = () => {
   const handleDelete = async (item) => {
     try {
       const userDelete = await axios.put(
-        "https://ftlwms01.onrender.com/v1/api/auth/dltuser",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/dltuser`,
         {
           userID: item,
         }
@@ -73,7 +74,7 @@ const ViewUser = () => {
   const handleReset = async (e) => {
     try {
       const passReset = await axios.post(
-        "https://ftlwms01.onrender.com/v1/api/auth/resetpass",
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/resetpass`,
         {
           userID: e,
         }
@@ -113,21 +114,18 @@ const ViewUser = () => {
             </Button>
             <Button
               icon={<EditTwoTone />}
-              onClick={() => handleEdit(item)}
-            ></Button>
+              onClick={() => handleEdit(item)}></Button>
             <Popconfirm
               title="Delete the task"
               description="Are you sure to delete this task?"
               onConfirm={() => handleDelete(item)}
               onCancel={cancel}
               okText="Yes"
-              cancelText="No"
-            >
+              cancelText="No">
               <Button
                 style={{ marginLeft: "10px" }}
                 danger
-                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}
-              ></Button>
+                icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
             </Popconfirm>
           </Flex>
         </>
@@ -138,7 +136,7 @@ const ViewUser = () => {
   useEffect(() => {
     async function getData() {
       const issueData = await axios.get(
-        "https://ftlwms01.onrender.com/v1/api/auth/viewuser"
+        `${import.meta.env.VITE_API_URL}/v1/api/auth/viewuser`
       );
       const tableData = [];
       issueData?.data?.map((item, i) => {
@@ -159,6 +157,9 @@ const ViewUser = () => {
 
   return (
     <>
+      <Helmet>
+        <title>User Details</title>
+      </Helmet>
       {user.role === "admin" && (
         <div>
           <Typography.Title level={2} style={{ textAlign: "center" }}>
@@ -181,8 +182,7 @@ const ViewUser = () => {
               title="Edit User Role"
               open={isModalOpen}
               onOk={handleOk}
-              onCancel={handleCancel}
-            >
+              onCancel={handleCancel}>
               <div>
                 <Radio.Group onChange={(e) => setNewRole(e.target.value)}>
                   <Radio value="user">User</Radio>

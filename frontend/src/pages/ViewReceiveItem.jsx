@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { useSelector } from "react-redux";
+import { Helmet } from "react-helmet-async";
 
 const ViewReceiveItem = () => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -69,7 +70,7 @@ const ViewReceiveItem = () => {
       if (editItem.locID.loc !== values.loc) {
         try {
           const update = await axios.post(
-            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
+            `${import.meta.env.VITE_API_URL}/v1/api/tnx/receiveupdate`,
             {
               id: values.id,
               field: "locID",
@@ -88,7 +89,7 @@ const ViewReceiveItem = () => {
       if (editItem.issue !== values.issue) {
         try {
           const update = await axios.post(
-            "https://ftlwms01.onrender.com/v1/api/tnx/receiveupdate",
+            `${import.meta.env.VITE_API_URL}/v1/api/tnx/receiveupdate`,
             {
               id: values.id,
               field: "issue",
@@ -197,7 +198,7 @@ const ViewReceiveItem = () => {
           setLoading(false);
         } else {
           const rmReceive = await axios.post(
-            "https://ftlwms01.onrender.com/v1/api/tnx/receiveview",
+            `${import.meta.env.VITE_API_URL}/v1/api/tnx/receiveview`,
             {
               stDate: moment(strDate).format(),
               edDate: moment(endDate).format(),
@@ -242,6 +243,9 @@ const ViewReceiveItem = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Receive Details</title>
+      </Helmet>
       <div>
         <Typography.Title level={2} style={{ textAlign: "center" }}>
           View Receive Details
