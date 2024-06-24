@@ -50,10 +50,10 @@ const RMIssue = () => {
               itemData.push({
                 value: list._id,
                 label: `
-                ${list.codeID.code} - 
-                ${list.codeID.itemname} - 
+                ${list.codeID.code} -
                 ${list.locID.loc} - 
-                ${list.qty - list.issue}${list.codeID.uom}`,
+                ${list.qty - list.issue}${list.codeID.uom} - 
+                ${list.codeID.itemname}`,
               });
               itemFullData.push({
                 id: list._id,
