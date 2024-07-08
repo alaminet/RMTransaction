@@ -79,6 +79,11 @@ const ViewItemList = () => {
       key: "sl",
     },
     {
+      title: "Item ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Part Code",
       dataIndex: "code",
       key: "code",
@@ -130,6 +135,7 @@ const ViewItemList = () => {
         tableData.push({
           sl: ++i,
           code: item.code,
+          id: item._id,
           name: item.itemname,
           uom: item.uom,
           action: item._id,

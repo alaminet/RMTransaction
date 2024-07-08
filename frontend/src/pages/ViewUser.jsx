@@ -98,6 +98,11 @@ const ViewUser = () => {
       key: "userID",
     },
     {
+      title: "Item ID",
+      dataIndex: "dataIndex",
+      key: "dataIndex",
+    },
+    {
       title: "Role",
       dataIndex: "role",
       key: "role",

@@ -20,12 +20,14 @@ import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Helmet } from "react-helmet-async";
 
 const PartWiseReceive = () => {
+  const { Text } = Typography;
   const user = useSelector((user) => user.loginSlice.login);
   const [editForm] = Form.useForm();
   const [editItem, setEditItem] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [findpartdlts] = Form.useForm();
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const [tbllist, setTbllist] = useState([]);
   const [itemlist, setitemlist] = useState([]);
 
@@ -52,13 +54,13 @@ const PartWiseReceive = () => {
           if (reclist.codeID == data.data.itemMatch._id) {
             recArr.push({
               sl: y++,
-              code: data.data.itemMatch.code,
-              name: data.data.itemMatch.itemname,
-              loc: reclist.locID.loc,
-              lot: receive.lotID.lot,
-              recqty: reclist.qty,
-              issqty: reclist.issue,
-              onhand: reclist.qty - reclist.issue,
+              code: data?.data?.itemMatch?.code,
+              name: data?.data?.itemMatch?.itemname,
+              loc: reclist?.locID?.loc,
+              lot: receive?.lotID?.lot,
+              recqty: reclist?.qty,
+              issqty: reclist?.issue,
+              onhand: reclist?.qty - reclist?.issue,
               action: reclist,
             });
           }
@@ -228,6 +230,7 @@ const PartWiseReceive = () => {
         ),
     },
   ];
+
   return (
     <>
       <Helmet>
@@ -285,10 +288,57 @@ const PartWiseReceive = () => {
           <>
             <Divider>On-Hand Details Table</Divider>
             <div>
-              <Table
+              <Input
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Find by Model"
+                variant="filled"
+              />
+              {/* <Table
                 style={{ width: "100%" }}
                 dataSource={tbllist}
                 columns={columns}
+              /> */}
+              <Table
+                columns={columns}
+                dataSource={
+                  tbllist !== "" &&
+                  tbllist.filter((item) =>
+                    item.lot.toLowerCase().includes(search.toLowerCase())
+                  )
+                }
+                pagination={false}
+                bordered
+                summary={(pageData) => {
+                  let totalRecive = 0;
+                  let totalIssue = 0;
+                  let totalOnhand = 0;
+                  pageData.forEach(({ recqty, issqty, onhand }) => {
+                    totalRecive += recqty;
+                    totalIssue += issqty;
+                    totalOnhand += onhand;
+                  });
+
+                  return (
+                    <>
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell></Table.Summary.Cell>
+                        <Table.Summary.Cell></Table.Summary.Cell>
+                        <Table.Summary.Cell></Table.Summary.Cell>
+                        <Table.Summary.Cell></Table.Summary.Cell>
+                        <Table.Summary.Cell>Total</Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalRecive}</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalIssue}</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalOnhand}</Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    </>
+                  );
+                }}
               />
             </div>
           </>

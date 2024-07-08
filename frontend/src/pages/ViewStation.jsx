@@ -78,6 +78,11 @@ const ViewStation = () => {
       key: "sl",
     },
     {
+      title: "Item ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Station",
       dataIndex: "station",
       key: "station",
@@ -118,6 +123,7 @@ const ViewStation = () => {
       data?.data?.map((item, i) => {
         tableData.push({
           sl: ++i,
+          id: item._id,
           station: item.station,
           action: item._id,
         });

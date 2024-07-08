@@ -10,12 +10,9 @@ import {
   Table,
   Select,
   message,
-  Popconfirm,
   Modal,
   Space,
   InputNumber,
-  Row,
-  Col,
   Typography,
 } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
@@ -23,6 +20,7 @@ import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 
 const PartWiseTnx = () => {
+  const { Text } = Typography;
   const user = useSelector((user) => user.loginSlice.login);
   const [editForm] = Form.useForm();
   const [editItem, setEditItem] = useState();
@@ -38,12 +36,14 @@ const PartWiseTnx = () => {
 
   // From output
   const onFinish = async (values) => {
-    console.log("Success:", values);
+    // console.log("Success:", values);
     setLoading(true);
-    let strDate = values.StartDate.$d;
+    let strDate = new Date(values.StartDate.$d).setHours(0, 0, 0);
     let endDate = new Date(values.EndDate.$d).setHours(23, 59, 59);
     let tnxType = values.type;
     let findItem = values.code;
+    console.log(moment(strDate).format());
+    console.log(moment(endDate).format());
     try {
       if (!strDate || !endDate) {
         message.error("Date Required");
@@ -57,7 +57,7 @@ const PartWiseTnx = () => {
             codeID: findItem,
           }
         );
-        console.log(rmIssueDone.data);
+        // console.log(rmIssueDone.data);
         if (rmIssueDone.data.length == 0) {
           message.warning("No Data Found");
           setTbllist("");
@@ -66,21 +66,21 @@ const PartWiseTnx = () => {
         let y = 1;
         rmIssueDone?.data.map((order, i) => {
           order?.issueList?.map((item, j) => {
-            if (item.status === tnxType && item.codeID._id === findItem) {
+            if (item.codeID._id === findItem && item.status === tnxType) {
               tableData.push({
-                dataIndex: order._id,
+                dataIndex: order?._id,
                 sl: y++,
-                date: moment(order.date).format("DD-MMM-YY"),
-                station: order.stationID.station,
-                tnxID: order.tnxID,
-                tnxby: order.tnxby.userID,
-                lot: order.lotID.lot,
-                code: item.codeID.code,
-                name: item.codeID.itemname,
-                qty: item.qty,
-                status: item.status,
-                rmk: item.rmk,
-                action: item._id,
+                date: moment(order?.date).format("DD-MMM-YY"),
+                station: order?.stationID?.station,
+                tnxID: order?.tnxID,
+                tnxby: order?.tnxby?.userID,
+                lot: order?.lotID?.lot,
+                code: item?.codeID?.code,
+                name: item?.codeID?.itemname,
+                qty: item?.qty,
+                status: item?.status,
+                rmk: item?.rmk,
+                action: item?._id,
               });
               setTbllist(tableData);
             }
@@ -161,6 +161,7 @@ const PartWiseTnx = () => {
       title: "Date",
       dataIndex: "date",
       key: "date",
+      defaultSortOrder: "ascend",
     },
     {
       title: "Tnx ID",
@@ -331,10 +332,10 @@ const PartWiseTnx = () => {
             <div>
               <Input
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Find by Code"
+                placeholder="Find by Model"
                 variant="filled"
               />
-              <Table
+              {/* <Table
                 style={{ width: "100%" }}
                 dataSource={
                   tbllist !== "" &&
@@ -343,6 +344,36 @@ const PartWiseTnx = () => {
                   )
                 }
                 columns={columns}
+              /> */}
+              <Table
+                columns={columns}
+                dataSource={
+                  tbllist !== "" &&
+                  tbllist.filter((item) =>
+                    item.lot.toLowerCase().includes(search.toLowerCase())
+                  )
+                }
+                pagination={false}
+                bordered
+                summary={(pageData) => {
+                  let totalIssue = 0;
+                  pageData.forEach(({ qty }) => {
+                    totalIssue += qty;
+                  });
+
+                  return (
+                    <>
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell colSpan={8}>
+                          <Text>Total:</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalIssue}</Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    </>
+                  );
+                }}
               />
             </div>
           </div>

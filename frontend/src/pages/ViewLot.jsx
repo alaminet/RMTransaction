@@ -80,6 +80,11 @@ const ViewLot = () => {
       key: "sl",
     },
     {
+      title: "Item ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Model",
       dataIndex: "model",
       key: "model",
@@ -125,6 +130,7 @@ const ViewLot = () => {
       data?.data?.map((item, i) => {
         tableData.push({
           sl: ++i,
+          id: item._id,
           model: item.model,
           lot: item.lot,
           action: item._id,

@@ -78,6 +78,11 @@ const ViewLocation = () => {
       key: "sl",
     },
     {
+      title: "Item ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
       title: "Location",
       dataIndex: "location",
       key: "location",
@@ -118,6 +123,7 @@ const ViewLocation = () => {
       data?.data?.map((item, i) => {
         tableData.push({
           sl: ++i,
+          id: item._id,
           location: item.loc,
           action: item._id,
         });

@@ -8,7 +8,7 @@ const RMIssueQtyUpdateController = async (req, res) => {
       { "issueList._id": id },
       { $set: { "issueList.$.qty": value } }
     );
-    await update.save();
+
     res.status(200).send({ update, message: "Issue Qty Updated" });
   } catch (error) {
     res.status(401).send(error);
