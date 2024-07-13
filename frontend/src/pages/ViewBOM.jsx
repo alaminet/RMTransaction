@@ -79,19 +79,19 @@ const ViewBOM = () => {
 
   const handleOk = async () => {
     setIsModalOpen(false);
-    try {
-      const userEdit = await axios.put(
-        `${import.meta.env.VITE_API_URL}/v1/api/item/editlot`,
-        {
-          id: editID,
-          filed: editField,
-          data: editData,
-        }
-      );
-      message.success(userEdit.data.message);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const userEdit = await axios.put(
+    //     `${import.meta.env.VITE_API_URL}/v1/api/item/editlot`,
+    //     {
+    //       id: editID,
+    //       filed: editField,
+    //       data: editData,
+    //     }
+    //   );
+    //   message.success(userEdit.data.message);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -104,17 +104,17 @@ const ViewBOM = () => {
   };
 
   const handleDelete = async (item) => {
-    try {
-      const lotDelete = await axios.put(
-        `${import.meta.env.VITE_API_URL}/v1/api/item/dltlot`,
-        {
-          id: item,
-        }
-      );
-      message.warning(lotDelete.data.message);
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const lotDelete = await axios.put(
+    //     `${import.meta.env.VITE_API_URL}/v1/api/item/dltlot`,
+    //     {
+    //       id: item,
+    //     }
+    //   );
+    //   message.warning(lotDelete.data.message);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
   const cancel = (e) => {
     message.error("Click on No");

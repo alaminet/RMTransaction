@@ -165,7 +165,7 @@ const ViewLot = () => {
           </div>
           <div>
             <Modal
-              title="Edit User Role"
+              title="Edit Lot Details"
               open={isModalOpen}
               onOk={handleOk}
               onCancel={handleCancel}>

@@ -6,7 +6,7 @@ async function EditUserController(req, res) {
       $set: { role: role },
     });
     await roleUpd.save();
-    res.status(200).send({ findTnx, message: "ROle updated" });
+    res.status(200).send({ findTnx, message: "User Role updated" });
   } catch (error) {
     return res.status(401).send({ message: "Not updated" });
   }

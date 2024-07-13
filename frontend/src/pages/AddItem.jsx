@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Form, Input, Typography } from "antd";
+import { Button, Form, Input, message, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 const { TextArea } = Input;
@@ -8,6 +8,7 @@ const { Title } = Typography;
 
 const AddItem = () => {
   const user = useSelector((user) => user.loginSlice.login);
+  const [partList, setPartList] = useState();
   const [additemform] = Form.useForm();
   const onFinish = async (values) => {
     // console.log("Success:", values);
@@ -16,27 +17,52 @@ const AddItem = () => {
     const itemList = values.itemdetails.split("\n").map((item, i) => {
       itemlistArr.push(item.split("\t"));
     });
-    itemlistArr?.map((list) => {
-      const items = [{ code: list[0], itemname: list[1], uom: list[2] }];
-      itemArr.push(...items);
-    });
 
+    itemlistArr?.map((list) => {
+      const partMatch = partList.find((f) => f.code === list[0]);
+      if (!partMatch) {
+        const items = [{ code: list[0], itemname: list[1], uom: list[2] }];
+        itemArr.push(...items);
+      }
+    });
     try {
-      const data = await axios.post(
-        `${import.meta.env.VITE_API_URL}/v1/api/item/additem`,
-        {
-          itemlist: itemArr,
-        }
-      );
+      if (itemArr.length > 0) {
+        const data = await axios.post(
+          `${import.meta.env.VITE_API_URL}/v1/api/item/additem`,
+          {
+            itemlist: itemArr,
+          }
+        );
+        message.success(data.data.message);
+        additemform.resetFields();
+      } else {
+        message.warning("No New Item Found");
+      }
     } catch (error) {
-      console.log(error.response.message);
+      message.error(error.response.message);
     }
-    additemform.resetFields();
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
+  // get Part info
+  async function getPart() {
+    const data = await axios.get(
+      `${import.meta.env.VITE_API_URL}/v1/api/item/viewitemlist`
+    );
+    const tableData = [];
+    data?.data?.map((item, i) => {
+      tableData.push({
+        id: item._id,
+        code: item.code,
+        name: item.itemname,
+      });
+      setPartList(tableData);
+    });
+  }
+  useEffect(() => {
+    getPart();
+  }, []);
   return (
     <>
       <Helmet>

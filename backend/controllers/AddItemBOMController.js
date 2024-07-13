@@ -10,7 +10,7 @@ async function AddItemBOMController(req, res) {
       { lotID: lot },
       { $push: { itemlist: itemlist } }
     );
-    res.status(200).send({ message: "BOM Found" });
+    res.status(200).send({ message: "New Item added on BOM" });
   }
 }
 module.exports = AddItemBOMController;
