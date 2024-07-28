@@ -321,11 +321,9 @@ const PartWiseReceive = () => {
                   return (
                     <>
                       <Table.Summary.Row>
-                        <Table.Summary.Cell></Table.Summary.Cell>
-                        <Table.Summary.Cell></Table.Summary.Cell>
-                        <Table.Summary.Cell></Table.Summary.Cell>
-                        <Table.Summary.Cell></Table.Summary.Cell>
-                        <Table.Summary.Cell>Total</Table.Summary.Cell>
+                        <Table.Summary.Cell colSpan={5}>
+                          <Text>Total:</Text>
+                        </Table.Summary.Cell>
                         <Table.Summary.Cell>
                           <Text>{totalRecive}</Text>
                         </Table.Summary.Cell>

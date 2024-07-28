@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Divider, Form, Input, Table, message } from "antd";
+import { Button, Divider, Form, Input, Table, message, Typography } from "antd";
 import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet-async";
 
 const PartStock = () => {
+  const { Text } = Typography;
   const user = useSelector((user) => user.loginSlice.login);
   const [findpartdlts] = Form.useForm();
   const [loadings, setLoadings] = useState(false);
@@ -149,6 +150,36 @@ const PartStock = () => {
                 style={{ width: "100%" }}
                 dataSource={tbllist}
                 columns={columns}
+                bordered
+                summary={(pageData) => {
+                  let totalRecive = 0;
+                  let totalIssue = 0;
+                  let totalOnhand = 0;
+                  pageData.forEach(({ recqty, issqty, onhand }) => {
+                    totalRecive += recqty;
+                    totalIssue += issqty;
+                    totalOnhand += onhand;
+                  });
+
+                  return (
+                    <>
+                      <Table.Summary.Row>
+                        <Table.Summary.Cell colSpan={5}>
+                          <Text>Total:</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalRecive}</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalIssue}</Text>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell>
+                          <Text>{totalOnhand}</Text>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    </>
+                  );
+                }}
               />
             </div>
           </>
