@@ -28,6 +28,11 @@ const RMIssueSchema = new Schema({
       },
       qty: Number,
       rmk: String,
+      updateTime: Date,
+      updateBy: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      },
       status: {
         type: String,
         enum: ["waiting", "done", "reject"],

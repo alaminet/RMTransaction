@@ -4,8 +4,10 @@ import axios from "axios";
 import { Button, Flex, Input, Table, Typography, message } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
 
 const RMCheck = () => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [tbllist, setTbllist] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,6 +43,7 @@ const RMCheck = () => {
             issueID: item.issueID,
             receID: item.receID,
             qty: receIDArr[0].issueQty + item.dtls.qty,
+            updateBy: user._id,
           }
         );
         message.success("Check Done!");
@@ -61,6 +64,7 @@ const RMCheck = () => {
         `${import.meta.env.VITE_API_URL}/v1/api/tnx/issueReject`,
         {
           lineID: item.issueID,
+          updateBy: user._id,
         }
       );
       setLoading(false);

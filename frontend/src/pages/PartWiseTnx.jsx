@@ -80,6 +80,10 @@ const PartWiseTnx = () => {
                 qty: item?.qty,
                 status: item?.status,
                 rmk: item?.rmk,
+                lastUpdateBy: item?.updateBy?.userID,
+                lastupdated:
+                  item?.updateTime &&
+                  moment(item?.updateTime).format("DD-MMM-YY hh:mmA"),
                 action: item?._id,
               });
               setTbllist(tableData);
@@ -202,6 +206,16 @@ const PartWiseTnx = () => {
       title: "Remarks",
       dataIndex: "rmk",
       key: "rmk",
+    },
+    {
+      title: "Update By",
+      dataIndex: "lastUpdateBy",
+      key: "lastUpdateBy",
+    },
+    {
+      title: "Update Time",
+      dataIndex: "lastupdated",
+      key: "lastupdated",
     },
     {
       title: "Action",

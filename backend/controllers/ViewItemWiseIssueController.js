@@ -12,7 +12,8 @@ const ViewItemWiseIssueController = async (req, res) => {
     .populate("issueList.codeID")
     .populate("stationID")
     .populate("tnxby")
-    .populate("lotID");
+    .populate("lotID")
+    .populate("issueList.updateBy");
   return res.status(200).send(tnxDonelist);
 };
 

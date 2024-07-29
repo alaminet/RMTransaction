@@ -2,11 +2,17 @@ const RMIssue = require("../model/rmIssueModel");
 const RMReceive = require("../model/rmReceiveModel");
 
 const RMIssueStatusUpdateController = async (req, res) => {
-  const { issueID, receID, qty } = req.body;
+  const { issueID, receID, qty, updateBy } = req.body;
 
   await RMIssue.findOneAndUpdate(
     { "issueList._id": issueID },
-    { $set: { "issueList.$.status": "done" } },
+    {
+      $set: {
+        "issueList.$.status": "done",
+        "issueList.$.updateTime": new Date(),
+        "issueList.$.updateBy": updateBy,
+      },
+    },
     { new: true }
   )
     .then(async (findTnx) => {
