@@ -34,9 +34,9 @@ const RMTnxView = () => {
   const onFinish = async (values) => {
     // console.log("Success:", values);
     setLoading(true);
-    let strDate = values.StartDate.$d;
-    let endDate = new Date(values.EndDate.$d).setHours(23, 59, 59);
-    let tnxType = values.type;
+    let strDate = values?.StartDate.$d;
+    let endDate = new Date(values?.EndDate.$d).setHours(23, 59, 59);
+    let tnxType = values?.type;
     try {
       if (!strDate || !endDate) {
         message.error("Date Required");
@@ -54,21 +54,21 @@ const RMTnxView = () => {
         let y = 1;
         rmIssueDone?.data.map((order, i) => {
           order?.issueList?.map((item, j) => {
-            item.status === tnxType &&
+            item?.status === tnxType &&
               tableData.push({
-                dataIndex: order._id,
+                dataIndex: order?._id,
                 sl: y++,
-                date: moment(order.date).format("DD-MMM-YY"),
-                station: order.stationID.station,
-                tnxID: order.tnxID,
-                tnxby: order.tnxby.userID,
-                lot: order.lotID.lot,
-                code: item.codeID.code,
-                name: item.codeID.itemname,
-                qty: item.qty,
-                status: item.status,
-                rmk: item.rmk,
-                action: item._id,
+                date: moment(order?.date).format("DD-MMM-YY"),
+                station: order?.stationID?.station,
+                tnxID: order?.tnxID,
+                tnxby: order?.tnxby?.userID,
+                lot: order?.lotID?.lot,
+                code: item?.codeID?.code,
+                name: item?.codeID?.itemname,
+                qty: item?.qty,
+                status: item?.status,
+                rmk: item?.rmk,
+                action: item?._id,
               });
             setTbllist(tableData);
           });
