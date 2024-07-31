@@ -71,7 +71,7 @@ const RMIssue = () => {
   };
   // Form submit
   const onFinish = async (values) => {
-    // console.log(values);
+    console.log(values);
     setLoadings(true);
     const issuelist = [];
     values.issueList.map((item, i) => {
@@ -96,7 +96,9 @@ const RMIssue = () => {
       const data = await axios.post(
         `${import.meta.env.VITE_API_URL}/v1/api/tnx/rmissue`,
         {
-          date: new Date(values.DatePicker.$d).setHours(h, m, s), //moment(values.DatePicker.$d).format()
+          date: values.DatePicker
+            ? new Date(values.DatePicker.$d).setHours(h, m, s)
+            : new Date(), //moment(values.DatePicker.$d).format()
           stationID: values.station,
           lotID: values.lot,
           tnxby: user._id,
@@ -169,13 +171,16 @@ const RMIssue = () => {
             <Col>
               <Form.Item
                 name="DatePicker"
-                rules={[
-                  {
-                    required: true,
-                    message: "Issue Date Required!",
-                  },
-                ]}>
-                <DatePicker placeholder="Issue Date" format={"DD-MMM-YY"} />
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Issue Date Required!",
+                //   },
+                // ]}
+              >
+                {user.role === "admin" && (
+                  <DatePicker placeholder="Issue Date" format={"DD-MMM-YY"} />
+                )}
               </Form.Item>
             </Col>
             <Col>
