@@ -42,8 +42,8 @@ const PartWiseTnx = () => {
     let endDate = new Date(values.EndDate.$d).setHours(23, 59, 59);
     let tnxType = values.type;
     let findItem = values.code;
-    console.log(moment(strDate).format());
-    console.log(moment(endDate).format());
+    // console.log(moment(strDate).format());
+    // console.log(moment(endDate).format());
     try {
       if (!strDate || !endDate) {
         message.error("Date Required");
