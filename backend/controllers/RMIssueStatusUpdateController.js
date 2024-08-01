@@ -5,9 +5,11 @@ const RMIssueStatusUpdateController = async (req, res) => {
   const { issueID, receID, qty, updateBy } = req.body;
 
   try {
-    const statusCk = await RMIssue.findOne({ "issueList._id": issueID });
-
-    if (statusCk.issueList.status === "waiting") {
+    const issueStatus = await RMIssue.findOne({
+      "issueList._id": issueID,
+      "issueList.status": "waiting",
+    });
+    if (issueStatus) {
       await RMIssue.findOneAndUpdate(
         { "issueList._id": issueID },
         {
@@ -35,7 +37,7 @@ const RMIssueStatusUpdateController = async (req, res) => {
           res.status(401).send(error);
         });
     } else {
-      res.status(401).send({ message: "Somethin Wrong Please Reload Data" });
+      res.status(401).send({ message: "Refresh Your List" });
     }
   } catch (error) {
     res.status(401).send(error);

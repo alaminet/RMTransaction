@@ -29,6 +29,7 @@ const RMCheck = () => {
             receIDArr.push({
               issueQty: list.issue,
               receiveQty: list.qty,
+              status: list.status,
             });
           }
         });
