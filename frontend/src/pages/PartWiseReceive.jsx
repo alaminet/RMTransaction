@@ -210,7 +210,7 @@ const PartWiseReceive = () => {
       dataIndex: "action",
       key: "action",
       render: (item, record) =>
-        user.role === "admin" && (
+        (user.role === "admin" || user.role === "LM") && (
           <>
             <Flex gap={4}>
               <Tooltip title="Edit">

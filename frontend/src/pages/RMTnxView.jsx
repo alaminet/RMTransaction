@@ -212,19 +212,21 @@ const RMTnxView = () => {
       title: "Action",
       dataIndex: "action",
       key: "action",
-      render: (item, record) =>
-        user.role === "admin" && (
-          <>
-            <Button
-              icon={<EditTwoTone />}
-              onClick={() => handleEdit(record)}></Button>
-            <Button
-              style={{ marginLeft: "10px" }}
-              onClick={() => handleDelete(item)}
-              danger
-              icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
-          </>
-        ),
+      render: (item, record) => (
+        <>
+          <Button
+            icon={<EditTwoTone />}
+            onClick={() =>
+              (user.role === "admin" || user.role === "LM") &&
+              handleEdit(record)
+            }></Button>
+          <Button
+            style={{ marginLeft: "10px" }}
+            onClick={() => user.role === "admin" && handleDelete(item)}
+            danger
+            icon={<DeleteTwoTone twoToneColor="#eb2f96" />}></Button>
+        </>
+      ),
     },
   ];
 
