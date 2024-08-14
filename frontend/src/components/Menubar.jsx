@@ -453,8 +453,8 @@ const Menubar = () => {
               key: "lotstock",
             },
             {
-              label: "Model Wise Stock",
-              key: "modelstock",
+              label: "On-Hand Stock",
+              key: "onhandstock",
             },
           ],
         },
