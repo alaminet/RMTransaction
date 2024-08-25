@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Button, Flex, Form, Input, Typography, message } from "antd";
 import { useDispatch } from "react-redux";
@@ -7,8 +7,10 @@ import { Helmet } from "react-helmet-async";
 const Login = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
+  const [loadings, setLoadings] = useState(false);
   const onFinish = async (values) => {
     // console.log("Success:", values);
+    setLoadings(true);
     try {
       const userData = await axios.post(
         `${import.meta.env.VITE_API_URL}/v1/api/auth/login`,
@@ -20,12 +22,15 @@ const Login = () => {
       messageApi.success("Successfully Login");
       dispatch(Loginuser(userData.data));
       localStorage.setItem("user", JSON.stringify(userData.data));
+      setLoadings(false);
     } catch (error) {
       messageApi.error(error.response.data.error);
+      setLoadings(false);
     }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    setLoadings(false);
   };
   return (
     <>
@@ -81,7 +86,11 @@ const Login = () => {
                 offset: 8,
                 span: 16,
               }}>
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                loading={loadings}
+                disabled={loadings}>
                 Login
               </Button>
             </Form.Item>
