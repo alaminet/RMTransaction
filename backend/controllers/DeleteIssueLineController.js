@@ -9,54 +9,11 @@ async function DeleteIssueLineController(req, res) {
         { "issueList._id": id },
         { $pull: { issueList: { _id: id } } },
         { new: true }
-      ).then(async (response) => {
-        // console.log(response);
-        if (response.issueList[0].status === "done") {
-          const findCode = response.issueList[0].codeID;
-          const findLot = response.lotID;
-          const IssueQty = response.issueList[0].qty;
-          const findRece = await RMReceive.findOneAndUpdate(
-            {
-              lotID: findLot,
-              "receList.codeID": findCode,
-              "receList.issue": { $gte: IssueQty },
-            },
-            {
-              $inc: { "receList.$.issue": -IssueQty },
-            },
-            { new: true }
-          ).catch((error) => {
-            res.status(401).send(error);
-          });
-        }
-
-        res.status(200).send({ message: "Partial Tnx Deleted" });
-      });
-    } else {
-      await RMIssue.findOneAndDelete({ "issueList._id": id }).then(
-        async (response) => {
-          // console.log(response);
-          if (response.issueList[0].status === "done") {
-            const findCode = response.issueList[0].codeID;
-            const findLot = response.lotID;
-            const IssueQty = response.issueList[0].qty;
-            const findRece = await RMReceive.findOneAndUpdate(
-              {
-                lotID: findLot,
-                "receList.codeID": findCode,
-                "receList.issue": { $gte: IssueQty },
-              },
-              {
-                $inc: { "receList.$.issue": -IssueQty },
-              },
-              { new: true }
-            ).catch((error) => {
-              res.status(401).send(error);
-            });
-          }
-          res.status(200).send({ message: "Full Tnx Deleted" });
-        }
       );
+      return res.status(200).send({ message: "Partial Deleted" });
+    } else {
+      await RMIssue.findOneAndDelete({ "issueList._id": id });
+      return res.status(200).send({ message: "Complete Deleted" });
     }
   } catch (error) {
     return res.status(401).send({ message: "Not Deleted" });
