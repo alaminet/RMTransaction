@@ -27,6 +27,7 @@ import AddNewTask from "../components/AddNewTask";
 import TaskCard from "../components/TaskCard";
 import TaskSummery from "../components/TaskSummery";
 import Notification from "../components/Notification";
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -60,10 +61,13 @@ const TaskPannel = () => {
                   alignItems: "center",
                   height: "100%",
                 }}>
-                <div>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <Button type="primary" onClick={showModal}>
                     Add New Task
                   </Button>
+                  <Link to="/alltask">
+                    <Button>View All Task</Button>
+                  </Link>
                   <AddNewTask
                     setIsModalOpen={setIsModalOpen}
                     isModalOpen={isModalOpen}

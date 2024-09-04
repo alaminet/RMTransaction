@@ -13,7 +13,7 @@ const TaskCard = () => {
         <Col xs={24} sm={8}>
           <Card style={{ background: "#717EEE" }} bordered={false}>
             <Title level={4} style={{ marginTop: "0", color: "#fff" }}>
-              On Going Task
+              On-Going Task
             </Title>
             <Text style={{ color: "#fff" }}>08 Tasks | 10 Tasks</Text>
           </Card>
@@ -24,7 +24,7 @@ const TaskCard = () => {
             style={{ background: "#FF7783", color: "#fff" }}
             bordered={false}>
             <Title level={4} style={{ marginTop: "0", color: "#fff" }}>
-              Task Already Due
+              Expired Task
             </Title>
             <Text style={{ color: "#fff" }}>08 Tasks | 10 Tasks</Text>
           </Card>
@@ -35,7 +35,7 @@ const TaskCard = () => {
             style={{ background: "#FFBB56", color: "#fff" }}
             bordered={false}>
             <Title level={4} style={{ marginTop: "0", color: "#fff" }}>
-              Upcoming Task
+              Reviewed Task
             </Title>
             <Text style={{ color: "#fff" }}>08 Tasks | 10 Tasks</Text>
           </Card>

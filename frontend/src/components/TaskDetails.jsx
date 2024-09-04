@@ -80,7 +80,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen }) => {
             wrap
             style={{ marginBottom: "14px" }}
             justify="space-between">
-            <Col span={20}>
+            <Col span={19}>
               <Input />
             </Col>
             <Col>
