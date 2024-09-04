@@ -32,6 +32,7 @@ import LotStock from "./pages/LotStock";
 import PartWiseReceive from "./pages/PartWiseReceive";
 import PartWiseTnx from "./pages/PartWiseTnx";
 import OnHandStock from "./pages/OnHandStock";
+import TaskPannel from "./pages/TaskPannel";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -40,6 +41,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route element={<LoginUserRouter />}>
           <Route path="/" element={<Home />}>
+            <Route path="" element={<TaskPannel />}></Route>
             <Route path="passcng" element={<PassChange />}></Route>
             <Route path="rmissue" element={<RMIssue />}></Route>
             <Route path="rmcheck" element={<RMCheck />}></Route>
