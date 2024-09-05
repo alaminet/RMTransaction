@@ -147,7 +147,7 @@ const TaskView = () => {
     {
       key: "1",
       title: "John Brown",
-      group: 32,
+      group: "Daily Task",
       startDate: "23/09/2024 02:00 PM",
       endDate: "23/09/2024 02:00 PM",
       assigned: "@M03166",
