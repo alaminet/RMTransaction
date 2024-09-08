@@ -1,19 +1,50 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { Button, DatePicker, Form, Input, Mentions, Modal, Select } from "antd";
 
 import TextArea from "antd/es/input/TextArea";
 
 const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [userList, setUserList] = useState([]);
 
   // Add New Task Form
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const onFinish = (values) => {
-    setIsModalOpen(false);
+  const onFinish = async (values) => {
     console.log("Success:", values);
+    // setIsModalOpen(false);
+
+    let assginToArr = [];
+    const toArray = values.assignTo.split("@");
+    toArray.map(
+      (item) =>
+        item !== "" &&
+        userList.find(
+          (f) =>
+            f.label === item.trim() && assginToArr.push({ assignedToID: f.id })
+        )
+    );
+
+    try {
+      const data = await axios.post(
+        `${import.meta.env.VITE_API_URL}/v1/api/task/newtask`,
+        {
+          title: values.title,
+          details: values.details,
+          taskTypes: values.taskGroup,
+          taskStart: values.dateRange[0].$d,
+          taskEnd: values.dateRange[1].$d,
+          assignedBy: user._id,
+          assignedTo: assginToArr,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -27,8 +58,9 @@ const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
       const tableData = [];
       issueData?.data?.map((item, i) => {
         tableData.push({
-          value: item.userID,
+          id: item._id,
           label: item.userID,
+          value: item.userID,
         });
 
         setUserList(tableData);
@@ -121,6 +153,7 @@ const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
                   style={{
                     width: "100%",
                   }}
+                  optionFilterProp="label"
                   placeholder="@M12345"
                   options={userList}
                 />

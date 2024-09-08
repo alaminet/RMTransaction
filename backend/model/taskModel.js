@@ -4,9 +4,12 @@ const { Schema } = mongoose;
 const taskModel = new Schema({
   title: String,
   details: String,
-  types: String,
-  startDate: Date,
-  endDate: Date,
+  taskTypes: {
+    type: String,
+    enum: ["daily", "5s", "assign"],
+  },
+  taskStart: Date,
+  taskEnd: Date,
   assignedBy: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -17,10 +20,9 @@ const taskModel = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
       },
-      assignedTime: Date,
-      startTime: Date,
-      submitTime: Date,
-      endTime: Date,
+      assignStart: { type: Date, default: null },
+      assignSubmit: { type: Date, default: null },
+      assignAccept: { type: Date, default: null },
       assignedStatus: {
         type: String,
         enum: ["waiting", "ongoing", "submit", "done", "review"],
