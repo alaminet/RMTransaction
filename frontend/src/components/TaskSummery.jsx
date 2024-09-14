@@ -14,8 +14,9 @@ import {
 import TaskDetails from "./TaskDetails";
 const { Title, Text } = Typography;
 
-const TaskSummery = () => {
+const TaskSummery = ({ taskList }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskView, setTaskView] = useState();
 
   // progress bar color
   const twoColors = {
@@ -34,7 +35,8 @@ const TaskSummery = () => {
   };
 
   // Show Task details
-  const showModal = () => {
+  const showModal = (item) => {
+    setTaskView(item);
     setIsModalOpen(true);
   };
   return (
@@ -53,49 +55,62 @@ const TaskSummery = () => {
         </Divider>
         <div>
           <Row gutter={16} style={{ rowGap: "16px" }}>
-            <Col xs={24} sm={8}>
-              <Card bordered={false}>
-                <Title level={5} style={{ marginTop: "0" }}>
-                  Task Title
-                </Title>
-                <Row justify="space-between" style={{ rowGap: "16px" }}>
-                  <Col xs={24} sm={15}>
-                    <Flex vertical>
-                      <Text style={{ marginBottom: "15px" }}>- @M03166</Text>
-                      <Text strong>Team</Text>
-                      <Text>@M03166 @M03166 @M03166</Text>
-                    </Flex>
-                  </Col>
-                  <Col xs={24} sm={9}>
-                    <Flex gap="small" wrap style={{ marginBottom: "15px" }}>
-                      <Button type="primary" onClick={showModal}>
-                        View
-                      </Button>
-                      <Popconfirm
-                        title="Complete the task"
-                        description="Are you sure to complete this task?"
-                        onConfirm={confirm}
-                        onCancel={cancel}
-                        okText="Yes"
-                        cancelText="No">
-                        <Button danger>Done</Button>
-                      </Popconfirm>
-                    </Flex>
-                    <Progress
-                      percent={70}
-                      strokeColor={twoColors}
-                      showInfo={false}
-                    />
-                  </Col>
-                </Row>
-              </Card>
-            </Col>
+            {taskList?.map((item, i) => (
+              <>
+                <Col xs={24} sm={8}>
+                  <Card bordered={false}>
+                    <Title level={5} style={{ marginTop: "0" }}>
+                      {item?.title}
+                    </Title>
+                    <Row justify="space-between" style={{ rowGap: "16px" }}>
+                      <Col xs={24} sm={15}>
+                        <Flex vertical>
+                          <Text style={{ marginBottom: "15px" }}>
+                            - @{item?.assigned}
+                          </Text>
+                          <Text strong>Team</Text>
+                          <Text>
+                            {item?.team?.map((t) => (
+                              <span>{`@${t?.assignedToID?.userID} `}</span>
+                            ))}
+                          </Text>
+                        </Flex>
+                      </Col>
+                      <Col xs={24} sm={9}>
+                        <Flex gap="small" wrap style={{ marginBottom: "15px" }}>
+                          <Button
+                            type="primary"
+                            onClick={() => showModal(item)}>
+                            View
+                          </Button>
+                          <Popconfirm
+                            title="Complete the task"
+                            description="Are you sure to complete this task?"
+                            onConfirm={confirm}
+                            onCancel={cancel}
+                            okText="Yes"
+                            cancelText="No">
+                            <Button danger>Done</Button>
+                          </Popconfirm>
+                        </Flex>
+                        <Progress
+                          percent={70}
+                          strokeColor={twoColors}
+                          showInfo={false}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </>
+            ))}
           </Row>
         </div>
         <div>
           <TaskDetails
             setIsModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
+            taskView={taskView}
           />
         </div>
       </div>

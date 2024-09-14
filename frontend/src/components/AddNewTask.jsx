@@ -1,22 +1,30 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Button, DatePicker, Form, Input, Mentions, Modal, Select } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  Mentions,
+  message,
+  Modal,
+  Select,
+} from "antd";
 
 import TextArea from "antd/es/input/TextArea";
 
 const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
   const user = useSelector((user) => user.loginSlice.login);
   const [userList, setUserList] = useState([]);
+  const [taskForm] = Form.useForm();
 
   // Add New Task Form
   const handleCancel = () => {
     setIsModalOpen(false);
   };
   const onFinish = async (values) => {
-    console.log("Success:", values);
-    // setIsModalOpen(false);
+    // console.log("Success:", values);
 
     let assginToArr = [];
     const toArray = values.assignTo.split("@");
@@ -42,8 +50,12 @@ const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
           assignedTo: assginToArr,
         }
       );
+      taskForm.resetFields();
+      message.success(data.data.massage);
+      setIsModalOpen(false);
     } catch (error) {
       console.log(error);
+      message.error("Error Found");
     }
   };
   const onFinishFailed = (errorInfo) => {
@@ -79,6 +91,8 @@ const AddNewTask = ({ setIsModalOpen, isModalOpen }) => {
           onCancel={handleCancel}>
           <div>
             <Form
+              form={taskForm}
+              variant="filled"
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               autoComplete="off"

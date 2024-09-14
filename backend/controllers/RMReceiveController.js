@@ -58,7 +58,7 @@ const RMReceiveController = async (req, res) => {
       res.status(200).send({ rmFirstReceive, message: "Recevie Done !" });
     }
   } catch (error) {
-    res.status(401).send({ message: "Receive Not Complete" });
+    res.status(401).send({ error, message: "Receive Not Complete" });
   }
 };
 

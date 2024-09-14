@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
+import axios from "axios";
 import { Button, Divider, message, Popconfirm, Space, Table, Tag } from "antd";
 import TaskDetails from "../components/TaskDetails";
+import { useSelector } from "react-redux";
 
 const TaskView = () => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [taskList, setTaskList] = useState([]);
 
   // Modal functional
   const showModal = () => {
@@ -12,11 +17,9 @@ const TaskView = () => {
 
   // popconfirm
   const confirm = (e) => {
-    console.log(e);
     message.success("Click on Yes");
   };
   const cancel = (e) => {
-    console.log(e);
     message.error("Click on No");
   };
 
@@ -54,35 +57,49 @@ const TaskView = () => {
       key: "status",
       render: (_, item) => {
         let color;
-
+        // ["waiting", "ongoing", "done", "review", "delete"]
         return (
           <>
             <Tag
               color={
-                item.status === "expaired"
+                item?.status === "waiting"
                   ? "volcano"
-                  : item.status === "ongoing"
+                  : item?.status === "ongoing"
                   ? "geekblue"
-                  : item.status === "completed" && "green"
+                  : item?.status === "done"
+                  ? "blue"
+                  : item?.status === "review"
+                  ? "volcano"
+                  : item?.status === "delete"
+                  ? "volcano"
+                  : item?.status === "completed" && "green"
               }
               key={item}>
-              {item.status.toUpperCase()}
+              {item?.status.toUpperCase()}
             </Tag>
           </>
         );
       },
       filters: [
         {
-          text: "Expaired",
-          value: "expaired",
-        },
-        {
-          text: "Completed",
-          value: "completed",
+          text: "Waiting",
+          value: "waiting",
         },
         {
           text: "On-going",
           value: "ongoing",
+        },
+        {
+          text: "Done",
+          value: "done",
+        },
+        {
+          text: "Review",
+          value: "review",
+        },
+        {
+          text: "Delete",
+          value: "delete",
         },
       ],
       onFilter: (value, record) => record.status.indexOf(value) === 0,
@@ -94,7 +111,7 @@ const TaskView = () => {
       render: (_, item) => (
         <>
           <Tag color="green" key={item}>
-            {item.assigned.toUpperCase()}
+            {item?.assigned}
           </Tag>
         </>
       ),
@@ -105,10 +122,10 @@ const TaskView = () => {
       dataIndex: "team",
       render: (_, { team }) => (
         <>
-          {team.map((team) => {
+          {team?.map((team) => {
             return (
               <Tag color="geekblue" key={team}>
-                {team.toUpperCase()}
+                {team?.assignedToID?.userID}
               </Tag>
             );
           })}
@@ -143,23 +160,70 @@ const TaskView = () => {
       ),
     },
   ];
-  const data = [
-    {
-      key: "1",
-      title: "John Brown",
-      group: "Daily Task",
-      startDate: "23/09/2024 02:00 PM",
-      endDate: "23/09/2024 02:00 PM",
-      assigned: "@M03166",
-      status: "completed",
-      team: ["@M03166", "@M03166"],
-    },
-  ];
+
+  useEffect(() => {
+    async function getTask() {
+      const data = await axios.get(
+        `${import.meta.env.VITE_API_URL}/v1/api/task/alltask`
+      );
+      console.log(data.data.allTask);
+      let taskArr = [];
+      data?.data?.allTask?.map((item, i) => {
+        if (user.role === "admin") {
+          taskArr.push({
+            key: ++i,
+            title: item?.title,
+            group: item?.taskTypes,
+            startDate: moment(item?.taskStart).format("DD-MMM-YY hh:mmA"),
+            endDate: moment(item?.taskEnd).format("DD-MMM-YY hh:mmA"),
+            assigned: item?.assignedBy?.userID,
+            status: item?.taskStatus,
+            team: item?.assignedTo,
+            action: item?._id,
+          });
+        }
+
+        if (user.role !== "admin") {
+          if (user.userID === item?.assignedBy?.userID) {
+            taskArr.push({
+              key: ++i,
+              title: item?.title,
+              group: item?.taskTypes,
+              startDate: moment(item?.taskStart).format("DD-MMM-YY hh:mmA"),
+              endDate: moment(item?.taskEnd).format("DD-MMM-YY hh:mmA"),
+              assigned: item?.assignedBy?.userID,
+              status: item?.taskStatus,
+              team: item?.assignedTo,
+              action: item?._id,
+            });
+          }
+          item?.assignedTo?.map((assign, j) => {
+            if (user.userID === assign?.assignedToID?.userID) {
+              taskArr.push({
+                key: ++i,
+                title: item?.title,
+                group: item?.taskTypes,
+                startDate: moment(item?.taskStart).format("DD-MMM-YY hh:mmA"),
+                endDate: moment(item?.taskEnd).format("DD-MMM-YY hh:mmA"),
+                assigned: item?.assignedBy?.userID,
+                status: item?.taskStatus,
+                team: item?.assignedTo,
+                action: item?._id,
+              });
+            }
+          });
+        }
+      });
+      setTaskList(taskArr);
+    }
+
+    getTask();
+  }, []);
   return (
     <>
       <div style={{ width: "100%" }}>
         <Divider>Task Details Table</Divider>
-        <Table columns={columns} dataSource={data} bordered />
+        <Table columns={columns} dataSource={taskList} bordered />
       </div>
     </>
   );

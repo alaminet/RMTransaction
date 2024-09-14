@@ -1,75 +1,105 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
-  Badge,
   Button,
   Card,
   Col,
   Descriptions,
   Divider,
   Flex,
+  Form,
   Input,
   Modal,
   Row,
-  Space,
+  Tag,
   Typography,
 } from "antd";
-import React from "react";
+import { useSelector } from "react-redux";
+import moment from "moment";
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
-const TaskDetails = ({ setIsModalOpen, isModalOpen }) => {
+const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
+  const user = useSelector((user) => user.loginSlice.login);
+  const [chatForm] = Form.useForm();
+  const [chatText, setchatText] = useState();
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const handleComment = async (values) => {
+    try {
+      if (chatText !== "") {
+        const data = await axios.post(
+          `${import.meta.env.VITE_API_URL}/v1/api/task/newchat`,
+          {
+            taskID: taskView.action,
+            chatText: values.chatText,
+            chatBy: user._id,
+          }
+        );
+        console.log(data);
+        setchatText("");
+        chatForm.resetFields();
+      }
+    } catch (error) {
+      console.log(error);
+      message.error("Error Found");
+    }
+  };
+  // useEffect(() => {
+  //   async function getTask() {
+  //     const data = await axios.get(
+  //       `${import.meta.env.VITE_API_URL}/v1/api/task/viewTask`,
+  //       {
+  //         taskID: taskView,
+  //       }
+  //     );
+  //     console.log(data);
+  //   }
+  //   getTask();
+  // }, []);
   return (
     <>
       <Modal
-        title="Task Title"
+        title={taskView?.title}
         htmlType="submit"
         open={isModalOpen}
         footer={false}
         onCancel={handleCancel}>
         <div>
           <Descriptions>
-            <Descriptions.Item label="Assigned">@M03166</Descriptions.Item>
-            <Descriptions.Item label="Status">Ongoing</Descriptions.Item>
-            <Descriptions.Item label="Due Time">02:00</Descriptions.Item>
+            <Descriptions.Item label="Assigned">
+              <Tag size="small" style={{ margin: "5px" }}>
+                @{taskView?.assigned}
+              </Tag>
+            </Descriptions.Item>
+            <Descriptions.Item label="Status">
+              <Tag size="small" style={{ margin: "5px" }}>
+                {taskView?.status}
+              </Tag>
+            </Descriptions.Item>
+            <Descriptions.Item label="Time">
+              <Tag size="small" style={{ margin: "5px" }}>
+                {taskView?.dueTime}
+              </Tag>
+            </Descriptions.Item>
           </Descriptions>
-          <Row gap="small">
+          <Row gap="small" align="middle">
             <Col span={2}>Team: </Col>
             <Col span={22} gap="small">
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
-              <Button size="small" style={{ margin: "5px" }}>
-                @M03166
-              </Button>
+              {taskView?.team?.map((t) => (
+                <Tag size="small" style={{ margin: "5px" }}>
+                  @{t?.assignedToID.userID}
+                </Tag>
+              ))}
             </Col>
           </Row>
           <Typography>
             <Title level={5} style={{ margin: "0" }}>
-              Introduction
+              Task Details
             </Title>
-            <Paragraph>
-              In the process of internal desktop applications development, many
-              different design specs and implementations would be involved,
-              which might cause designers and developers difficulties and
-              duplication and reduce the efficiency of development.
-            </Paragraph>
+            <Paragraph>{taskView?.details}</Paragraph>
           </Typography>
           <Divider>Discussion</Divider>
           <Button block danger type="primary" style={{ margin: "20px 0" }}>
@@ -80,12 +110,23 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen }) => {
             wrap
             style={{ marginBottom: "14px" }}
             justify="space-between">
-            <Col span={19}>
-              <Input />
-            </Col>
-            <Col>
-              <Button type="primary">Send</Button>
-            </Col>
+            <Form form={chatForm} variant="filled" onFinish={handleComment}>
+              <Form.Item
+                name="chatText"
+                rules={[
+                  {
+                    required: true,
+                    message: "Input Comments",
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
           </Row>
           <Flex
             vertical
@@ -96,65 +137,42 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen }) => {
               height: "300px",
               overflowY: "scroll",
             }}>
-            <Card
-              style={{
-                backgroundColor: "#ffbb5659",
-                width: "95%",
-              }}>
-              <Title level={5} style={{ margin: "0" }}>
-                @M03166 - 23/09/204 02:03 PM
-              </Title>
-              <Paragraph>
-                In the process of internal desktop applications development,
-                difficulties and duplication and reduce the efficiency of
-                development.
-              </Paragraph>
-            </Card>
-            <Card
-              style={{
-                backgroundColor: "rgb(240, 242, 245)",
-                width: "95%",
-                marginLeft: "auto",
-              }}>
-              <Title level={5} style={{ margin: "0" }}>
-                @M03166 - 23/09/204 02:03 PM
-              </Title>
-              <Paragraph>
-                In the process of internal desktop applications development,
-                many different design specs and implementations would be
-                involved, which might cause designers and developers
-                difficulties and duplication and reduce the efficiency of
-                development.
-              </Paragraph>
-            </Card>
-            <Card
-              style={{
-                backgroundColor: "#ffbb5659",
-              }}>
-              <Title level={5} style={{ margin: "0" }}>
-                @M03166 - 23/09/204 02:03 PM
-              </Title>
-              <Paragraph>
-                In the process of internal desktop applications development,
-                difficulties and duplication and reduce the efficiency of
-                development.
-              </Paragraph>
-            </Card>
-            <Card
-              style={{
-                backgroundColor: "rgb(240, 242, 245)",
-              }}>
-              <Title level={5} style={{ margin: "0" }}>
-                @M03166 - 23/09/204 02:03 PM
-              </Title>
-              <Paragraph>
-                In the process of internal desktop applications development,
-                many different design specs and implementations would be
-                involved, which might cause designers and developers
-                difficulties and duplication and reduce the efficiency of
-                development.
-              </Paragraph>
-            </Card>
+            {taskView?.discussition?.map((dis) => {
+              if (dis?.chatBy.userID !== user.userID) {
+                return (
+                  <>
+                    <Card
+                      id="taskCard"
+                      style={{
+                        backgroundColor: "#ffbb5659",
+                        width: "95%",
+                      }}>
+                      <Title level={5} style={{ margin: "0" }}>
+                        @{dis?.chatBy.userID} -{" "}
+                        {moment(dis?.chatTime).format("DD-MMM-YY hh:mmA")}
+                      </Title>
+                      <Paragraph>{dis?.chatText}</Paragraph>
+                    </Card>
+                  </>
+                );
+              } else {
+                return (
+                  <Card
+                    id="taskCard"
+                    style={{
+                      backgroundColor: "rgb(240, 242, 245)",
+                      width: "95%",
+                      marginLeft: "auto",
+                    }}>
+                    <Title level={5} style={{ margin: "0" }}>
+                      @{dis?.chatBy.userID} -{" "}
+                      {moment(dis?.chatTime).format("DD-MMM-YY hh:mmA")}
+                    </Title>
+                    <Paragraph>{dis?.chatText}</Paragraph>
+                  </Card>
+                );
+              }
+            })}
           </Flex>
         </div>
       </Modal>

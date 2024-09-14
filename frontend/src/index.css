@@ -1,0 +1,7 @@
+.ant-descriptions-item-container {
+  align-items: center;
+}
+
+#taskCard .ant-card-body {
+  padding: 10px !important;
+}

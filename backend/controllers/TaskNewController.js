@@ -10,7 +10,7 @@ async function TaskNewController(req, res) {
     assignedBy,
     assignedTo,
   } = req.body;
- 
+
   try {
     const newTask = await new Task({
       title: title,
@@ -21,7 +21,7 @@ async function TaskNewController(req, res) {
       assignedBy: assignedBy,
       assignedTo: assignedTo,
     }).save();
-    res.status(200).send({ newTask, massage: "New Task Added" });
+    res.status(200).send({ massage: "New Task Added" });
   } catch (error) {
     res.status(401).send(error);
   }
