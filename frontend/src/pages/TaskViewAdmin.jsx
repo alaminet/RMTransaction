@@ -5,11 +5,10 @@ import { Button, Divider, message, Popconfirm, Space, Table, Tag } from "antd";
 import TaskDetails from "../components/TaskDetails";
 import { useSelector } from "react-redux";
 
-const TaskView = () => {
+const TaskViewAdmin = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskList, setTaskList] = useState([]);
-  const [taskCount, setTaskCount] = useState([]);
   const [taskView, setTaskView] = useState();
   const [teamMember, setTeamMember] = useState([]);
 
@@ -192,48 +191,44 @@ const TaskView = () => {
       );
       // console.log(data.data.allTask);
       let taskArr = [];
-      const assStatusArr = [];
+      let y = 1;
       data?.data?.allTask?.map((item, i) => {
-        item?.assignedTo?.map((assign, j) => {
-          const timeDiff = parseInt(
-            (new Date(item?.taskEnd) - new Date()) / 1000
-          );
-          const durationTime = parseInt(
-            (new Date(item?.taskEnd) - new Date()) / 1000
-          );
-          const days = parseInt(durationTime < 0 ? 0 : durationTime / 86400);
-          const hours = parseInt(
-            (durationTime < 0 ? 0 : durationTime % 86400) / 3600
-          );
-          const minutes = Math.floor(
-            (durationTime < 0 ? 0 : durationTime % 3600) / 60
-          );
+        const timeDiff = parseInt(
+          (new Date(item?.taskEnd) - new Date()) / 1000
+        );
+        const durationTime = parseInt(
+          (new Date(item?.taskEnd) - new Date()) / 1000
+        );
+        const days = parseInt(durationTime < 0 ? 0 : durationTime / 86400);
+        const hours = parseInt(
+          (durationTime < 0 ? 0 : durationTime % 86400) / 3600
+        );
+        const minutes = Math.floor(
+          (durationTime < 0 ? 0 : durationTime % 3600) / 60
+        );
 
-          if (user.userID === assign?.assignedToID?.userID) {
-            assStatusArr.push(assign.assignedStatus);
-            taskArr.push({
-              key: ++i,
-              title: item?.title,
-              group: item?.taskTypes,
-              details: item?.details,
-              startDate: moment(item?.taskStart).format("DD-MMM-YY hh:mmA"),
-              endDate: moment(item?.taskEnd).format("DD-MMM-YY hh:mmA"),
-              duePersent: Math.floor((durationTime / timeDiff) * 100),
-              dueTime:
-                days < 1
-                  ? `${hours}h:${minutes}m`
-                  : `${days}Day ${hours}h:${minutes}m`,
-              assigned: item?.assignedBy?.userID,
-              status: item?.taskStatus,
-              team: item?.assignedTo,
-              discussition: item?.discussition,
-              action: item?._id,
-            });
-          }
-        });
+        if (user.role == "admin") {
+          taskArr.push({
+            key: y++,
+            title: item?.title,
+            group: item?.taskTypes,
+            details: item?.details,
+            startDate: moment(item?.taskStart).format("DD-MMM-YY hh:mmA"),
+            endDate: moment(item?.taskEnd).format("DD-MMM-YY hh:mmA"),
+            duePersent: Math.floor((durationTime / timeDiff) * 100),
+            dueTime:
+              days < 1
+                ? `${hours}h:${minutes}m`
+                : `${days}Day ${hours}h:${minutes}m`,
+            assigned: item?.assignedBy?.userID,
+            status: item?.taskStatus,
+            team: item?.assignedTo,
+            discussition: item?.discussition,
+            action: item?._id,
+          });
+          setTaskList(taskArr);
+        }
       });
-      setTaskList(taskArr);
-      setTaskCount(assStatusArr);
     }
 
     getTask();
@@ -248,4 +243,4 @@ const TaskView = () => {
   );
 };
 
-export default TaskView;
+export default TaskViewAdmin;

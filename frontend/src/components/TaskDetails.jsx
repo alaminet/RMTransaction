@@ -18,7 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import moment from "moment";
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
   const user = useSelector((user) => user.loginSlice.login);
@@ -59,18 +59,6 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
     setSelectStatus(value);
   };
 
-  // taskTeam
-  // useEffect(() => {
-  //   const teamArr = [];
-  //   taskView?.team?.map((t) => {
-  //     teamArr.push({
-  //       value: t?.assignedToID._id,
-  //       label: t?.assignedToID.userID,
-  //     });
-  //   });
-  //   // setTaskTeam(teamArr);
-  // }, []);
-
   const showTask = async (id, status) => {
     await axios.post(`${import.meta.env.VITE_API_URL}/v1/api/task/teamview`, {
       teamID: id,
@@ -80,7 +68,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
   const handleReview = () => {
     taskView?.team?.map(async (member) => {
       if (member.assignedToID.userID === user.userID) {
-        showTask(member._id, "review");
+        showTask(member._id, "submit");
       }
     });
   };
@@ -232,11 +220,11 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
                         backgroundColor: "#ffbb5659",
                         width: "95%",
                       }}>
-                      <Title level={5} style={{ margin: "0" }}>
+                      <Text style={{ margin: "0", fontSize: "10px" }}>
                         @{dis?.chatBy.userID} -{" "}
                         {moment(dis?.chatTime).format("DD-MMM-YY hh:mmA")}
-                      </Title>
-                      <Paragraph>{dis?.chatText}</Paragraph>
+                      </Text>
+                      Text<Paragraph>{dis?.chatText}</Paragraph>
                     </Card>
                   </>
                 );
@@ -249,10 +237,10 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
                       width: "95%",
                       marginLeft: "auto",
                     }}>
-                    <Title level={5} style={{ margin: "0" }}>
+                    <Text style={{ margin: "0", fontSize: "10px" }}>
                       @{dis?.chatBy.userID} -{" "}
                       {moment(dis?.chatTime).format("DD-MMM-YY hh:mmA")}
-                    </Title>
+                    </Text>
                     <Paragraph>{dis?.chatText}</Paragraph>
                   </Card>
                 );

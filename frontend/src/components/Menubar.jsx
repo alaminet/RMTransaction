@@ -244,6 +244,11 @@ const Menubar = () => {
             },
           ],
         },
+        {
+          type: "Task",
+          label: "Task",
+          key: "alltaskadmin",
+        },
       ],
     },
     {

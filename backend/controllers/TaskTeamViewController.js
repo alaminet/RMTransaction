@@ -29,7 +29,7 @@ async function TaskTeamViewController(req, res) {
       }
     }
 
-    if (status === "review") {
+    if (status === "submit") {
       const reviewDate = new Date();
       const teamsView = await Task.findOne({
         "assignedTo._id": teamID,
