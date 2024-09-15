@@ -134,7 +134,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
             style={{ margin: "20px 0" }}>
             Submit for Review
           </Button>
-          {taskView?.assigned === user.userID && (
+          {(taskView?.assigned === user.userID || user.role === "admin") && (
             <>
               <Flex gap={10}>
                 <Select
