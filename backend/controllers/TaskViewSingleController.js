@@ -1,7 +1,7 @@
 const Task = require("../model/taskModel");
 
 async function TaskViewSingleController(req, res) {
-  const [taskID] = req.body;
+  const { taskID } = req.body;
   try {
     const allTask = await Task.findById(taskID)
       .populate("assignedBy", { userID: true, role: true })

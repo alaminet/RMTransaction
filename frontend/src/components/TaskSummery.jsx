@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -12,11 +12,16 @@ import {
   Typography,
 } from "antd";
 import TaskDetails from "./TaskDetails";
+import { useSelector } from "react-redux";
+import axios from "axios";
 const { Title, Text } = Typography;
 
 const TaskSummery = ({ taskList }) => {
+  const user = useSelector((user) => user.loginSlice.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskView, setTaskView] = useState();
+  const [teamMember, setTeamMember] = useState([]);
+
 
   // progress bar color
   const twoColors = {
@@ -35,10 +40,30 @@ const TaskSummery = ({ taskList }) => {
   };
 
   // Show Task details
+
+  const showTask = async (id) => {
+    await axios.post(`${import.meta.env.VITE_API_URL}/v1/api/task/teamview`, {
+      teamID: id,
+      status: "firstView",
+    });
+  };
   const showModal = (item) => {
+    const teamArry = [];
+    item?.team?.map((member) => {
+      teamArry.push({
+        label: member.assignedToID.userID,
+        value: member._id,
+      });
+      if (member.assignedToID.userID === user.userID) {
+        showTask(member._id);
+      }
+    });
+    setTeamMember(teamArry);
+
     setTaskView(item);
     setIsModalOpen(true);
   };
+
   return (
     <>
       <div
@@ -57,7 +82,7 @@ const TaskSummery = ({ taskList }) => {
           <Row gutter={16} style={{ rowGap: "16px" }}>
             {taskList?.map((item, i) => (
               <>
-                <Col xs={24} sm={8}>
+                <Col xs={24} md={12} lg={8}>
                   <Card bordered={false}>
                     <Title level={5} style={{ marginTop: "0" }}>
                       {item?.title}
@@ -70,14 +95,16 @@ const TaskSummery = ({ taskList }) => {
                           </Text>
                           <Text strong>Team</Text>
                           <Text>
-                            {item?.team?.map((t) => (
-                              <span>{`@${t?.assignedToID?.userID} `}</span>
-                            ))}
+                            {item?.team?.map((t) => {
+                              return (
+                                <span>{`@${t?.assignedToID?.userID} `}</span>
+                              );
+                            })}
                           </Text>
                         </Flex>
                       </Col>
                       <Col xs={24} sm={9}>
-                        <Flex gap="small" wrap style={{ marginBottom: "15px" }}>
+                        <Flex gap="small" style={{ marginBottom: "15px" }}>
                           <Button
                             type="primary"
                             onClick={() => showModal(item)}>
@@ -111,6 +138,7 @@ const TaskSummery = ({ taskList }) => {
             setIsModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
             taskView={taskView}
+            teamMember={teamMember}
           />
         </div>
       </div>

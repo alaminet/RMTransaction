@@ -11,6 +11,7 @@ import {
   Input,
   Modal,
   Row,
+  Select,
   Tag,
   Typography,
 } from "antd";
@@ -19,10 +20,13 @@ import moment from "moment";
 
 const { Title, Paragraph } = Typography;
 
-const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
+const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
   const user = useSelector((user) => user.loginSlice.login);
   const [chatForm] = Form.useForm();
   const [chatText, setchatText] = useState();
+  const [selectMember, setSelectMember] = useState();
+  const [selectStatus, setSelectStatus] = useState();
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -38,7 +42,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
             chatBy: user._id,
           }
         );
-        console.log(data);
+        // console.log(data);
         setchatText("");
         chatForm.resetFields();
       }
@@ -47,18 +51,44 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
       message.error("Error Found");
     }
   };
+
+  const handleMemberCng = (value) => {
+    setSelectMember(value);
+  };
+  const handleStatusCng = (value) => {
+    setSelectStatus(value);
+  };
+
+  // taskTeam
   // useEffect(() => {
-  //   async function getTask() {
-  //     const data = await axios.get(
-  //       `${import.meta.env.VITE_API_URL}/v1/api/task/viewTask`,
-  //       {
-  //         taskID: taskView,
-  //       }
-  //     );
-  //     console.log(data);
-  //   }
-  //   getTask();
+  //   const teamArr = [];
+  //   taskView?.team?.map((t) => {
+  //     teamArr.push({
+  //       value: t?.assignedToID._id,
+  //       label: t?.assignedToID.userID,
+  //     });
+  //   });
+  //   // setTaskTeam(teamArr);
   // }, []);
+
+  const showTask = async (id, status) => {
+    await axios.post(`${import.meta.env.VITE_API_URL}/v1/api/task/teamview`, {
+      teamID: id,
+      status: status,
+    });
+  };
+  const handleReview = () => {
+    taskView?.team?.map(async (member) => {
+      if (member.assignedToID.userID === user.userID) {
+        showTask(member._id, "review");
+      }
+    });
+  };
+  const handleAccept = () => {
+    showTask(selectMember, selectStatus);
+    console.log(selectMember, selectStatus);
+  };
+
   return (
     <>
       <Modal
@@ -76,7 +106,11 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
             </Descriptions.Item>
             <Descriptions.Item label="Status">
               <Tag size="small" style={{ margin: "5px" }}>
-                {taskView?.status}
+                {taskView?.team?.map(
+                  (member) =>
+                    member.assignedToID.userID === user.userID &&
+                    member.assignedStatus
+                )}
               </Tag>
             </Descriptions.Item>
             <Descriptions.Item label="Time">
@@ -88,11 +122,13 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
           <Row gap="small" align="middle">
             <Col span={2}>Team: </Col>
             <Col span={22} gap="small">
-              {taskView?.team?.map((t) => (
-                <Tag size="small" style={{ margin: "5px" }}>
-                  @{t?.assignedToID.userID}
-                </Tag>
-              ))}
+              {taskView?.team?.map((t) => {
+                return (
+                  <Tag size="small" style={{ margin: "5px" }}>
+                    @{t?.assignedToID.userID}
+                  </Tag>
+                );
+              })}
             </Col>
           </Row>
           <Typography>
@@ -102,17 +138,66 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
             <Paragraph>{taskView?.details}</Paragraph>
           </Typography>
           <Divider>Discussion</Divider>
-          <Button block danger type="primary" style={{ margin: "20px 0" }}>
+          <Button
+            onClick={handleReview}
+            block
+            danger
+            type="primary"
+            style={{ margin: "20px 0" }}>
             Submit for Review
           </Button>
+          {taskView?.assigned === user.userID && (
+            <>
+              <Flex gap={10}>
+                <Select
+                  showSearch
+                  placeholder="Select a person"
+                  optionFilterProp="label"
+                  onChange={handleMemberCng}
+                  options={teamMember}
+                />
+                <Select
+                  showSearch
+                  placeholder="Status"
+                  optionFilterProp="label"
+                  onChange={handleStatusCng}
+                  options={[
+                    {
+                      value: "done",
+                      label: "Done",
+                    },
+                    {
+                      value: "review",
+                      label: "Review",
+                    },
+                  ]}
+                />
+                <Button
+                  onClick={handleAccept}
+                  type="primary"
+                  style={{ marginBottom: "20px", textTransform: "capitalize" }}>
+                  {selectStatus || "Button"}
+                </Button>
+              </Flex>
+            </>
+          )}
+
           <Row
             gutter={10}
             wrap
             style={{ marginBottom: "14px" }}
             justify="space-between">
-            <Form form={chatForm} variant="filled" onFinish={handleComment}>
+            <Form
+              form={chatForm}
+              variant="filled"
+              onFinish={handleComment}
+              style={{ width: "100%" }}
+              layout="inline">
               <Form.Item
                 name="chatText"
+                style={{
+                  width: "79%",
+                }}
                 rules={[
                   {
                     required: true,
@@ -123,7 +208,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView }) => {
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  Submit
+                  Send
                 </Button>
               </Form.Item>
             </Form>

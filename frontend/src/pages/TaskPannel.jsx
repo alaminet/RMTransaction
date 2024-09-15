@@ -15,7 +15,6 @@ const TaskPannel = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskList, setTaskList] = useState([]);
-  console.log(taskList);
 
   // Modal functional
   const showModal = () => {

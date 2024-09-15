@@ -10,6 +10,7 @@ const taskModel = new Schema({
   },
   taskStart: Date,
   taskEnd: Date,
+  taskComplete: Date,
   assignedBy: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -32,8 +33,8 @@ const taskModel = new Schema({
   ],
   taskStatus: {
     type: String,
-    enum: ["waiting", "ongoing", "done", "review", "delete"],
-    default: "waiting",
+    enum: ["ongoing", "done", "delete"],
+    default: "ongoing",
   },
   discussition: [
     {
