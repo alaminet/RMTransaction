@@ -2,7 +2,9 @@ const Task = require("../model/taskModel");
 
 async function TaskTeamViewController(req, res) {
   const { teamID, status } = req.body;
-
+  if (teamID === "") {
+    return res.status(404).send({ message: "Task ID not Selected" });
+  }
   try {
     if (status === "firstView") {
       const startDate = new Date();

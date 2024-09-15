@@ -22,7 +22,6 @@ const TaskSummery = ({ taskList }) => {
   const [taskView, setTaskView] = useState();
   const [teamMember, setTeamMember] = useState([]);
 
-
   // progress bar color
   const twoColors = {
     "0%": "#52c41a",
@@ -80,57 +79,61 @@ const TaskSummery = ({ taskList }) => {
         </Divider>
         <div>
           <Row gutter={16} style={{ rowGap: "16px" }}>
-            {taskList?.map((item, i) => (
-              <>
-                <Col xs={24} md={12} lg={8}>
-                  <Card bordered={false}>
-                    <Title level={5} style={{ marginTop: "0" }}>
-                      {item?.title}
-                    </Title>
-                    <Row justify="space-between" style={{ rowGap: "16px" }}>
-                      <Col xs={24} sm={15}>
-                        <Flex vertical>
-                          <Text style={{ marginBottom: "15px" }}>
-                            - @{item?.assigned}
-                          </Text>
-                          <Text strong>Team</Text>
-                          <Text>
-                            {item?.team?.map((t) => {
-                              return (
-                                <span>{`@${t?.assignedToID?.userID} `}</span>
-                              );
-                            })}
-                          </Text>
-                        </Flex>
-                      </Col>
-                      <Col xs={24} sm={9}>
-                        <Flex gap="small" style={{ marginBottom: "15px" }}>
-                          <Button
-                            type="primary"
-                            onClick={() => showModal(item)}>
-                            View
-                          </Button>
-                          <Popconfirm
-                            title="Complete the task"
-                            description="Are you sure to complete this task?"
-                            onConfirm={confirm}
-                            onCancel={cancel}
-                            okText="Yes"
-                            cancelText="No">
-                            <Button danger>Done</Button>
-                          </Popconfirm>
-                        </Flex>
-                        <Progress
-                          percent={70}
-                          strokeColor={twoColors}
-                          showInfo={false}
-                        />
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-              </>
-            ))}
+            {taskList?.map((item, i) => {
+              if (item?.status !== "done") {
+                return (
+                  <>
+                    <Col xs={24} md={12} lg={8}>
+                      <Card bordered={false}>
+                        <Title level={5} style={{ marginTop: "0" }}>
+                          {item?.title}
+                        </Title>
+                        <Row justify="space-between" style={{ rowGap: "16px" }}>
+                          <Col xs={24} sm={15}>
+                            <Flex vertical>
+                              <Text style={{ marginBottom: "15px" }}>
+                                - @{item?.assigned}
+                              </Text>
+                              <Text strong>Team</Text>
+                              <Text>
+                                {item?.team?.map((t) => {
+                                  return (
+                                    <span>{`@${t?.assignedToID?.userID} `}</span>
+                                  );
+                                })}
+                              </Text>
+                            </Flex>
+                          </Col>
+                          <Col xs={24} sm={9}>
+                            <Flex gap="small" style={{ marginBottom: "15px" }}>
+                              <Button
+                                type="primary"
+                                onClick={() => showModal(item)}>
+                                View
+                              </Button>
+                              <Popconfirm
+                                title="Complete the task"
+                                description="Are you sure to complete this task?"
+                                onConfirm={confirm}
+                                onCancel={cancel}
+                                okText="Yes"
+                                cancelText="No">
+                                <Button danger>Done</Button>
+                              </Popconfirm>
+                            </Flex>
+                            <Progress
+                              percent={70}
+                              strokeColor={twoColors}
+                              showInfo={false}
+                            />
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                  </>
+                );
+              }
+            })}
           </Row>
         </div>
         <div>

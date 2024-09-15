@@ -15,6 +15,7 @@ const TaskPannel = () => {
   const user = useSelector((user) => user.loginSlice.login);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [taskList, setTaskList] = useState([]);
+  const [taskCount, setTaskCount] = useState([]);
 
   // Modal functional
   const showModal = () => {
@@ -29,6 +30,7 @@ const TaskPannel = () => {
       );
       // console.log(data.data.allTask);
       let taskArr = [];
+      const assStatusArr = [];
       data?.data?.allTask?.map((item, i) => {
         item?.assignedTo?.map((assign, j) => {
           const timeDiff = parseInt(
@@ -44,7 +46,9 @@ const TaskPannel = () => {
           const minutes = Math.floor(
             (durationTime < 0 ? 0 : durationTime % 3600) / 60
           );
+
           if (user.userID === assign?.assignedToID?.userID) {
+            assStatusArr.push(assign.assignedStatus);
             taskArr.push({
               key: ++i,
               title: item?.title,
@@ -67,6 +71,7 @@ const TaskPannel = () => {
         });
       });
       setTaskList(taskArr);
+      setTaskCount(assStatusArr);
     }
 
     getTask();
@@ -116,7 +121,7 @@ const TaskPannel = () => {
               padding: "20px",
               borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
             }}>
-            <TaskCard />
+            <TaskCard taskCount={taskCount} />
             <TaskSummery taskList={taskList} />
           </div>
         </div>
