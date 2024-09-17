@@ -70,7 +70,11 @@ const TaskPannel = () => {
           }
         });
       });
-      setTaskList(taskArr);
+      const uniqueArray = taskArr.filter(
+        (value, index, self) =>
+          index === self.findIndex((t) => t.action == value.action)
+      );
+      setTaskList(uniqueArray);
       setTaskCount(assStatusArr);
     }
 
