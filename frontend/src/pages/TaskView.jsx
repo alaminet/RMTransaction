@@ -193,6 +193,7 @@ const TaskView = () => {
       // console.log(data.data.allTask);
       let taskArr = [];
       const assStatusArr = [];
+      let y = 0;
       data?.data?.allTask?.map((item, i) => {
         item?.assignedTo?.map((assign, j) => {
           const timeDiff = parseInt(
@@ -209,10 +210,13 @@ const TaskView = () => {
             (durationTime < 0 ? 0 : durationTime % 3600) / 60
           );
 
-          if (user.userID === assign?.assignedToID?.userID) {
+          if (
+            user.userID === assign?.assignedToID?.userID ||
+            user.userID === item?.assignedBy?.userID
+          ) {
             assStatusArr.push(assign.assignedStatus);
             taskArr.push({
-              key: ++i,
+              key: ++y,
               title: item?.title,
               group: item?.taskTypes,
               details: item?.details,
