@@ -99,6 +99,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
                     member.assignedToID.userID === user.userID &&
                     member.assignedStatus
                 )}
+                {taskView?.assigned === user.userID && taskView?.status}
               </Tag>
             </Descriptions.Item>
             <Descriptions.Item label="Time">
@@ -224,7 +225,7 @@ const TaskDetails = ({ setIsModalOpen, isModalOpen, taskView, teamMember }) => {
                         @{dis?.chatBy.userID} -{" "}
                         {moment(dis?.chatTime).format("DD-MMM-YY hh:mmA")}
                       </Text>
-                      Text<Paragraph>{dis?.chatText}</Paragraph>
+                      <Paragraph>{dis?.chatText}</Paragraph>
                     </Card>
                   </>
                 );
