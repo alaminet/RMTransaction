@@ -31,7 +31,7 @@ const ViewStation = () => {
   const handleOk = async (e) => {
     setIsModalOpen(false);
     try {
-      const stationEdit = await axios.put(
+      const stationEdit = await axios.post(
         `${import.meta.env.VITE_API_URL}/v1/api/item/editstation`,
         {
           id: editID.action,

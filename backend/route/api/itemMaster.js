@@ -43,7 +43,7 @@ route.get("/deletelocation", DeleteLocationController);
 
 route.post("/addstation", addStationController);
 route.get("/viewstation", ViewStationController);
-route.put("/editstation", EditStationController);
-route.post("/deletestation", DeleteStationController);
+route.post("/editstation", EditStationController);
+route.put("/deletestation", DeleteStationController);
 
 module.exports = route;
