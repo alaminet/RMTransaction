@@ -1,4 +1,4 @@
-const Location = require("../model/stationModel");
+const Location = require("../model/locationModel");
 
 const EditLocationController = async (req, res) => {
   const { id, data } = req.body;
@@ -8,9 +8,12 @@ const EditLocationController = async (req, res) => {
       { $set: { loc: data } },
       { new: true }
     );
-    await updateLoc.save();
+    console.log(updateLoc);
+
     res.status(200).send({ updateLoc, message: "Location Name updated" });
   } catch (error) {
+    console.log(error);
+
     res.status(401).send({ message: "Not edited" });
   }
 };

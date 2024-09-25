@@ -38,7 +38,7 @@ route.put("/additembom", AddItemBOMController);
 
 route.post("/addlocation", AddLocationController);
 route.get("/viewlocation", ViewLocationController);
-route.get("/editlocation", EditLocationController);
+route.post("/editlocation", EditLocationController);
 route.get("/deletelocation", DeleteLocationController);
 
 route.post("/addstation", addStationController);
