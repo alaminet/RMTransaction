@@ -22,12 +22,12 @@ const TaskCard = ({ taskCount }) => {
           </Card>
           <Progress
             strokeColor={twoColors}
-            percent={
+            percent={Math.floor(
               100 -
-              (taskCount.filter((x) => x == "ongoing").length /
-                taskCount.length) *
-                100
-            }
+                (taskCount.filter((x) => x == "ongoing").length /
+                  taskCount.length) *
+                  100
+            )}
           />
         </Col>
         <Col xs={24} sm={8}>
@@ -44,11 +44,12 @@ const TaskCard = ({ taskCount }) => {
           </Card>
           <Progress
             strokeColor={twoColors}
-            percent={
+            percent={Math.floor(
               100 -
-              (taskCount.filter((x) => x == "done").length / taskCount.length) *
-                100
-            }
+                (taskCount.filter((x) => x == "done").length /
+                  taskCount.length) *
+                  100
+            )}
           />
         </Col>
         <Col xs={24} sm={8}>
@@ -65,12 +66,12 @@ const TaskCard = ({ taskCount }) => {
           </Card>
           <Progress
             strokeColor={twoColors}
-            percent={
+            percent={Math.floor(
               100 -
-              (taskCount.filter((x) => x == "review").length /
-                taskCount.length) *
-                100
-            }
+                (taskCount.filter((x) => x == "review").length /
+                  taskCount.length) *
+                  100
+            )}
           />
         </Col>
       </Row>

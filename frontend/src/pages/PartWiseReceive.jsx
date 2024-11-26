@@ -18,6 +18,7 @@ import {
 import { useSelector } from "react-redux";
 import { EditTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Helmet } from "react-helmet-async";
+import moment from "moment";
 
 const PartWiseReceive = () => {
   const { Text } = Typography;
@@ -54,6 +55,8 @@ const PartWiseReceive = () => {
           if (reclist.codeID == data.data.itemMatch._id) {
             recArr.push({
               sl: y++,
+              recDate: moment(receive?.date).format("DD-MMM-YY"),
+              tnxID: receive?.tnxID,
               code: data?.data?.itemMatch?.code,
               name: data?.data?.itemMatch?.itemname,
               loc: reclist?.locID?.loc,
@@ -169,6 +172,16 @@ const PartWiseReceive = () => {
       title: "SL",
       dataIndex: "sl",
       key: "sl",
+    },
+    {
+      title: "Received Date",
+      dataIndex: "recDate",
+      key: "recDate",
+    },
+    {
+      title: "Tnx ID",
+      dataIndex: "tnxID",
+      key: "tnxID",
     },
     {
       title: "Part Code",

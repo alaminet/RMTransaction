@@ -124,11 +124,26 @@ const ViewReceiveItem = () => {
       dataIndex: "date",
       key: "date",
     },
-    // {
-    //   title: "Tnx ID",
-    //   dataIndex: "tnxID",
-    //   key: "tnxid",
-    // },
+    {
+      title: "Invoice No",
+      dataIndex: "inv",
+      key: "inv",
+    },
+    {
+      title: "LC No",
+      dataIndex: "LC",
+      key: "LC",
+    },
+    {
+      title: "PO No",
+      dataIndex: "PO",
+      key: "PO",
+    },
+    {
+      title: "B/E No",
+      dataIndex: "BE",
+      key: "BE",
+    },
     {
       title: "Lot No",
       dataIndex: "lot",
@@ -218,7 +233,7 @@ const ViewReceiveItem = () => {
                 PO: order.PO,
                 lot: order.lotID.lot,
                 rmk: order.rmk,
-                order: order.order,
+                order: item.order,
                 tnxID: order.tnxID,
                 code: item.codeID.code,
                 name: item.codeID.itemname,

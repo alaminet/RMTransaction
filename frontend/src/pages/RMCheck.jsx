@@ -116,6 +116,11 @@ const RMCheck = () => {
       key: "qty",
     },
     {
+      title: "Remarks",
+      dataIndex: "rmk",
+      key: "rmk",
+    },
+    {
       title: "Action",
       dataIndex: "action",
       key: "action",
