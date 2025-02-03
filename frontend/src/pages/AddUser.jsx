@@ -96,6 +96,7 @@ const AddUser = () => {
                 <Radio value="LM">Line Manager</Radio>
                 <Radio value="checker">Checker</Radio>
                 <Radio value="admin">Admin</Radio>
+                <Radio value="guest">Guest</Radio>
               </Radio.Group>
             </Form.Item>
 

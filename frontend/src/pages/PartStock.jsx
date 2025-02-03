@@ -29,7 +29,7 @@ const PartStock = () => {
         receive.receList.map((reclist, j) => {
           if (
             reclist.codeID == data.data.itemMatch._id &&
-            reclist.issue <= reclist.qty
+            reclist.issue < reclist.qty
           ) {
             recArr.push({
               sl: y++,

@@ -83,53 +83,59 @@ const TaskPannel = () => {
 
   return (
     <>
-      <div style={{ width: "90%", margin: "0 auto" }}>
-        <Notification />
-        <div>
-          <Row gutter={16} style={{ rowGap: "16px" }}>
-            <Col className="gutter-row" xs={24} sm={8}>
-              <div>
-                <Title level={3}>Hello; {user.userID}</Title>
-                <Text>
-                  {moment(new Date()).format("[Today is] dddd, MMMM Do YYYY")}
-                </Text>
-              </div>
-            </Col>
-            <Col className="gutter-row" xs={24} sm={8}>
+      {user.role !== "guest" && (
+        <>
+          <div style={{ width: "90%", margin: "0 auto" }}>
+            <Notification />
+            <div>
+              <Row gutter={16} style={{ rowGap: "16px" }}>
+                <Col className="gutter-row" xs={24} sm={8}>
+                  <div>
+                    <Title level={3}>Hello; {user.userID}</Title>
+                    <Text>
+                      {moment(new Date()).format(
+                        "[Today is] dddd, MMMM Do YYYY"
+                      )}
+                    </Text>
+                  </div>
+                </Col>
+                <Col className="gutter-row" xs={24} sm={8}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      height: "100%",
+                    }}>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <Button type="primary" onClick={showModal}>
+                        Add New Task
+                      </Button>
+                      <Link to="/alltask">
+                        <Button>View All Task</Button>
+                      </Link>
+                      <AddNewTask
+                        setIsModalOpen={setIsModalOpen}
+                        isModalOpen={isModalOpen}
+                      />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Divider></Divider>
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  height: "100%",
+                  background: "rgb(240, 242, 245)",
+                  borderRadius: "8px 8px 0 0",
+                  padding: "20px",
+                  borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
                 }}>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <Button type="primary" onClick={showModal}>
-                    Add New Task
-                  </Button>
-                  <Link to="/alltask">
-                    <Button>View All Task</Button>
-                  </Link>
-                  <AddNewTask
-                    setIsModalOpen={setIsModalOpen}
-                    isModalOpen={isModalOpen}
-                  />
-                </div>
+                <TaskCard taskCount={taskCount} />
+                <TaskSummery taskList={taskList} />
               </div>
-            </Col>
-          </Row>
-          <Divider></Divider>
-          <div
-            style={{
-              background: "rgb(240, 242, 245)",
-              borderRadius: "8px 8px 0 0",
-              padding: "20px",
-              borderBottom: "1px solid rgba(5, 5, 5, 0.06)",
-            }}>
-            <TaskCard taskCount={taskCount} />
-            <TaskSummery taskList={taskList} />
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };

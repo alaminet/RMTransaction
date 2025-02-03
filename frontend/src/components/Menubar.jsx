@@ -595,6 +595,35 @@ const Menubar = () => {
       icon: <LogoutOutlined />,
     },
   ];
+  const guest = [
+    {
+      label: "Home",
+      key: "/",
+      icon: <HomeOutlined />,
+    },
+    {
+      label: "Transaction",
+      key: "SubMenu1",
+      icon: <DiffOutlined />,
+      children: [
+        {
+          type: "stock",
+          label: "Stock",
+          children: [
+            {
+              label: "Part Wise",
+              key: "partstock",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: "Logout",
+      key: "logout",
+      icon: <LogoutOutlined />,
+    },
+  ];
   return (
     <>
       <Menu
@@ -605,7 +634,8 @@ const Menubar = () => {
           (user.role === "admin" && Adminitems) ||
           (user.role === "LM" && LMitems) ||
           (user.role === "checker" && checker) ||
-          (user.role === "user" && regular)
+          (user.role === "user" && regular) ||
+          (user.role === "guest" && guest)
         }
       />
     </>
