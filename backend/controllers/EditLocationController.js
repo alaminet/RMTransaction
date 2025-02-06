@@ -9,7 +9,6 @@ const EditLocationController = async (req, res) => {
       { new: true }
     );
     console.log(updateLoc);
-
     res.status(200).send({ updateLoc, message: "Location Name updated" });
   } catch (error) {
     console.log(error);

@@ -63,7 +63,8 @@ const AddLot = () => {
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            autoComplete="off">
+            autoComplete="off"
+          >
             <Form.Item
               label="Lot Details"
               name="lotdetails"
@@ -72,7 +73,8 @@ const AddLot = () => {
                   required: true,
                   message: "Please input Model_Lot paste from XL",
                 },
-              ]}>
+              ]}
+            >
               <TextArea rows={4} placeholder="ex: SU2id_Lot 01~02" />
             </Form.Item>
 
@@ -80,7 +82,8 @@ const AddLot = () => {
               wrapperCol={{
                 offset: 8,
                 span: 16,
-              }}>
+              }}
+            >
               <Button type="primary" htmlType="submit">
                 Add Lot
               </Button>
