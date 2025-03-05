@@ -503,6 +503,10 @@ const Menubar = () => {
               label: "Part Wise",
               key: "partstock",
             },
+            {
+              label: "Location Transfer",
+              key: "loctransfer",
+            },
           ],
         },
         {

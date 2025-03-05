@@ -34,6 +34,7 @@ import OnHandStock from "./pages/OnHandStock";
 import TaskPannel from "./pages/TaskPannel";
 import TaskView from "./pages/TaskView";
 import TaskViewAdmin from "./pages/TaskViewAdmin";
+import LocationTnsf from "./pages/LocationTnsf";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -62,6 +63,7 @@ function App() {
             <Route path="locdetails" element={<ViewLocation />}></Route>
             <Route path="newreceive" element={<ReceiveItem />}></Route>
             <Route path="receivedetails" element={<ViewReceiveItem />}></Route>
+            <Route path="loctransfer" element={<LocationTnsf />}></Route>
             <Route path="addstation" element={<AddStation />}></Route>
             <Route path="stationdtls" element={<ViewStation />}></Route>
             <Route path="partstock" element={<PartStock />}></Route>
